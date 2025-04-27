@@ -148,7 +148,7 @@ body.nav-active { overflow: hidden; }
   #REUSED STYLE
 \*-----------------------------------*/
 
-.container { padding };
+.container { padding: 0; } /* Fixed padding declaration */
 .container { padding-inline: 16px; }
 
 .social-list {
@@ -349,7 +349,8 @@ body.nav-active { overflow: hidden; }
 
 .hero .container {
   display: grid;
-  gap: 50px;
+  gap:  
+   gap: 50px;
 }
 
 .hero-banner {
@@ -384,7 +385,6 @@ body.nav-active { overflow: hidden; }
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items:
   align-items: center;
   gap: 12px;
 }
@@ -451,11 +451,13 @@ body.nav-active { overflow: hidden; }
 
 .project-card-1,
 .project-card-2,
-:is(.project-card-3, .project-card-4) .card-content { padding: var(--padding); }
+.project-card-3,
+.project-card-4 .card-content { padding: var(--padding); }
 
 .project-card-1 { padding-block-end: 0; }
 
-.project :is(.project-card-3, .project-card-4) { gap: 0; }
+.project .project-card-3,
+.project .project-card-4 { gap: 0; }
 
 .project-card .card-tag {
   font-size: var(--fs-8);
@@ -710,7 +712,6 @@ textarea.input-field {
    */
 
   .about .wrapper {
-    grid-template-columns: 1
     grid-template-columns: 1fr 1fr;
     align-items: center;
   }
@@ -738,6 +739,7 @@ textarea.input-field {
 
   :is(.project-card-1, .project-card-2) .card-banner { width: 66.66%; }
 
+  .project-card-1 .card
   .project-card-1 .card-content { padding-block-end: var(--padding); }
 
   .project-card-2 .card-content { order: 1; }
