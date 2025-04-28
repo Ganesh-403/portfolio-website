@@ -28,6 +28,8 @@ This is my **personal portfolio website**, showcasing my skills, projects, certi
 
 ## 🚀 Getting Started
 
+## 🚀 Getting Started
+
 ### **Clone the Repository**
 ```sh
 git clone https://github.com/Ganesh-403/portfolio-website.git
@@ -53,3 +55,4 @@ npm run build
 1. Ensure you have a GitHub account and a repository set up.
 2. Follow the instructions in the [GitHub Pages documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site) to deploy your project to GitHub Pages.
 
+🛠 **Feel free to fork, contribute, or suggest improvements!** 🚀  
