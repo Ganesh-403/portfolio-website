@@ -1,76 +1,55 @@
-# 🌐 Ganesh Kambli - Portfolio Website  
+# 🌐 Ganesh Kambli - Portfolio Website
 
-🚀 **AI & Full-Stack Enthusiast | Pune, India**  
+🚀 **AI & Full-Stack Enthusiast | Pune, India**
 
-This is my **personal portfolio website**, showcasing my skills, projects, certifications, and experience in **Software Development, Data Science, and Machine Learning**. The website serves as a central hub for my work, achievements, and contact information.  
-
----
-
-## 🔥 Features  
-✅ **About Me** – Introduction and background summary.  
-✅ **Projects** – A showcase of my real-world projects.  
-✅ **Certifications** – A section highlighting my achievements.  
-✅ **Resume** – Direct access to my resume.  
-✅ **Contact** – Email and social media links.  
-✅ **Navigation Bar** – Easy navigation across sections.  
-✅ **Hero Section** – Overview of my expertise and interests.  
-✅ **Minimalist & Responsive UI** – Optimized for all devices.  
+This is my **personal portfolio website**, showcasing my skills, projects, certifications, and experience in **Software Development, Data Science, and Machine Learning**. The website serves as a central hub for my work, achievements, and contact information.
 
 ---
 
-## 📋 Technologies Used  
-- **Frontend**: HTML, CSS, JavaScript  
-- **Styling**: Bootstrap / Tailwind CSS  
-- **Hosting**: GitHub Pages (or any other deployment platform)  
+## 🔥 Features
+✅ **About Me** – Introduction and background summary, including skills (progress bars).
+✅ **Projects** – A showcase of my real-world projects with links.
+✅ **Certifications** – A section highlighting my achievements. (Note: This section is mentioned in the README but not present in the provided HTML. You might want to add it.)
+✅ **Resume** – Direct access to my resume. (Note: This link is not present in the provided HTML. You might want to add it.)
+✅ **Contact** – Contact form and social media links. **(Note: The contact form requires a backend or a third-party service to process submissions.)**
+✅ **Smooth Navigation** – Easy navigation across sections with smooth scrolling.
+✅ **Dark/Light Mode Toggle** – Switch between themes with preference saved locally.
+✅ **Minimalist & Responsive UI** – Optimized for all devices.
 
 ---
 
-## 🚀 Getting Started  
+## 📋 Technologies Used
+- **Frontend**: HTML, CSS, JavaScript
+- **Styling**: Custom CSS (based on the provided `style.css`)
+- **Icons**: Ionicon
+- **Hosting**: GitHub Pages (or any other deployment platform)
 
-### **Clone the Repository**  
-```sh  
-git clone https://github.com/Ganesh-403/portfolio-website.git  
-cd portfolio-website  
+---
+
+## 🚀 Getting Started
+
+### **Clone the Repository**
+```sh
+git clone https://github.com/Ganesh-403/portfolio-website.git
+cd portfolio-website
 ```
 
-### **Open the Project**  
-Since this is a **static website**, simply open `index.html` in your browser or use Live Server (if using VS Code).  
+### **Install Dependencies**
+```sh
+npm install
+```
 
----
+### **Start the Development Server**
+```sh
+npm start
+```
 
-## 📂 Projects Featured  
-The portfolio showcases the following projects:  
+### **Build the Project for Production**
+```sh
+npm run build
+```
 
-1. **Railway Management System** - Python-based ticket booking and train management system.  
-   🔗 [GitHub Repo](https://github.com/Ganesh-403/Railway-Management-System)  
+### **Deploy to GitHub Pages**
+1. Ensure you have a GitHub account and a repository set up.
+2. Follow the instructions in the [GitHub Pages documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site) to deploy your project to GitHub Pages.
 
-2. **SVF** - C++-based secure virtual file system with user authentication.  
-   🔗 [GitHub Repo](https://github.com/Ganesh-403/SVF)  
-
-3. **Missionaries and Cannibals Game** - Python game based on a classic river-crossing puzzle.  
-   🔗 [GitHub Repo](https://github.com/Ganesh-403/missionaries-and-cannibals-game)  
-
-4. **Open Source License Detection** - Flask web app for identifying open-source licenses.  
-   🔗 [GitHub Repo](https://github.com/Ganesh-403/Open-Source-License-Detection)  
-
-5. **Bulk Certificate Generation Web Page** - Flask-based app for bulk certificate generation.  
-   🔗 [GitHub Repo](https://github.com/Ganesh-403/Bulk-Certificate-Generation-Web-Application)  
-
-6. **Certificate Verification Plugin** - WordPress plugin for course certificate verification.  
-   🔗 [GitHub Repo](https://github.com/Ganesh-403/Certificate-Verification-Plugin)  
-
----
-
-## 🔗 Live Demo  
-[Coming Soon / Add Deployment Link]  
-
----
-
-## 💌 Connect with Me  
-📩 **Email**: gkambli403@gmail.com  
-🔗 **LinkedIn**: [Ganesh Kambli](https://www.linkedin.com/in/ganesh-kambli-404-error/)  
-💻 **GitHub**: [Ganesh-403](https://github.com/Ganesh-403)  
-
----
-
-🛠 **Feel free to fork, contribute, or suggest improvements!** 🚀  
