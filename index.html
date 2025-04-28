@@ -6,31 +6,31 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- 
+  <!--
     - primary meta tags
   -->
   <title>Ganesh Kambli - AI & Full-Stack Enthusiast</title>
   <meta name="title" content="Ganesh Kambli - AI & Full-Stack Enthusiast">
   <meta name="description" content="This is a personal portfolio of Ganesh Kambli, an AI & Full-Stack Enthusiast.">
 
-  <!-- 
+  <!--
     - favicon
   -->
   <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
-  <!-- 
+  <!--
     - google font link
   -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700&display=swap" rel="stylesheet">
 
-  <!-- 
+  <!--
     - custom css link
   -->
   <link rel="stylesheet" href="./assets/css/style.css">
 
-  <!-- 
+  <!--
     - preload images
   -->
   <link rel="preload" as="image" href="./assets/images/hero-banner.jpg">
@@ -40,7 +40,7 @@
 
 <body>
 
-  <!-- 
+  <!--
     - #HEADER
   -->
 
@@ -65,16 +65,16 @@
 
         <ul class="navbar-list">
           <li>
-            <a href="#about" class="navbar-link">About</a>
+            <a href="#about" class="navbar-link" data-nav-link>About</a>
           </li>
           <li>
-            <a href="#projects" class="navbar-link">Projects</a>
+            <a href="#projects" class="navbar-link" data-nav-link>Projects</a>
           </li>
           <li>
-            <a href="#skills" class="navbar-link">Skills</a>
+            <a href="#about" class="navbar-link" data-nav-link>Skills</a>
           </li>
           <li>
-            <a href="#contact" class="navbar-link">Contact</a>
+            <a href="#contact" class="navbar-link" data-nav-link>Contact</a>
           </li>
         </ul>
 
@@ -109,7 +109,7 @@
   <main>
     <article>
 
-      <!-- 
+      <!--
         - #HERO
       -->
 
@@ -125,7 +125,6 @@
               I'm an AI & Full-Stack Enthusiast.
             </h1>
 
-            <p class="section-text" data-reveal="top" data-reveal-delay="0.75
             <p class="section-text" data-reveal="top" data-reveal-delay="0.75s">
               Hello! I'm Ganesh Kambli, a third-year Computer Engineering student passionate about software development, data science, and machine learning. I thrive on building innovative solutions that leverage AI to tackle complex challenges.
             </p>
@@ -140,11 +139,11 @@
         </div>
       </section>
 
-      <!-- 
+      <!--
         - #ABOUT
       -->
 
-      <section class="section about" aria-label="about">
+      <section class="section about" aria-label="about" id="about">
         <div class="container">
 
           <div class="wrapper">
@@ -230,7 +229,6 @@
                 </p>
               </div>
             </li>
-            <li data-re
             <li data-reveal="bottom" data-reveal-delay="0.5s">
               <div class="about-card">
                 <div class="card-icon">
@@ -258,11 +256,11 @@
         </div>
       </section>
 
-      <!-- 
+      <!--
         - #PROJECT
       -->
 
-      <section class="section project" aria-labelledby="project-label">
+      <section class="section project" aria-labelledby="project-label" id="projects">
         <div class="container">
 
           <div class="title-wrapper" data-reveal="top">
@@ -334,35 +332,35 @@
               <div class="project-card project-card-4" style="background-color: #fcf4f6">
                 <div class="card-content" data-reveal="left">
                   <p class="card-tag" style="color: #d16b86">Web Development</p>
-                  <h3 class="h3 card-title">Open Source License Detector</h3>
-                  <p class="card-text">
+                  <h3 class=\"h3 card-title\">Open Source License Detector</h3>
+                  <p class=\"card-text\">
                     A Flask-based web app that detects open-source licenses in .txt and .md files, helping developers ensure compliance.
                   </p>
-                  <a href="https://github.com/Ganesh-403/Open-Source-License-Detection" class="btn-text" style="color: #d16b86">
-                    <span class="span">See Project</span>
-                    <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                  <a href=\"https://github.com/Ganesh-403/Open-Source-License-Detection\" class=\"btn-text\" style=\"color: #d16b86\">
+                    <span class=\"span\">See Project</span>
+                    <ion-icon name=\"arrow-forward-outline\" aria-hidden=\"true\"></ion-icon>
                   </a>
                 </div>
-                <figure class="card-banner" data-reveal="right">
-                  <img src="./assets/images/project-4.png" width="620" height="370" loading="lazy" alt="Open Source License Detector" class="w-100">
+                <figure class=\"card-banner\" data-reveal=\"right\">
+                  <img src=\"./assets/images/project-4.png\" width=\"620\" height=\"370\" loading=\"lazy\" alt=\"Open Source License Detector\" class=\"w-100\">
                 </figure>
               </div>
             </li>
             <li>
-              <div class="project-card project-card-5" style="background-color: #f8f5fb">
-                <div class="card-content" data-reveal="left">
-                  <p class="card-tag" style="color: #a07cc5">Web Development</p>
-                  <h3 class="h3 card-title">Certificate Generation Application</h3>
-                  <p class="card-text">
+              <div class=\"project-card project-card-5\" style=\"background-color: #f8f5fb\">
+                <div class=\"card-content\" data-reveal=\"left\">
+                  <p class=\"card-tag\" style=\"color: #a07cc5\">Web Development</p>
+                  <h3 class=\"h3 card-title\">Certificate Generation Application</h3>
+                  <p class=\"card-text\">
                     A Flask-based web app for bulk certificate generation using custom templates, supporting PDF and image templates, font customization, and bulk ZIP downloads.
                   </p>
-                  <a href="https://github.com/Ganesh-403/Bulk-Certificate-Generation-Web-Application" class="btn-text" style="color: #a07cc5">
-                    <span class="span">See Project</span>
-                    <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                  <a href=\"https://github.com/Ganesh-403/Bulk-Certificate-Generation-Web-Application\" class=\"btn-text\" style=\"color: #a07cc5\">
+                    <span class=\"span\">See Project</span>
+                    <ion-icon name=\"arrow-forward-outline\" aria-hidden=\"true\"></ion-icon>
                   </a>
                 </div>
-                <figure class="card-banner" data-reveal="right">
-                  <img src="./assets/images/project-5.png" width="650" height="370" loading="lazy" alt="Certificate Generator" class="w-100">
+                <figure class=\"card-banner\" data-reveal=\"right\">
+                  <img src=\"./assets/images/project-5.png\" width=\"650\" height=\"370\" loading=\"lazy\" alt=\"Certificate Generator\" class=\"w-100\">
                 </figure>
               </div>
             </li>
@@ -371,11 +369,11 @@
         </div>
       </section>
 
-      <!-- 
+      <!--
         - #CONTACT
       -->
 
-      <section class="section contact" aria-label="contact">
+      <section class="section contact" aria-label="contact" id="contact">
         <div class="container">
 
           <div class="contact-card">
@@ -415,7 +413,7 @@
     </article>
   </main>
 
-  <!-- 
+  <!--
     - #FOOTER
       -->
 
@@ -442,12 +440,12 @@
     </div>
   </footer>
 
-  <!-- 
+  <!--
     - custom js link
   -->
   <script src="./assets/js/script.js"></script>
 
-  <!-- 
+  <!--
     - ionicon link
   -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
