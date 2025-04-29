@@ -13,7 +13,6 @@ This is my **personal portfolio website**, showcasing my skills, projects, certi
 - ✅ **Resume** – Direct access to my resume. (Note: This link is not present in the provided HTML. You might want to add it.)
 - ✅ **Contact** – Contact form and social media links. **(Note: The contact form requires a backend or a third-party service to process submissions.)**
 - ✅ **Smooth Navigation** – Easy navigation across sections with smooth scrolling.
-- ✅ **Dark/Light Mode Toggle** – Switch between themes with preference saved locally.
 - ✅ **Minimalist & Responsive UI** – Optimized for all devices.
 
 ---
