@@ -1,57 +1,65 @@
-# 🌐 Ganesh Kambli - Portfolio Website
+# Ganesh Kambli — Portfolio Website
 
-🚀 **AI & Full-Stack Enthusiast | Pune, India**
-
-This is my **personal portfolio website**, showcasing my skills, projects, certifications, and experience in **Software Development, Data Science, and Machine Learning**. The website serves as a central hub for my work, achievements, and contact information.
-
----
-
-## 🔥 Features
-- ✅ **About Me** – Introduction and background summary, including skills (progress bars).
-- ✅ **Projects** – A showcase of my real-world projects with links.
-- ✅ **Certifications** – A section highlighting my achievements. (Note: This section is mentioned in the README but not present in the provided HTML. You might want to add it.)
-- ✅ **Resume** – Direct access to my resume. (Note: This link is not present in the provided HTML. You might want to add it.)
-- ✅ **Contact** – Contact form and social media links. **(Note: The contact form requires a backend or a third-party service to process submissions.)**
-- ✅ **Smooth Navigation** – Easy navigation across sections with smooth scrolling.
-- ✅ **Minimalist & Responsive UI** – Optimized for all devices.
+Personal portfolio website built with vanilla HTML, CSS, and JavaScript.
+Live at: `https://portfolio-website-theta-beige.vercel.app/`
 
 ---
 
-## 📋 Technologies Used
-- **Frontend**: HTML, CSS, JavaScript
-- **Styling**: Custom CSS (based on the provided `style.css`)
-- **Icons**: Ionicon
-- **Hosting**: GitHub Pages (or any other deployment platform)
+## What's Inside
+
+- **Hero** — Intro with animated typewriter, photo, and live stat counters
+- **About** — Background, skill tags, and highlights
+- **Experience** — Timeline of internship + education, with achievement cards
+- **Projects** — 6 real projects with tech tags, metrics, and GitHub links
+- **Contact** — Working contact form via Formspree + direct channel links
 
 ---
 
-## 🚀 Getting Started
+## Tech Stack
 
-## 🚀 Getting Started
+- Pure HTML + CSS + JavaScript — no frameworks, no build step
+- Fonts: Syne · JetBrains Mono · DM Sans (Google Fonts)
+- Form handling: Formspree
+- Hosting: GitHub Pages
 
-### **Clone the Repository**
+---
+
+## Running Locally
 ```sh
 git clone https://github.com/Ganesh-403/portfolio-website.git
 cd portfolio-website
 ```
 
-### **Install Dependencies**
-```sh
-npm install
+Then just open `index.html` in your browser — no install or build step needed.
+
+---
+
+## Project Structure
+```
+portfolio-website/
+├── index.html          # All HTML + CSS + JS (self-contained)
+└── assets/
+    └── images/
+        └── ganesh.jpg  # Profile photo
 ```
 
-### **Start the Development Server**
-```sh
-npm start
-```
+---
 
-### **Build the Project for Production**
-```sh
-npm run build
-```
+## Projects Featured
 
-### **Deploy to GitHub Pages**
-1. Ensure you have a GitHub account and a repository set up.
-2. Follow the instructions in the [GitHub Pages documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site) to deploy your project to GitHub Pages.
+| Project | Stack | Status |
+|---|---|---|
+| HoneyCloud — Scalable Honeypot Platform | Python · Cloud · Docker | In Progress |
+| Flight Delay Prediction AI | Scikit-learn · Flask · Plotly.js | Deployed |
+| Railway Management System | Flask · MySQL · JavaScript | Deployed |
+| Bulk Certificate Generator | Flask · Jinja2 · Pandas | Deployed |
+| Absence Detection System | Python · GitHub Actions · Sheets API | Deployed |
+| Open Source License Detector | Flask · Python · NLP | Deployed |
 
-🛠 **Feel free to fork, contribute, or suggest improvements!** 🚀  
+---
+
+## Contact
+
+- Email: gkambli70@gmail.com
+- LinkedIn: [ganesh-kambli-404-error](https://www.linkedin.com/in/ganesh-kambli-404-error/)
+- GitHub: [Ganesh-403](https://github.com/Ganesh-403)
