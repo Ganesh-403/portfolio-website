@@ -372,7 +372,8 @@
       content: ''; position: absolute; inset: 0;
       background: linear-gradient(135deg, var(--orange-dim), transparent 60%);
       opacity: 0; transition: var(--transition);
-    }
+  pointer-events: none;
+}
     .project-card:hover { border-color: var(--border-hover); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
     .project-card:hover::before { opacity: 1; }
     .project-card.featured { grid-column: span 2; }
@@ -549,15 +550,15 @@
             <div class="hero-actions">
               <a href="#projects" class="btn-primary">View Projects →</a>
               <a href="https://github.com/Ganesh-403" target="_blank" class="btn-ghost">GitHub ↗</a>
-              <a href="https://www.linkedin.com/in/ganesh-kambli-404-error/" target="_blank" class="btn-ghost">LinkedIn ↗</a>
+              <a href="https://www.linkedin.com/in/ganeshkambli" target="_blank" class="btn-ghost">LinkedIn ↗</a>
             </div>
             <div class="hero-stats">
               <div class="stat">
-                <span class="stat-num" data-count="2">0</span>
+                <span class="stat-num" data-count="1">0</span>
                 <span class="stat-label">Internships</span>
               </div>
               <div class="stat">
-                <span class="stat-num" data-count="3">0</span>
+                <span class="stat-num" data-count="6">0</span>
                 <span class="stat-label">Projects</span>
               </div>
               <div class="stat">
@@ -595,7 +596,7 @@
             <div class="about-highlights">
               <div class="highlight-item"><div class="dot"></div>GSMCOE, Pune · SPPU · 2022–2026 · CGPA 7.67</div>
               <div class="highlight-item"><div class="dot"></div>Python Developer Intern · AI Adventures LLP</div>
-              <div class="highlight-item"><div class="dot"></div>Winner · Site Craft Web Dev Challenge 2025</div>
+              <div class="highlight-item"><div class="dot"></div>Winner · Site Craft  2025 | Runner-up · Prep-a-thon 2025</div>
               <div class="highlight-item"><div class="dot"></div>Open to SDE roles · Pune / Remote</div>
             </div>
           </div>
@@ -691,7 +692,7 @@
             <div class="timeline-org">GSMCOE, Pune · Savitribai Phule Pune University (SPPU) · CGPA: 7.67</div>
             <ul class="timeline-bullets">
               <li>Coursework: DSA, DBMS, OS, Computer Networks, OOP, Software Engineering, Machine Learning.</li>
-              <li>Applied knowledge through 3 deployed projects, 1 internship, and 2 intercollegiate competition wins.</li>
+              <li>Applied knowledge through multiple deployed projects, 1 internship, and 2 intercollegiate competition wins.</li>
             </ul>
           </div>
         </div>
@@ -736,7 +737,7 @@
               <div class="project-icon">🍯</div>
               <div style="display:flex;align-items:center;gap:10px;">
                 <span class="project-status wip">In Progress</span>
-                <a href="https://github.com/Ganesh-403" target="_blank" class="project-link">↗</a>
+                <a href="https://github.com/Ganesh-403/honeycloud" target="_blank" class="project-link">↗</a>
               </div>
             </div>
             <div class="project-tag-row">
@@ -755,6 +756,7 @@
             <div class="project-top">
               <div class="project-icon">✈️</div>
               <span class="project-status">Deployed</span>
+              <a href="https://github.com/Ganesh-403/FlightDelayAI" target="_blank" class="project-link">↗</a>
             </div>
             <div class="project-tag-row">
               <span class="project-tag">Python</span>
@@ -770,7 +772,10 @@
           <div class="project-card reveal">
             <div class="project-top">
               <div class="project-icon">🚂</div>
-              <a href="https://github.com/Ganesh-403/Railway-Management-System" target="_blank" class="project-link">↗</a>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="project-status">Deployed</span>
+                <a href="https://github.com/Ganesh-403/Railway-Management-System" target="_blank" class="project-link">↗</a>
+              </div>
             </div>
             <div class="project-tag-row">
               <span class="project-tag">Flask</span>
@@ -785,7 +790,10 @@
           <div class="project-card reveal reveal-delay-1">
             <div class="project-top">
               <div class="project-icon">📜</div>
-              <a href="https://github.com/Ganesh-403/Bulk-Certificate-Generation-Web-Application" target="_blank" class="project-link">↗</a>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="project-status">Deployed</span>
+                <a href="https://github.com/Ganesh-403/Bulk-Certificate-Generation-Web-Application" target="_blank" class="project-link">↗</a>
+              </div>
             </div>
             <div class="project-tag-row">
               <span class="project-tag">Flask</span>
@@ -801,7 +809,10 @@
           <div class="project-card reveal reveal-delay-2">
             <div class="project-top">
               <div class="project-icon">🤖</div>
-              <a href="https://github.com/Ganesh-403/Absence-Detection-System" target="_blank" class="project-link">↗</a>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="project-status">Deployed</span>
+                <a href="https://github.com/Ganesh-403/Absence-Detection-System" target="_blank" class="project-link">↗</a>
+              </div>
             </div>
             <div class="project-tag-row">
               <span class="project-tag">Python</span>
@@ -816,7 +827,10 @@
           <div class="project-card reveal reveal-delay-3">
             <div class="project-top">
               <div class="project-icon">🔍</div>
-              <a href="https://github.com/Ganesh-403/Open-Source-License-Detection" target="_blank" class="project-link">↗</a>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="project-status">Deployed</span>
+                <a href="https://github.com/Ganesh-403/Open-Source-License-Detection" target="_blank" class="project-link">↗</a>
+              </div>
             </div>
             <div class="project-tag-row">
               <span class="project-tag">Flask</span>
@@ -844,9 +858,9 @@
                 <span class="contact-channel-icon">@</span>
                 gkambli70@gmail.com
               </a>
-              <a href="https://www.linkedin.com/in/ganesh-kambli-404-error/" target="_blank" class="contact-channel">
+              <a href="https://www.linkedin.com/in/ganeshkambli" target="_blank" class="contact-channel">
                 <span class="contact-channel-icon">in</span>
-                linkedin.com/in/ganesh-kambli-404-error
+                linkedin.com/in/ganeshkambli
               </a>
               <a href="https://github.com/Ganesh-403" target="_blank" class="contact-channel">
                 <span class="contact-channel-icon">gh</span>
@@ -884,7 +898,7 @@
         <p class="footer-left">© 2026 Ganesh Kambli. Built with intention.</p>
         <ul class="footer-links">
           <li><a href="https://github.com/Ganesh-403" target="_blank">GitHub</a></li>
-          <li><a href="https://www.linkedin.com/in/ganesh-kambli-404-error/" target="_blank">LinkedIn</a></li>
+          <li><a href="https://www.linkedin.com/in/ganeshkambli" target="_blank">LinkedIn</a></li>
           <li><a href="mailto:gkambli70@gmail.com">Email</a></li>
         </ul>
       </div>
