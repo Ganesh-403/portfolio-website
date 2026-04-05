@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ganesh Kambli — Software Developer</title>
-  <meta name="description" content="Ganesh Kambli — Final-year CS Engineer at Savitribai Phule Pune University, Pune. Python Developer, Full-Stack builder, ML practitioner. 2 internships · 3 deployed projects · 2 competition wins.">
+  <meta name="description" content="Ganesh Kambli — Final-year CS Engineer at Savitribai Phule Pune University, Pune. Python Developer, Full-Stack builder, ML practitioner. 1 internship · 6 projects · 2 competition wins.">
   <meta property="og:title" content="Ganesh Kambli — Software Developer">
-  <meta property="og:description" content="Python Developer · Full-Stack · ML · Open to SDE roles">
+  <meta property="og:description" content="Python Developer · Backend · Cloud · Security · Open to SDE roles">
   <meta name="theme-color" content="#0d0d0d">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -372,8 +372,8 @@
       content: ''; position: absolute; inset: 0;
       background: linear-gradient(135deg, var(--orange-dim), transparent 60%);
       opacity: 0; transition: var(--transition);
-  pointer-events: none;
-}
+      pointer-events: none;
+    }
     .project-card:hover { border-color: var(--border-hover); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
     .project-card:hover::before { opacity: 1; }
     .project-card.featured { grid-column: span 2; }
@@ -405,6 +405,38 @@
     .project-status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; animation: pulse 2s ease-in-out infinite; }
     @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
+    /* ─── MORE PROJECTS STRIP ──────────────────────────── */
+    .more-projects-strip {
+      margin-top: 28px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .more-projects-link {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font-mono); font-size: 0.78rem;
+      color: var(--text-dim); text-decoration: none;
+      padding: 12px 22px;
+      border: 1px dashed rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      cursor: none;
+    }
+    .more-projects-link:hover {
+      color: var(--orange);
+      border-color: rgba(247,76,0,0.35);
+      background: var(--orange-dim);
+    }
+    .more-projects-link .gh-icon {
+      width: 16px; height: 16px; opacity: 0.5;
+      transition: opacity var(--transition);
+      flex-shrink: 0;
+    }
+    .more-projects-link:hover .gh-icon { opacity: 1; }
+    .more-projects-link .arrow {
+      color: var(--orange); font-size: 0.85rem;
+      transform: translateX(0); transition: transform var(--transition);
+    }
+    .more-projects-link:hover .arrow { transform: translateX(4px); }
+
     /* ─── CONTACT ──────────────────────────────────────── */
     #contact { background: var(--bg2); }
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
@@ -430,8 +462,6 @@
     }
     .form-group input:focus, .form-group textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 3px var(--orange-dim); }
     .form-group textarea { min-height: 120px; }
-    .form-note { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin-top: 4px; }
-    .form-note a { color: var(--orange); text-decoration: none; }
 
     /* ─── FOOTER ───────────────────────────────────────── */
     footer { padding: 32px 0; border-top: 1px solid var(--border); position: relative; z-index: 2; }
@@ -518,7 +548,6 @@
           <li><a href="#experience" data-num="02">Experience</a></li>
           <li><a href="#projects" data-num="03">Projects</a></li>
           <li><a href="#contact" data-num="04">Contact</a></li>
-          
         </ul>
         <a href="mailto:gkambli70@gmail.com" class="nav-cta">Hire Me</a>
         <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
@@ -546,17 +575,17 @@
               <span id="typewriter"></span><span class="cursor-blink"></span>
             </p>
             <p class="hero-desc">
-              Final-year CS engineer at Savitribai Phule Pune University, Pune. I build Python-powered backends, full-stack web apps, and ML systems — end to end, from architecture to production.
+              Final-year CS engineer at Savitribai Phule Pune University, Pune. I build Python-powered backends, cloud platforms, cybersecurity tools, and full-stack web apps — end to end, from architecture to production.
             </p>
             <div class="hero-actions">
               <a href="#projects" class="btn-primary">View Projects →</a>
               <a href="https://github.com/Ganesh-403" target="_blank" class="btn-ghost">GitHub ↗</a>
-              <a href="https://www.linkedin.com/in/ganeshkambli" target="_blank" class="btn-ghost">LinkedIn ↗</a>
+              <a href="https://www.linkedin.com/in/ganeshkambli/" target="_blank" class="btn-ghost">LinkedIn ↗</a>
             </div>
             <div class="hero-stats">
               <div class="stat">
                 <span class="stat-num" data-count="1">0</span>
-                <span class="stat-label">Internships</span>
+                <span class="stat-label">Internship</span>
               </div>
               <div class="stat">
                 <span class="stat-num" data-count="6">0</span>
@@ -592,12 +621,12 @@
         <div class="about-grid">
           <div class="about-text reveal">
             <p>I'm <strong>Ganesh Kambli</strong> — a final-year Computer Engineering student at <strong>Savitribai Phule Pune University, Pune</strong>, graduating in 2026. My core is Python: I've shipped automation pipelines, REST APIs, ML models, and data-engineering tools that are currently in use.</p>
-            <p>I love writing code that is clean, measurable, and maintainable — not just code that runs. I've won intercollegiate competitions, interned at aiadventures LLM a Pune-based AI startup, and am building <strong>HoneyCloud</strong>, a cloud-native cybersecurity platform, as my final-year project.</p>
+            <p>I love writing code that is clean, measurable, and maintainable — not just code that runs. I've won intercollegiate competitions, interned at AI Adventures LLP, a Pune-based AI startup, and am building <strong>HoneyCloud</strong>, a cloud-native cybersecurity platform, as my final-year project.</p>
             <p>I'm looking for my first full-time <strong>SDE role</strong> where I can contribute to a high-quality engineering team and grow fast.</p>
             <div class="about-highlights">
               <div class="highlight-item"><div class="dot"></div>Savitribai Phule Pune University, Pune · 2022–2026 · CGPA 7.67</div>
               <div class="highlight-item"><div class="dot"></div>Python Developer Intern · AI Adventures LLP</div>
-              <div class="highlight-item"><div class="dot"></div>Winner · Site Craft  2025 | Runner-up · Prep-a-thon 2025</div>
+              <div class="highlight-item"><div class="dot"></div>Winner · Site Craft 2025 | Runner-up · Prep-a-thon 2025</div>
               <div class="highlight-item"><div class="dot"></div>Open to SDE roles · Pune / Remote</div>
             </div>
           </div>
@@ -607,9 +636,9 @@
               <div class="skills-group-label">Languages</div>
               <div class="skill-tags">
                 <span class="skill-tag">Python</span>
+                <span class="skill-tag">C++</span>
                 <span class="skill-tag">JavaScript</span>
                 <span class="skill-tag">Java</span>
-                <span class="skill-tag">C++</span>
                 <span class="skill-tag">SQL</span>
                 <span class="skill-tag">HTML/CSS</span>
               </div>
@@ -628,22 +657,23 @@
               </div>
             </div>
             <div class="skills-group">
+              <div class="skills-group-label">Cloud & Security</div>
+              <div class="skill-tags">
+                <span class="skill-tag">Docker</span>
+                <span class="skill-tag">GitHub Actions</span>
+                <span class="skill-tag">REST APIs</span>
+                <span class="skill-tag">JWT Auth</span>
+                <span class="skill-tag">SHA-256</span>
+                <span class="skill-tag">RBAC</span>
+              </div>
+            </div>
+            <div class="skills-group">
               <div class="skills-group-label">Databases</div>
               <div class="skill-tags">
                 <span class="skill-tag">MySQL</span>
                 <span class="skill-tag">MongoDB</span>
                 <span class="skill-tag">SQLite</span>
                 <span class="skill-tag">Google Sheets API</span>
-              </div>
-            </div>
-            <div class="skills-group">
-              <div class="skills-group-label">Tools & Platforms</div>
-              <div class="skill-tags">
-                <span class="skill-tag">Git & GitHub</span>
-                <span class="skill-tag">GitHub Actions</span>
-                <span class="skill-tag">Docker</span>
-                <span class="skill-tag">REST APIs</span>
-                <span class="skill-tag">VS Code</span>
               </div>
             </div>
             <div class="skills-group">
@@ -733,6 +763,8 @@
         </div>
 
         <div class="projects-grid">
+
+          <!-- 1. HoneyCloud — featured (spans 2 cols) -->
           <div class="project-card featured reveal">
             <div class="project-top">
               <div class="project-icon">🍯</div>
@@ -745,32 +777,57 @@
               <span class="project-tag">Python</span>
               <span class="project-tag">Cloud</span>
               <span class="project-tag">Cybersecurity</span>
+              <span class="project-tag">Machine Learning</span>
               <span class="project-tag">Docker</span>
-              <span class="project-tag">Dashboard</span>
+              <span class="project-tag">Real-time Streaming</span>
             </div>
             <div class="project-name">HoneyCloud — Scalable Honeypot Platform</div>
-            <p class="project-desc">Final-year BE project. A cloud-deployed honeypot platform with real-time threat dashboards, scalable multi-node architecture, and attacker behaviour analytics. Designed to attract, log, and analyse malicious activity in a controlled environment.</p>
-            <div class="project-metric">Final Year Project · SPPU 2019 Pattern · Cybersecurity + Cloud</div>
+            <p class="project-desc">Final-year project. A smart, cloud-deployed honeypot platform that captures, analyzes, and visualizes attack traffic across SSH, FTP, and HTTP protocols. Combines real-time event streaming, ML-powered threat classification, and attacker behaviour dashboards — designed to attract, log, and dissect malicious activity in a controlled environment.</p>
+            <div class="project-metric">Final Year Project · Cybersecurity + Cloud + ML · Multi-protocol threat capture</div>
           </div>
 
+          <!-- 2. Cloud SaaS System -->
           <div class="project-card reveal reveal-delay-1">
             <div class="project-top">
-              <div class="project-icon">✈️</div>
-              <span class="project-status">Deployed</span>
-              <a href="https://github.com/Ganesh-403/FlightDelayAI" target="_blank" class="project-link">↗</a>
+              <div class="project-icon">☁️</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="project-status">Deployed</span>
+                <a href="https://github.com/Ganesh-403/Cloud-SaaS-System" target="_blank" class="project-link">↗</a>
+              </div>
             </div>
             <div class="project-tag-row">
               <span class="project-tag">Python</span>
-              <span class="project-tag">Scikit-learn</span>
-              <span class="project-tag">Flask</span>
-              <span class="project-tag">Plotly.js</span>
+              <span class="project-tag">JWT Auth</span>
+              <span class="project-tag">REST API</span>
+              <span class="project-tag">SaaS</span>
             </div>
-            <div class="project-name">Flight Delay Prediction AI</div>
-            <p class="project-desc">ML web app predicting flight delays — 15+ engineered features from historical data. Tuned Random Forest model outperformed baseline. Interactive dashboard surfaces the top 5 delay drivers.</p>
-            <div class="project-metric">15+ engineered features · Random Forest · REST API</div>
+            <div class="project-name">Cloud SaaS System</div>
+            <p class="project-desc">Python-powered cloud SaaS platform with JWT authentication, database-backed user management, file storage, metadata handling, and file preview — built end-to-end for scalability.</p>
+            <div class="project-metric">JWT auth · File management · Database-backed users</div>
           </div>
 
+          <!-- 3. SVF -->
           <div class="project-card reveal">
+            <div class="project-top">
+              <div class="project-icon">🔐</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="project-status">Deployed</span>
+                <a href="https://github.com/Ganesh-403/SVF" target="_blank" class="project-link">↗</a>
+              </div>
+            </div>
+            <div class="project-tag-row">
+              <span class="project-tag">C++</span>
+              <span class="project-tag">SHA-256</span>
+              <span class="project-tag">RBAC</span>
+              <span class="project-tag">Systems</span>
+            </div>
+            <div class="project-name">SVF — Secure Virtual File System</div>
+            <p class="project-desc">C++-based secure virtual file system with user authentication, SHA-256 password hashing, role-based access control, and full command-line file operations. Security-first by design.</p>
+            <div class="project-metric">SHA-256 hashing · Role-based permissions · CLI operations</div>
+          </div>
+
+          <!-- 4. Railway Management System -->
+          <div class="project-card reveal reveal-delay-1">
             <div class="project-top">
               <div class="project-icon">🚂</div>
               <div style="display:flex;align-items:center;gap:10px;">
@@ -784,65 +841,61 @@
               <span class="project-tag">JavaScript</span>
             </div>
             <div class="project-name">Railway Management System</div>
-            <p class="project-desc">Full-stack booking system. Reduced booking workflow to under 3 user actions. Optimised MySQL queries for concurrent operations with zero race conditions.</p>
-            <div class="project-metric">Under 3 user actions to book · Zero race conditions</div>
+            <p class="project-desc">Full-stack booking system. Reduced booking workflow to under 3 user actions with real-time seat reservation and MySQL query optimizations — zero race conditions under concurrent load.</p>
+            <div class="project-metric">Under 3 actions to book · Zero race conditions</div>
           </div>
 
-          <div class="project-card reveal reveal-delay-1">
-            <div class="project-top">
-              <div class="project-icon">📜</div>
-              <div style="display:flex;align-items:center;gap:10px;">
-                <span class="project-status">Deployed</span>
-                <a href="https://github.com/Ganesh-403/Bulk-Certificate-Generation-Web-Application" target="_blank" class="project-link">↗</a>
-              </div>
-            </div>
-            <div class="project-tag-row">
-              <span class="project-tag">Flask</span>
-              <span class="project-tag">Jinja2</span>
-              <span class="project-tag">Pandas</span>
-              <span class="project-tag">PDF</span>
-            </div>
-            <div class="project-name">Bulk Certificate Generator</div>
-            <p class="project-desc">Compressed certificate generation from hours to under 2 minutes. Processes 500+ recipients per batch via CSV upload and single-click bulk PDF download.</p>
-            <div class="project-metric">500+ recipients/batch · Hours → 2 minutes</div>
-          </div>
-
+          <!-- 5. Monitor Google Sheet -->
           <div class="project-card reveal reveal-delay-2">
             <div class="project-top">
-              <div class="project-icon">🤖</div>
+              <div class="project-icon">📡</div>
               <div style="display:flex;align-items:center;gap:10px;">
                 <span class="project-status">Deployed</span>
-                <a href="https://github.com/Ganesh-403/Absence-Detection-System" target="_blank" class="project-link">↗</a>
+                <a href="https://github.com/Ganesh-403/Monitor-Google-Sheet" target="_blank" class="project-link">↗</a>
               </div>
             </div>
             <div class="project-tag-row">
               <span class="project-tag">Python</span>
+              <span class="project-tag">Google Sheets API</span>
               <span class="project-tag">GitHub Actions</span>
-              <span class="project-tag">Sheets API</span>
             </div>
-            <div class="project-name">Absence Detection System</div>
-            <p class="project-desc">Built at AI Adventures LLP — end-to-end attendance tracking via Python, Google Sheets API, and GitHub Actions. Cut reporting time by ~80% and eliminated human error.</p>
+            <div class="project-name">Monitor Google Sheet</div>
+            <p class="project-desc">Real-time Google Sheets monitoring pipeline built during internship at AI Adventures LLP. Uses gspread + service account auth to detect new entries and fire automated workflows — cut reporting time by ~80%.</p>
             <div class="project-metric">~80% reduction in reporting time · Zero human error</div>
           </div>
 
+          <!-- 6. Portfolio Website -->
           <div class="project-card reveal reveal-delay-3">
             <div class="project-top">
-              <div class="project-icon">🔍</div>
+              <div class="project-icon">🌐</div>
               <div style="display:flex;align-items:center;gap:10px;">
-                <span class="project-status">Deployed</span>
-                <a href="https://github.com/Ganesh-403/Open-Source-License-Detection" target="_blank" class="project-link">↗</a>
+                <span class="project-status">Live</span>
+                <a href="https://github.com/Ganesh-403/portfolio-website" target="_blank" class="project-link">↗</a>
               </div>
             </div>
             <div class="project-tag-row">
-              <span class="project-tag">Flask</span>
-              <span class="project-tag">Python</span>
-              <span class="project-tag">NLP</span>
+              <span class="project-tag">HTML</span>
+              <span class="project-tag">CSS</span>
+              <span class="project-tag">JavaScript</span>
             </div>
-            <div class="project-name">Open Source License Detector</div>
-            <p class="project-desc">Flask app that detects open-source licenses in .txt and .md files — helping developers ensure compliance before publishing or contributing to repos.</p>
-            <div class="project-metric">Supports .txt and .md · Instant compliance check</div>
+            <div class="project-name">Portfolio Website</div>
+            <p class="project-desc">This site — a personal portfolio showcasing projects, skills, certifications, and experience. Responsive, dark-themed, and built from scratch with custom animations, cursor effects, and scroll reveals.</p>
+            <div class="project-metric">Custom cursor · Scroll reveals · Responsive design</div>
           </div>
+
         </div>
+
+        <!-- More projects strip -->
+        <div class="more-projects-strip reveal">
+          <a href="https://github.com/Ganesh-403?tab=repositories" target="_blank" class="more-projects-link">
+            <svg class="gh-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844a9.59 9.59 0 012.504.337c1.909-1.296 2.747-1.026 2.747-1.026.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12c0-5.523-4.477-10-10-10z"/>
+            </svg>
+            You can check out my other projects here
+            <span class="arrow">→</span>
+          </a>
+        </div>
+
       </div>
     </section>
 
@@ -859,7 +912,7 @@
                 <span class="contact-channel-icon">@</span>
                 gkambli70@gmail.com
               </a>
-              <a href="https://www.linkedin.com/in/ganeshkambli" target="_blank" class="contact-channel">
+              <a href="https://www.linkedin.com/in/ganeshkambli/" target="_blank" class="contact-channel">
                 <span class="contact-channel-icon">in</span>
                 linkedin.com/in/ganeshkambli
               </a>
@@ -907,7 +960,7 @@
         <p class="footer-left">© 2026 Ganesh Kambli. Built with intention.</p>
         <ul class="footer-links">
           <li><a href="https://github.com/Ganesh-403" target="_blank">GitHub</a></li>
-          <li><a href="https://www.linkedin.com/in/ganeshkambli" target="_blank">LinkedIn</a></li>
+          <li><a href="https://www.linkedin.com/in/ganeshkambli/" target="_blank">LinkedIn</a></li>
           <li><a href="mailto:gkambli70@gmail.com">Email</a></li>
         </ul>
       </div>
@@ -953,7 +1006,7 @@
     function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); }
 
     // ─── TYPEWRITER
-    const roles = ['Python Developer.', 'Full-Stack Builder.', 'ML Practitioner.', 'Problem Solver.', 'Aspiring SDE.'];
+    const roles = ['Python Developer.', 'Backend Engineer.', 'Cloud Builder.', 'Security Enthusiast.', 'Aspiring SDE.'];
     let ri = 0, ci = 0, deleting = false;
     const tw = document.getElementById('typewriter');
     function type() {
