@@ -1,7 +1,7 @@
 # Ganesh Kambli — Portfolio Website
 
 Personal portfolio website built with vanilla HTML, CSS, and JavaScript.
-Live at: `https://portfolio-website-theta-beige.vercel.app/`
+Live at: `https://portfolio-website-ganesh-kamblis-projects.vercel.app/`
 
 ---
 
@@ -61,5 +61,5 @@ portfolio-website/
 ## Contact
 
 - Email: gkambli70@gmail.com
-- LinkedIn: [ganesh-kambli-404-error](https://www.linkedin.com/in/ganesh-kambli-404-error/)
+- LinkedIn: [ganesh-kambli](https://www.linkedin.com/in/ganeshkambli/)
 - GitHub: [Ganesh-403](https://github.com/Ganesh-403)
