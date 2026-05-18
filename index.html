@@ -46,7 +46,6 @@
       font-size: 1rem;
       line-height: 1.7;
       overflow-x: hidden;
-      cursor: none;
     }
 
     /* ─── CUSTOM CURSOR ────────────────────────────────── */
@@ -71,6 +70,12 @@
       transition: transform 0.18s cubic-bezier(0.4,0,0.2,1), width 0.2s, height 0.2s;
     }
     body:hover #cursor { opacity: 1; }
+
+    body.has-custom-cursor,
+    body.has-custom-cursor a,
+    body.has-custom-cursor button {
+      cursor: none;
+    }
 
     /* ─── GRAIN TEXTURE OVERLAY ────────────────────────── */
     body::before {
@@ -207,7 +212,6 @@
       font-size: 0.82rem; letter-spacing: 0.06em;
       transition: var(--transition); border: 1px solid var(--orange);
       display: inline-flex; align-items: center; gap: 8px;
-      cursor: none;
     }
     .btn-primary:hover { background: transparent; color: var(--orange); }
     .btn-ghost {
@@ -217,7 +221,6 @@
       font-size: 0.82rem; letter-spacing: 0.06em;
       transition: var(--transition); border: 1px solid var(--border);
       display: inline-flex; align-items: center; gap: 8px;
-      cursor: none;
     }
     .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
 
@@ -418,7 +421,6 @@
       border: 1px dashed rgba(255,255,255,0.1);
       border-radius: var(--radius-sm);
       transition: var(--transition);
-      cursor: none;
     }
     .more-projects-link:hover {
       color: var(--orange);
@@ -596,7 +598,7 @@
                 <span class="stat-label">Wins</span>
               </div>
               <div class="stat">
-                <span class="stat-num" data-count="7" data-suffix=".67">0</span>
+                <span class="stat-num" data-count="8" data-suffix=".65">0</span>
                 <span class="stat-label">CGPA</span>
               </div>
             </div>
@@ -624,7 +626,7 @@
             <p>I love writing code that is clean, measurable, and maintainable — not just code that runs. I've won intercollegiate competitions, interned at AI Adventures LLP, a Pune-based AI startup, and am building <strong>HoneyCloud</strong>, a cloud-native cybersecurity platform, as my final-year project.</p>
             <p>I'm looking for my first full-time <strong>SDE role</strong> where I can contribute to a high-quality engineering team and grow fast.</p>
             <div class="about-highlights">
-              <div class="highlight-item"><div class="dot"></div>Savitribai Phule Pune University, Pune · 2022–2026 · CGPA 7.67</div>
+              <div class="highlight-item"><div class="dot"></div>Savitribai Phule Pune University, Pune · 2022–2026 · CGPA 8.65</div>
               <div class="highlight-item"><div class="dot"></div>Python Developer Intern · AI Adventures LLP</div>
               <div class="highlight-item"><div class="dot"></div>Winner · Site Craft 2025 | Runner-up · Prep-a-thon 2025</div>
               <div class="highlight-item"><div class="dot"></div>Open to SDE roles · Pune / Remote</div>
@@ -638,7 +640,6 @@
                 <span class="skill-tag">Python</span>
                 <span class="skill-tag">C++</span>
                 <span class="skill-tag">JavaScript</span>
-                <span class="skill-tag">Java</span>
                 <span class="skill-tag">SQL</span>
                 <span class="skill-tag">HTML/CSS</span>
               </div>
@@ -646,34 +647,46 @@
             <div class="skills-group">
               <div class="skills-group-label">Frameworks & Libraries</div>
               <div class="skill-tags">
+                <span class="skill-tag">FastAPI</span>
                 <span class="skill-tag">Flask</span>
                 <span class="skill-tag">React</span>
                 <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">Streamlit</span>
                 <span class="skill-tag">Scikit-learn</span>
                 <span class="skill-tag">Pandas</span>
                 <span class="skill-tag">NumPy</span>
-                <span class="skill-tag">Matplotlib</span>
-                <span class="skill-tag">Jinja2</span>
               </div>
             </div>
             <div class="skills-group">
-              <div class="skills-group-label">Cloud & Security</div>
+              <div class="skills-group-label">AI & LLM</div>
               <div class="skill-tags">
+                <span class="skill-tag">LangChain</span>
+                <span class="skill-tag">OpenAI API</span>
+                <span class="skill-tag">RAG Systems</span>
+                <span class="skill-tag">FAISS</span>
+                <span class="skill-tag">ChromaDB</span>
+                <span class="skill-tag">Semantic Search</span>
+              </div>
+            </div>
+            <div class="skills-group">
+              <div class="skills-group-label">Cloud & DevOps</div>
+              <div class="skill-tags">
+                <span class="skill-tag">AWS</span>
                 <span class="skill-tag">Docker</span>
+                <span class="skill-tag">CI/CD</span>
                 <span class="skill-tag">GitHub Actions</span>
                 <span class="skill-tag">REST APIs</span>
                 <span class="skill-tag">JWT Auth</span>
-                <span class="skill-tag">SHA-256</span>
-                <span class="skill-tag">RBAC</span>
               </div>
             </div>
             <div class="skills-group">
               <div class="skills-group-label">Databases</div>
               <div class="skill-tags">
+                <span class="skill-tag">PostgreSQL</span>
+                <span class="skill-tag">pgvector</span>
                 <span class="skill-tag">MySQL</span>
                 <span class="skill-tag">MongoDB</span>
                 <span class="skill-tag">SQLite</span>
-                <span class="skill-tag">Google Sheets API</span>
               </div>
             </div>
             <div class="skills-group">
@@ -720,7 +733,7 @@
               <span class="timeline-type">Education</span>
             </div>
             <div class="timeline-title">B.E. Computer Engineering</div>
-            <div class="timeline-org">Savitribai Phule Pune University, Pune · CGPA: 7.67</div>
+            <div class="timeline-org">Savitribai Phule Pune University, Pune · CGPA: 8.65</div>
             <ul class="timeline-bullets">
               <li>Coursework: DSA, DBMS, OS, Computer Networks, OOP, Software Engineering, Machine Learning.</li>
               <li>Applied knowledge through multiple deployed projects, 1 internship, and 2 intercollegiate competition wins.</li>
@@ -782,28 +795,28 @@
               <span class="project-tag">Real-time Streaming</span>
             </div>
             <div class="project-name">HoneyCloud — Scalable Honeypot Platform</div>
-            <p class="project-desc">Final-year project. A smart, cloud-deployed honeypot platform that captures, analyzes, and visualizes attack traffic across SSH, FTP, and HTTP protocols. Combines real-time event streaming, ML-powered threat classification, and attacker behaviour dashboards — designed to attract, log, and dissect malicious activity in a controlled environment.</p>
-            <div class="project-metric">Final Year Project · Cybersecurity + Cloud + ML · Multi-protocol threat capture</div>
+            <p class="project-desc">Final-year project. Designed a cloud-deployed honeypot platform using Python with real-time threat dashboards, scalable multi-node architecture, and attacker behavior analytics.</p>
+            <div class="project-metric">Cloud-deployed · Multi-node architecture · Attacker behavior analytics</div>
           </div>
 
-          <!-- 2. Cloud SaaS System -->
+          <!-- 2. Semantic Plagiarism Detector -->
           <div class="project-card reveal reveal-delay-1">
             <div class="project-top">
-              <div class="project-icon">☁️</div>
+              <div class="project-icon">🔍</div>
               <div style="display:flex;align-items:center;gap:10px;">
                 <span class="project-status">Deployed</span>
-                <a href="https://github.com/Ganesh-403/Cloud-SaaS-System" target="_blank" class="project-link">↗</a>
+                <a href="https://github.com/Ganesh-403" target="_blank" class="project-link">↗</a>
               </div>
             </div>
             <div class="project-tag-row">
               <span class="project-tag">Python</span>
-              <span class="project-tag">JWT Auth</span>
-              <span class="project-tag">REST API</span>
-              <span class="project-tag">SaaS</span>
+              <span class="project-tag">Sentence Transformers</span>
+              <span class="project-tag">FAISS</span>
+              <span class="project-tag">Streamlit</span>
             </div>
-            <div class="project-name">Cloud SaaS System</div>
-            <p class="project-desc">Python-powered cloud SaaS platform with JWT authentication, database-backed user management, file storage, metadata handling, and file preview — built end-to-end for scalability.</p>
-            <div class="project-metric">JWT auth · File management · Database-backed users</div>
+            <div class="project-name">Semantic Plagiarism Detector</div>
+            <p class="project-desc">AI-powered plagiarism detection system using Sentence Transformers and FAISS to identify paraphrased content. Built a multi-level similarity pipeline with document and paragraph-level embedding analysis.</p>
+            <div class="project-metric">Sentence Transformers · FAISS · Streamlit dashboard</div>
           </div>
 
           <!-- 3. SVF -->
@@ -822,8 +835,8 @@
               <span class="project-tag">Systems</span>
             </div>
             <div class="project-name">SVF — Secure Virtual File System</div>
-            <p class="project-desc">C++-based secure virtual file system with user authentication, SHA-256 password hashing, role-based access control, and full command-line file operations. Security-first by design.</p>
-            <div class="project-metric">SHA-256 hashing · Role-based permissions · CLI operations</div>
+            <p class="project-desc">Engineered a persistent virtual file system in C++17 with Argon2id security, B-Tree directory indexing, and a thread-safe concurrency model. Mimics ext4 supporting POSIX permissions.</p>
+            <div class="project-metric">C++17 · Argon2id · B-Tree indexing · Thread-safe</div>
           </div>
 
           <!-- 4. Railway Management System -->
@@ -927,7 +940,7 @@
                 <label for="message">Message</label>
                 <textarea id="message" name="body" placeholder="What's on your mind?" required></textarea>
               </div>
-              <button type="submit" class="btn-primary" style="width:100%;justify-content:center;cursor:none;">Send Message →</button>
+              <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">Send Message →</button>
             </form>
           </div>
         </div>
@@ -950,6 +963,7 @@
   </footer>
 
   <script>
+    document.body.classList.add('has-custom-cursor');
     // ─── CUSTOM CURSOR
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursor-ring');
@@ -1025,7 +1039,7 @@
           if (!startTime) startTime = ts;
           const progress = Math.min((ts - startTime) / duration, 1);
           const ease = 1 - Math.pow(1 - progress, 3);
-          el.textContent = isFloat ? target.toFixed(2) : Math.round(target * ease) + suffix;
+          el.textContent = isFloat ? (parseFloat(el.dataset.count + suffix) * ease).toFixed(2) : Math.round(target * ease) + suffix;
           if (progress < 1) requestAnimationFrame(animate);
           else el.textContent = target + suffix;
         }
