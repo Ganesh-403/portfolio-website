@@ -913,16 +913,16 @@
               </div>
             </div>
             <div class="project-tag-row">
-              <span class="project-tag">Python</span>
-              <span class="project-tag">Cloud</span>
-              <span class="project-tag">Cybersecurity</span>
-              <span class="project-tag">Machine Learning</span>
+              <span class="project-tag">FastAPI</span>
+              <span class="project-tag">SQLAlchemy</span>
+              <span class="project-tag">TensorFlow</span>
               <span class="project-tag">Docker</span>
-              <span class="project-tag">Real-time Streaming</span>
+              <span class="project-tag">WebSocket</span>
+              <span class="project-tag">Cybersecurity</span>
             </div>
             <div class="project-name">HoneyCloud — Scalable Honeypot Platform</div>
-            <p class="project-desc">Final-year project. A smart, cloud-deployed honeypot platform that captures, analyzes, and visualizes attack traffic across SSH, FTP, and HTTP protocols. Combines real-time event streaming, ML-powered threat classification, and attacker behaviour dashboards — designed to attract, log, and dissect malicious activity in a controlled environment.</p>
-            <div class="project-metric">Final Year Project · Cybersecurity + Cloud + ML · Multi-protocol threat capture</div>
+            <p class="project-desc">Final-year project. A scalable multi-protocol honeypot platform (SSH, FTP, HTTP, Telnet, SMTP, RDP) built with FastAPI and SQLAlchemy 2. Streams attacks in real-time via WebSocket/SSE, detects threats using scikit-learn + TensorFlow LSTM, profiles attackers with pattern detection, and delivers analytics with Telegram alerts — all in a Docker + Nginx stack.</p>
+            <div class="project-metric">6 Protocols · Keras LSTM threat detection · Real-time WebSocket dashboard</div>
           </div>
 
           <!-- 2. Semantic Plagiarism Detector -->
@@ -941,8 +941,8 @@
               <span class="project-tag">Streamlit</span>
             </div>
             <div class="project-name">Semantic Plagiarism Detector</div>
-            <p class="project-desc">AI-powered plagiarism detection system using Sentence Transformers and FAISS to identify paraphrased content. Built a multi-level similarity pipeline with document and paragraph-level embedding analysis.</p>
-            <div class="project-metric">Sentence Transformers · FAISS · Streamlit dashboard</div>
+            <p class="project-desc">A production-ready NLP application that detects semantic plagiarism even when text has been paraphrased — using all-MiniLM-L6-v2 embeddings, cosine similarity, and FAISS vector search. Features a Streamlit dashboard with heatmap visualization and a 25-pair benchmark evaluation suite.</p>
+            <div class="project-metric">Live on Streamlit · Catches paraphrases TF-IDF misses · 384-dim embeddings</div>
           </div>
 
           <!-- 3. SVF -->
@@ -955,14 +955,14 @@
               </div>
             </div>
             <div class="project-tag-row">
-              <span class="project-tag">C++</span>
-              <span class="project-tag">SHA-256</span>
-              <span class="project-tag">RBAC</span>
-              <span class="project-tag">Systems</span>
+              <span class="project-tag">C++17</span>
+              <span class="project-tag">Argon2id</span>
+              <span class="project-tag">B-Tree</span>
+              <span class="project-tag">POSIX</span>
             </div>
             <div class="project-name">SVF — Secure Virtual File System</div>
-            <p class="project-desc">Engineered a persistent virtual file system in C++17 with Argon2id security, B-Tree directory indexing, and a thread-safe concurrency model. Mimics ext4 supporting POSIX permissions.</p>
-            <div class="project-metric">C++17 · Argon2id · B-Tree indexing · Thread-safe</div>
+            <p class="project-desc">A production-grade, C++17 virtual file system engine simulating ext4-like block storage with 4KB data blocks, persistent B-Tree directory structures, concurrent inode locking via std::shared_mutex, POSIX permissions (rwxr-xr-x), and Argon2id cryptographic authentication. Production-hardened with B-Tree recursion limits and Windows I/O fixes.</p>
+            <div class="project-metric">4KB block storage · Concurrent inode locks · Production-hardened (May 2026)</div>
           </div>
 
           <!-- 4. Railway Management System -->
@@ -975,13 +975,14 @@
               </div>
             </div>
             <div class="project-tag-row">
-              <span class="project-tag">Flask</span>
+              <span class="project-tag">FastAPI</span>
+              <span class="project-tag">React</span>
               <span class="project-tag">MySQL</span>
-              <span class="project-tag">JavaScript</span>
+              <span class="project-tag">Docker</span>
             </div>
-            <div class="project-name">Railway Management System</div>
-            <p class="project-desc">Full-stack booking system. Reduced booking workflow to under 3 user actions with real-time seat reservation and MySQL query optimizations — zero race conditions under concurrent load.</p>
-            <div class="project-metric">Under 3 actions to book · Zero race conditions</div>
+            <div class="project-name">RailExp — Railway Management System</div>
+            <p class="project-desc">Re-engineered from legacy Flask into a modern FastAPI + Vite React + TailwindCSS SPA with Docker containerization. Features interactive SVG coach seat selection, itemized catering, Recharts admin analytics, JWT auth with hybrid bcrypt verification, and a full MySQL schema with Alembic migrations.</p>
+            <div class="project-metric">SVG seat map · Recharts analytics · Docker multi-stage builds</div>
           </div>
 
           <!-- 5. Monitor Google Sheet -->
@@ -997,10 +998,11 @@
               <span class="project-tag">Python</span>
               <span class="project-tag">Google Sheets API</span>
               <span class="project-tag">GitHub Actions</span>
+              <span class="project-tag">gspread</span>
             </div>
             <div class="project-name">Monitor Google Sheet</div>
-            <p class="project-desc">Real-time Google Sheets monitoring pipeline built during internship at AI Adventures LLP. Uses gspread + service account auth to detect new entries and fire automated workflows — cut reporting time by ~80%.</p>
-            <div class="project-metric">~80% reduction in reporting time · Zero human error</div>
+            <p class="project-desc">Real-time Google Sheets monitoring pipeline built during internship at AI Adventures LLP. Authenticates via service account credentials and continuously polls for new entries, logging updates with automated GitHub Actions CI/CD running every minute — cut reporting time by ~80% with zero human error.</p>
+            <div class="project-metric">~80% faster reporting · GitHub Actions CI/CD · Service account auth</div>
           </div>
 
          
