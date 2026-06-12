@@ -109,6 +109,8 @@
       z-index: 0;
       filter: blur(120px);
       opacity: 0.04;
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
     }
     .glow-orb-1 {
       width: 600px; height: 600px;
@@ -126,22 +128,22 @@
       width: 400px; height: 400px;
       background: #FF3300;
       top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate3d(-50%, -50%, 0);
       animation: floatOrb3 30s ease-in-out infinite;
     }
     @keyframes floatOrb1 {
-      0%, 100% { transform: translate(0, 0); }
-      33% { transform: translate(80px, 120px); }
-      66% { transform: translate(-60px, 60px); }
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      33% { transform: translate3d(80px, 120px, 0); }
+      66% { transform: translate3d(-60px, 60px, 0); }
     }
     @keyframes floatOrb2 {
-      0%, 100% { transform: translate(0, 0); }
-      33% { transform: translate(-100px, -80px); }
-      66% { transform: translate(60px, -120px); }
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      33% { transform: translate3d(-100px, -80px, 0); }
+      66% { transform: translate3d(60px, -120px, 0); }
     }
     @keyframes floatOrb3 {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-30%, -60%) scale(1.2); }
+      0%, 100% { transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1); }
+      50% { transform: translate3d(-30%, -60%, 0) scale3d(1.2, 1.2, 1); }
     }
 
     /* ─── PARTICLE CANVAS ──────────────────────────────── */
@@ -713,7 +715,7 @@
 
           <!-- Right: photo -->
           <div class="hero-photo-wrap">
-            <img src="./assets/images/ganesh.jpg" alt="Ganesh Kambli" class="hero-photo">
+            <img src="./assets/images/ganesh.jpg" alt="Ganesh Kambli" class="hero-photo" loading="eager" fetchpriority="high">
           </div>
 
         </div>
@@ -1158,18 +1160,49 @@
       });
     });
 
-    // ─── NAVBAR SCROLL
+    // ─── HIGH PERFORMANCE SCROLL MANAGER
     const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 60); });
-
-    // ─── NAV ACTIVE STATE
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-links a');
-    window.addEventListener('scroll', () => {
+    const timelineEl = document.querySelector('.timeline');
+    const timelineFill = document.getElementById('timelineFill');
+
+    let scrollScheduled = false;
+    function onScroll() {
+      const scrollY = window.scrollY;
+      
+      // 1. Navbar State
+      navbar.classList.toggle('scrolled', scrollY > 60);
+      
+      // 2. Active Section Navigation
       let current = '';
-      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      sections.forEach(s => { if (scrollY >= s.offsetTop - 120) current = s.id; });
       navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
-    });
+      
+      // 3. Timeline Progress Fill
+      if (timelineEl && timelineFill) {
+        const rect = timelineEl.getBoundingClientRect();
+        const viewportH = window.innerHeight;
+        if (rect.top < viewportH && rect.bottom > 0) {
+          const visibleTop = Math.max(0, -rect.top);
+          const maxFill = rect.height;
+          const fill = Math.min(visibleTop + viewportH * 0.35, maxFill);
+          timelineFill.style.height = Math.max(0, fill) + 'px';
+        }
+      }
+      
+      scrollScheduled = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!scrollScheduled) {
+        scrollScheduled = true;
+        requestAnimationFrame(onScroll);
+      }
+    }, { passive: true });
+    
+    // Initial run
+    onScroll();
 
     // ─── MOBILE MENU
     const hamburger = document.getElementById('hamburger');
@@ -1254,23 +1287,7 @@
       });
     });
 
-    // ─── TIMELINE SCROLL FILL
-    const timelineEl = document.querySelector('.timeline');
-    const timelineFill = document.getElementById('timelineFill');
-    if (timelineEl && timelineFill) {
-      function updateTimelineFill() {
-        const rect = timelineEl.getBoundingClientRect();
-        const viewportH = window.innerHeight;
-        if (rect.top < viewportH && rect.bottom > 0) {
-          const visibleTop = Math.max(0, -rect.top);
-          const maxFill = rect.height;
-          const fill = Math.min(visibleTop + viewportH * 0.35, maxFill);
-          timelineFill.style.height = Math.max(0, fill) + 'px';
-        }
-      }
-      window.addEventListener('scroll', updateTimelineFill, { passive: true });
-      updateTimelineFill();
-    }
+    // ─── TIMELINE SCROLL FILL (Handled by Scroll Manager)
 
     // ─── FLOATING PARTICLES
     const pCanvas = document.getElementById('particleCanvas');
@@ -1296,20 +1313,30 @@
 
     function drawParticles() {
       pCtx.clearRect(0, 0, pW, pH);
+      
+      const bins = [[], [], [], []];
       for (const p of particles) {
         p.x += p.speedX;
         p.y += p.speedY;
         p.pulse += 0.01;
-        const alpha = p.opacity * (0.6 + 0.4 * Math.sin(p.pulse));
 
         if (p.y < -10) { p.y = pH + 10; p.x = Math.random() * pW; }
         if (p.x < -10) p.x = pW + 10;
         if (p.x > pW + 10) p.x = -10;
 
-        pCtx.beginPath();
-        pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        pCtx.fillStyle = `rgba(247, 76, 0, ${alpha})`;
-        pCtx.fill();
+        const alpha = p.opacity * (0.6 + 0.4 * Math.sin(p.pulse));
+        const binIdx = Math.min(3, Math.max(0, Math.floor(alpha * 10)));
+        bins[binIdx].push(p);
+      }
+
+      const opacities = [0.08, 0.18, 0.28, 0.38];
+      for (let i = 0; i < 4; i++) {
+        const bin = bins[i];
+        if (bin.length === 0) continue;
+        pCtx.fillStyle = `rgba(247, 76, 0, ${opacities[i]})`;
+        for (const p of bin) {
+          pCtx.fillRect(p.x, p.y, p.r * 2, p.r * 2);
+        }
       }
       requestAnimationFrame(drawParticles);
     }
