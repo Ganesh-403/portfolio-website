@@ -6,7 +6,7 @@
 
 ## About the Portfolio
 
-I'm **Ganesh Kambli** — a final-year Computer Engineering student at **Savitribai Phule Pune University, Pune** (graduating 2026, CGPA 7.67). I specialize in **Python development**, building production-grade backends, cloud platforms, cybersecurity tools, and full-stack web applications. Currently interning at **AI Adventures LLP**, a Pune-based AI startup.
+I'm **Ganesh Kambli** — a final-year Computer Engineering student at **Savitribai Phule Pune University, Pune** (graduating 2026, CGPA 8.65). I specialize in **Python development**, building production-grade backends, cloud platforms, cybersecurity tools, and full-stack web applications. Currently interning at **AI Adventures LLP**, a Pune-based AI startup.
 
 **Open to SDE roles** — Pune / Remote
 
@@ -17,7 +17,7 @@ I'm **Ganesh Kambli** — a final-year Computer Engineering student at **Savitri
 ### **Hero Section**
 - Typewriter animation rotating through 5 roles (Python Developer · Backend Engineer · Cloud Builder · Security Enthusiast · Aspiring SDE)
 - Animated profile photo with rotating gradient border
-- Live stat counters: **1 Internship · 6 Projects · 2 Competition Wins · 7.67 CGPA**
+- Live stat counters: **1 Internship · 20+ Projects · 2 Competition Wins · 8.65 CGPA**
 - Call-to-action buttons linking to projects, GitHub, and LinkedIn
 
 ### **About Section**
@@ -36,45 +36,39 @@ I'm **Ganesh Kambli** — a final-year Computer Engineering student at **Savitri
   - Created real-time Google Sheets monitoring pipeline
   
 - **B.E. Computer Engineering** (2022–2026) at Savitribai Phule Pune University
-  - CGPA: 7.67
+  - CGPA: 8.65
   - Relevant coursework: DSA, DBMS, OS, Computer Networks, OOP, Machine Learning
   
 - **Achievements**
   - 🥇 Winner: Site Craft Web Dev Challenge (VAMINT Club 2025)
   - 🏆 Runner-up: Prep-A-Thon Coding Competition (Technobash 2025)
 
-### **Projects Section** (6 Featured Projects)
+### **Projects Section** (5 Featured Projects)
 
 1. **HoneyCloud — Scalable Honeypot Platform** *(In Progress)*
-   - Final-year project: Cloud-native cybersecurity platform capturing and analyzing attack traffic across SSH, FTP, and HTTP
-   - Stack: Python · Cloud · Cybersecurity · ML · Docker · Real-time Streaming
+   - Final-year project: Cloud-native cybersecurity platform capturing and analyzing attack traffic across SSH, FTP, HTTP, Telnet, SMTP, and RDP
+   - Stack: FastAPI · SQLAlchemy · TensorFlow · Docker · WebSocket · Cybersecurity
    - [GitHub](https://github.com/Ganesh-403/honeycloud)
 
-2. **Cloud SaaS System** *(Deployed)*
-   - Python-powered SaaS platform with JWT authentication, file storage, and metadata handling
-   - Stack: Python · JWT Auth · REST API · SaaS
-   - [GitHub](https://github.com/Ganesh-403/Cloud-SaaS-System)
+2. **RepoSage — Codebase Intelligence System** *(Deployed)*
+   - An autonomous, 100% offline Agentic GraphRAG system for codebase intelligence. Chat with your code by supplying a GitHub URL or local directory.
+   - Stack: Python · LangGraph · FastAPI · ChromaDB · NetworkX
+   - [GitHub](https://github.com/Ganesh-403/Repo-Sage)
 
 3. **SVF — Secure Virtual File System** *(Deployed)*
-   - C++-based secure file system with user auth, SHA-256 hashing, and role-based access control
-   - Stack: C++ · SHA-256 · RBAC · Systems
+   - C++17 virtual file system engine simulating ext4-like block storage with persistent B-Tree directory structures, concurrent inode locking, and Argon2id cryptographic authentication.
+   - Stack: C++17 · Argon2id · B-Tree · POSIX
    - [GitHub](https://github.com/Ganesh-403/SVF)
 
-4. **Railway Management System** *(Deployed)*
-   - Full-stack booking system: under 3 user actions to complete booking, zero race conditions under concurrent load
-   - Stack: Flask · MySQL · JavaScript
-   - [GitHub](https://github.com/Ganesh-403/Railway-Management-System)
+4. **FlightDelayAI — Predictor & Analytics** *(Deployed)*
+   - Real-time flight delay prediction system featuring XGBoost models, SHAP Explainable AI (XAI) feature importance, Redis caching, Flask-SocketIO WebSockets, and MLOps data drift monitoring.
+   - Stack: Flask · React · XGBoost · SHAP (XAI) · Redis · WebSockets
+   - [GitHub](https://github.com/Ganesh-403/FlightDelayAI)
 
-5. **Monitor Google Sheet** *(Deployed)*
-   - Real-time monitoring pipeline using Google Sheets API + GitHub Actions
-   - Achieved ~80% reduction in reporting time, eliminated human error
-   - Stack: Python · Google Sheets API · GitHub Actions
-   - [GitHub](https://github.com/Ganesh-403/Monitor-Google-Sheet)
-
-6. **Portfolio Website** *(Live)*
-   - This site — responsive dark-themed portfolio with custom animations and effects
-   - Stack: HTML · CSS · JavaScript
-   - [GitHub](https://github.com/Ganesh-403/portfolio-website)
+5. **GPU-huffman — Parallel CUDA Compressor** *(Deployed)*
+   - CUDA-accelerated Huffman encoding system in C++17 leveraging massive GPU parallelism, shared memory histograms, and warp-level aggregation kernels.
+   - Stack: C++17 · CUDA · Warp-Level Aggregation · OpenMP · CMake
+   - [GitHub](https://github.com/Ganesh-403/GPU-huffman)
 
 ### **Contact Section**
 - Direct email, LinkedIn, and GitHub links
