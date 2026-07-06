@@ -6,7 +6,7 @@
 
 ## About the Portfolio
 
-I'm **Ganesh Kambli** — a final-year Computer Engineering student at **Savitribai Phule Pune University, Pune** (graduating 2026, CGPA 8.65). I specialize in **Python development**, building production-grade backends, cloud platforms, cybersecurity tools, and full-stack web applications. Currently interning at **AI Adventures LLP**, a Pune-based AI startup.
+I'm **Ganesh Kambli** — a Computer Engineering graduate from **Savitribai Phule Pune University, Pune** (graduated 2026, CGPA 8.65). I specialize in **Python development**, building production-grade backends, cloud platforms, cybersecurity tools, and full-stack web applications. Currently interning at **AI Adventures LLP**, a Pune-based AI startup.
 
 **Open to SDE roles** — Pune / Remote
 
@@ -46,7 +46,7 @@ I'm **Ganesh Kambli** — a final-year Computer Engineering student at **Savitri
 ### **Projects Section** (5 Featured Projects)
 
 1. **HoneyCloud — Scalable Honeypot Platform** *(In Progress)*
-   - Final-year project: Cloud-native cybersecurity platform capturing and analyzing attack traffic across SSH, FTP, HTTP, Telnet, SMTP, and RDP
+   - Graduation project: Cloud-native cybersecurity platform capturing and analyzing attack traffic across SSH, FTP, HTTP, Telnet, SMTP, and RDP
    - Stack: FastAPI · SQLAlchemy · TensorFlow · Docker · WebSocket · Cybersecurity
    - [GitHub](https://github.com/Ganesh-403/honeycloud)
 
