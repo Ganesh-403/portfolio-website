@@ -22,53 +22,82 @@ I'm **Ganesh Kambli** — a Computer Engineering graduate from **Savitribai Phul
 
 ### **About Section**
 - Personal introduction and career goals
-- 5 skill categories with 30+ tech tags:
-  - **Languages**: Python, C++, JavaScript, Java, SQL, HTML/CSS
-  - **Frameworks & Libraries**: Flask, React, Node.js, Scikit-learn, Pandas, NumPy, Matplotlib, Jinja2
-  - **Cloud & Security**: Docker, GitHub Actions, REST APIs, JWT Auth, SHA-256, RBAC
-  - **Databases**: MySQL, MongoDB, SQLite, Google Sheets API
-  - **CS Fundamentals**: OOP, DSA, DBMS, OS, Computer Networks, MVC
+- 11 skill categories representing his technical expertise:
+  - **Programming Languages**: Python, C++, JavaScript, SQL, Kotlin
+  - **Web & Backend**: HTML, CSS, REST APIs, FastAPI, Flask, async programming, Redis, WebSockets/SSE
+  - **Frontend**: React.js, Vite, TailwindCSS
+  - **Databases**: MySQL, PostgreSQL, MongoDB, DynamoDB, ChromaDB, pgvector
+  - **Cloud & DevOps**: AWS (EC2, S3, Lambda, RDS, API Gateway, CloudWatch, VPC, IAM, CloudFront), Docker, CI/CD, GitHub Actions, Render, Vercel
+  - **AI / LLM**: Prompt Engineering, RAG, GraphRAG, LangChain, LangGraph, Local LLM Inference (Ollama), FAISS, semantic search, hybrid search, re-ranking, RAGAS
+  - **Machine Learning**: scikit-learn, Isolation Forest, Random Forest, LSTM, MLOps metrics, model drift monitoring
+  - **Security**: JWT Authentication, SHA-256 Hashing, Argon2id, bcrypt, Role-Based Access Control (RBAC), Honeypots, POSIX permissions
+  - **Systems Programming**: C++17, block storage engines, B-Tree indexing, thread-safe concurrency (Readers-Writer lock), CUDA/GPU parallelization
+  - **Mobile**: Android (Kotlin)
+  - **Tools**: Git, GitHub, Linux
 
 ### **Experience Section**
 - **Python Developer Intern** (Dec 2024 – Feb 2025) at AI Adventures LLP
-  - Built automated Absence Detection System reducing reporting time by ~80%
-  - Redesigned 3 Python course modules and authored 10+ interactive quizzes
-  - Created real-time Google Sheets monitoring pipeline
+  - Eliminated manual attendance tracking by building an end-to-end Absence Detection System (Python + Google Sheets API + GitHub Actions), reducing reporting time by ~80% and human error to zero.
+  - Built a real-time Google Sheets monitoring pipeline that automated data reconciliation across internal workflows, replacing a manual, error-prone process.
   
 - **B.E. Computer Engineering** (2022–2026) at Savitribai Phule Pune University
   - CGPA: 8.65
   - Relevant coursework: DSA, DBMS, OS, Computer Networks, OOP, Machine Learning
   
-- **Achievements**
-  - 🥇 Winner: Site Craft Web Dev Challenge (VAMINT Club 2025)
-  - 🏆 Runner-up: Prep-A-Thon Coding Competition (Technobash 2025)
+- **HSC - Science (Class XII)** (2019–2021) at Gurukul Grand Union High School & Jr. College
+  - Percentage: 74%
+  
+- **Achievements & Certifications**
+  - Winner: Site Craft Web Dev Challenge (VAMINT Club 2025)
+  - Runner-up: Prep-A-Thon Coding Competition (Technobash 2025)
+  - Open Source Contributor: GirlScript Summer of Code 2026 (GSSoC'26)
+  - Certifications: Python for Machine Learning (IIT Bombay / SINE), Google AI Essentials, Google Prompting Essentials, Cisco Cybersecurity, Learn Generative AI
 
-### **Projects Section** (5 Featured Projects)
+- **Publications & Research**
+  - HoneyCloud: A Smart Scalable Honeypot Platform with ML-Based Threat Classification and Real-Time Attacker Profiling (Co-authored research paper)
+  - A Survey on AI-Driven Honeypot Systems and Real-Time Intrusion Detection (Co-authored literature review)
 
-1. **HoneyCloud — Scalable Honeypot Platform** *(In Progress)*
-   - Graduation project: Cloud-native cybersecurity platform capturing and analyzing attack traffic across SSH, FTP, HTTP, Telnet, SMTP, and RDP
-   - Stack: FastAPI · SQLAlchemy · TensorFlow · Docker · WebSocket · Cybersecurity
-   - [GitHub](https://github.com/Ganesh-403/honeycloud)
+### **Projects Section** (8 Projects)
 
-2. **RepoSage — Codebase Intelligence System** *(Deployed)*
-   - An autonomous, 100% offline Agentic GraphRAG system for codebase intelligence. Chat with your code by supplying a GitHub URL or local directory.
-   - Stack: Python · LangGraph · FastAPI · ChromaDB · NetworkX
+1. **RepoSage — Agentic GraphRAG Codebase Intelligence System** *(Deployed)*
+   - Engineered a 100% offline, agentic GraphRAG system using LangGraph and NetworkX to autonomously traverse function-call dependency graphs, resolving queries via AST-based chunking and hybrid retrieval (ChromaDB + BM25) with Reciprocal Rank Fusion.
+   - Stack: Python · LangGraph · FastAPI · ChromaDB · NetworkX · Ollama
    - [GitHub](https://github.com/Ganesh-403/Repo-Sage)
 
-3. **SVF — Secure Virtual File System** *(Deployed)*
-   - C++17 virtual file system engine simulating ext4-like block storage with persistent B-Tree directory structures, concurrent inode locking, and Argon2id cryptographic authentication.
-   - Stack: C++17 · Argon2id · B-Tree · POSIX
-   - [GitHub](https://github.com/Ganesh-403/SVF)
+2. **HoneyCloud — Smart Scalable Honeypot Platform** *(Published Research / Deployed)*
+   - Built a scalable, cloud-deployed honeypot system (FastAPI, PostgreSQL, Docker) detecting and logging intrusion attempts in real time, with ML-based anomaly detection (Isolation Forest, Random Forest) for automated threat classification. Deployed a React + Vite dashboard on Render/Vercel.
+   - Stack: FastAPI · PostgreSQL · Docker · React · Vite · Anomaly Detection
+   - [GitHub](https://github.com/Ganesh-403/honeycloud)
 
-4. **FlightDelayAI — Predictor & Analytics** *(Deployed)*
-   - Real-time flight delay prediction system featuring XGBoost models, SHAP Explainable AI (XAI) feature importance, Redis caching, Flask-SocketIO WebSockets, and MLOps data drift monitoring.
-   - Stack: Flask · React · XGBoost · SHAP (XAI) · Redis · WebSockets
+3. **Flight Delay AI — Real-Time Flight Delay Prediction Infrastructure** *(Deployed)*
+   - Architected a decoupled, multi-service ML platform integrating an inference pipeline, distributed weather caching, and real-time client updates using React.js and Python. Implemented model drift monitoring and MLOps metrics.
+   - Stack: Flask · React · XGBoost · SHAP (XAI) · Redis · WebSockets · MLOps
    - [GitHub](https://github.com/Ganesh-403/FlightDelayAI)
 
-5. **GPU-huffman — Parallel CUDA Compressor** *(Deployed)*
-   - CUDA-accelerated Huffman encoding system in C++17 leveraging massive GPU parallelism, shared memory histograms, and warp-level aggregation kernels.
+4. **AWS Serverless URL Shortener** *(Deployed)*
+   - Built a fully serverless, event-driven URL shortener using AWS Lambda, API Gateway, DynamoDB, S3, and CloudFront.
+   - Stack: AWS Lambda · API Gateway · DynamoDB · S3 · CloudFront
+   - [GitHub](https://github.com/Ganesh-403/aws-serverless-url-shortener)
+
+5. **SVF — Secure Virtual File System** *(Deployed)*
+   - Engineered a persistent virtual file system in C++17 implementing physical block storage simulation, POSIX permissions, and concurrent inode access via a thread-safe Readers-Writer lock model. Passed a comprehensive security audit.
+   - Stack: C++17 · Argon2id · B-Tree · POSIX · Concurrency
+   - [GitHub](https://github.com/Ganesh-403/SVF)
+
+6. **GPU-Accelerated Parallel Compression Engine (CUDA Huffman)** *(Deployed)*
+   - CUDA-accelerated Huffman encoding system in C++17 leveraging massive GPU parallelism, shared memory histograms, and warp-level aggregation kernels, achieving 45+ GB/s throughput.
    - Stack: C++17 · CUDA · Warp-Level Aggregation · OpenMP · CMake
    - [GitHub](https://github.com/Ganesh-403/GPU-huffman)
+
+7. **RailExp — Modern Railway Management System** *(Deployed)*
+   - Re-engineered a legacy Flask + raw HTML application into a multi-tier architecture with a concurrent FastAPI backend and a Vite React + TailwindCSS SPA frontend. Containerized via Docker.
+   - Stack: FastAPI · React.js · Vite · TailwindCSS · Docker · Flask
+   - [GitHub](https://github.com/Ganesh-403/railexp)
+
+8. **Aura Wellness — Mindful Digital Wellbeing App** *(Deployed)*
+   - Built an Android application in Kotlin that intervenes on distracting app usage and offers gamified wellness quests and AI-guided check-ins.
+   - Stack: Kotlin · Android · AI Guides · Gamified Quests
+   - [GitHub](https://github.com/Ganesh-403/aura-wellness)
 
 ### **Contact Section**
 - Direct email, LinkedIn, and GitHub links

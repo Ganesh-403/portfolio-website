@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ganesh Kambli — Software Developer</title>
-  <meta name="description" content="Ganesh Kambli — CS Engineering Graduate from Savitribai Phule Pune University, Pune. Python Developer, Full-Stack builder, ML practitioner. 1 internship · 6 projects · 2 competition wins.">
-  <meta property="og:title" content="Ganesh Kambli — Software Developer">
-  <meta property="og:description" content="Python Developer · Backend · Cloud · Security · Open to SDE roles">
+  <meta name="description" content="Ganesh Kambli — Software Engineer | Backend, AI/ML, Cloud & Systems | Savitribai Phule Pune University, Pune. 1 internship · 8 projects · 2 competition wins.">
+  <meta property="og:title" content="Ganesh Kambli — Software Engineer">
+  <meta property="og:description" content="Software Engineer | Backend, AI/ML, Cloud & Systems | Savitribai Phule Pune University Graduate">
   <meta name="theme-color" content="#0d0d0d">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -431,8 +431,9 @@
     .timeline-bullets li::before { content: '▸'; position: absolute; left: 0; color: var(--orange); font-size: 0.75rem; top: 2px; }
     .timeline-bullets li strong { color: var(--text); }
 
-    /* ─── ACHIEVEMENTS ─────────────────────────────────── */
-    .achievements-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 56px; }
+    /* ─── ACHIEVEMENTS, CERTIFICATIONS, PUBLICATIONS ───── */
+    .achievements-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 56px; }
+    .certifications-grid, .publications-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
     .achievement-card {
       background: rgba(26, 26, 26, 0.6); border: 1px solid rgba(255,255,255,0.05);
       border-radius: var(--radius); padding: 24px 28px;
@@ -610,6 +611,8 @@
       .projects-grid { grid-template-columns: 1fr 1fr; }
       .project-card.featured { grid-column: span 2; }
       .achievements-row { grid-template-columns: 1fr; }
+      .certifications-grid, .publications-grid { grid-template-columns: 1fr; }
+      .certifications-grid .achievement-card, .publications-grid .achievement-card { grid-column: span 1 !important; }
       .hero-stats { grid-template-columns: repeat(2, 1fr); max-width: 340px; }
       .hero-inner { gap: 40px; }
       .hero-photo-wrap { width: 220px; height: 220px; }
@@ -680,13 +683,13 @@
             <div class="hero-label">Available for SDE roles · 2026</div>
             <h1 class="hero-title">
               <span class="line"><span>Software</span></span>
-              <span class="line"><span>Developer<span class="accent">.</span></span></span>
+              <span class="line"><span>Engineer<span class="accent">.</span></span></span>
             </h1>
             <p class="hero-role">
               <span id="typewriter"></span><span class="cursor-blink"></span>
             </p>
             <p class="hero-desc">
-              CS Engineering graduate from Savitribai Phule Pune University, Pune. I build Python-powered backends, cloud platforms, cybersecurity tools, and full-stack web apps — end to end, from architecture to production.
+              Computer Engineering graduate with hands-on experience across backend engineering, AI/LLM systems, cloud infrastructure, and low-level systems programming. Open to Software Engineer, Backend, AI/ML, DevOps, and Security roles.
             </p>
             <div class="hero-actions">
               <a href="#projects" class="btn-primary">View Projects →</a>
@@ -749,32 +752,29 @@
                 <span class="skill-tag">Python</span>
                 <span class="skill-tag">C++</span>
                 <span class="skill-tag">JavaScript</span>
-                <span class="skill-tag">Kotlin</span>
                 <span class="skill-tag">SQL</span>
-                <span class="skill-tag">Java</span>
-                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">Kotlin</span>
               </div>
             </div>
             <div class="skills-group">
-              <div class="skills-group-label">Frontend & Web</div>
+              <div class="skills-group-label">Web & Backend</div>
               <div class="skill-tags">
-                <span class="skill-tag">React</span>
-                <span class="skill-tag">TailwindCSS</span>
-                <span class="skill-tag">Vite</span>
                 <span class="skill-tag">HTML</span>
                 <span class="skill-tag">CSS</span>
                 <span class="skill-tag">REST APIs</span>
-                <span class="skill-tag">Jetpack Compose (Android)</span>
+                <span class="skill-tag">FastAPI</span>
+                <span class="skill-tag">Flask</span>
+                <span class="skill-tag">Async Programming</span>
+                <span class="skill-tag">Redis</span>
+                <span class="skill-tag">WebSockets / SSE</span>
               </div>
             </div>
             <div class="skills-group">
-              <div class="skills-group-label">Backend & Caching</div>
+              <div class="skills-group-label">Frontend</div>
               <div class="skill-tags">
-                <span class="skill-tag">FastAPI</span>
-                <span class="skill-tag">Flask</span>
-                <span class="skill-tag">Redis</span>
-                <span class="skill-tag">WebSockets / SSE</span>
-                <span class="skill-tag">Async Programming</span>
+                <span class="skill-tag">React.js</span>
+                <span class="skill-tag">Vite</span>
+                <span class="skill-tag">TailwindCSS</span>
               </div>
             </div>
             <div class="skills-group">
@@ -782,9 +782,8 @@
               <div class="skill-tags">
                 <span class="skill-tag">MySQL</span>
                 <span class="skill-tag">PostgreSQL</span>
-                <span class="skill-tag">SQLite</span>
-                <span class="skill-tag">DynamoDB</span>
                 <span class="skill-tag">MongoDB</span>
+                <span class="skill-tag">DynamoDB</span>
                 <span class="skill-tag">ChromaDB</span>
                 <span class="skill-tag">pgvector</span>
               </div>
@@ -792,50 +791,75 @@
             <div class="skills-group">
               <div class="skills-group-label">Cloud & DevOps</div>
               <div class="skill-tags">
-                <span class="skill-tag">AWS (Lambda, S3, EC2, RDS, API Gateway, CloudFront, VPC, IAM)</span>
+                <span class="skill-tag">AWS (EC2, S3, Lambda, RDS, API Gateway, CloudWatch, VPC, IAM, CloudFront)</span>
                 <span class="skill-tag">Docker</span>
-                <span class="skill-tag">Nginx</span>
                 <span class="skill-tag">CI/CD</span>
                 <span class="skill-tag">GitHub Actions</span>
+                <span class="skill-tag">Render</span>
+                <span class="skill-tag">Vercel</span>
               </div>
             </div>
             <div class="skills-group">
-              <div class="skills-group-label">AI, ML & NLP</div>
+              <div class="skills-group-label">AI / LLM</div>
               <div class="skill-tags">
-                <span class="skill-tag">XGBoost</span>
-                <span class="skill-tag">TensorFlow & Keras LSTM</span>
-                <span class="skill-tag">Scikit-Learn</span>
-                <span class="skill-tag">SHAP (XAI)</span>
-                <span class="skill-tag">Gemini API</span>
-                <span class="skill-tag">Computer Vision (OpenCV)</span>
-                <span class="skill-tag">Sentence Transformers</span>
+                <span class="skill-tag">Prompt Engineering</span>
+                <span class="skill-tag">RAG</span>
+                <span class="skill-tag">GraphRAG</span>
+                <span class="skill-tag">LangChain</span>
+                <span class="skill-tag">LangGraph</span>
+                <span class="skill-tag">Local LLM Inference (Ollama)</span>
                 <span class="skill-tag">FAISS</span>
-                <span class="skill-tag">RAG / LangChain / LangGraph</span>
-                <span class="skill-tag">GraphRAG & NetworkX</span>
-                <span class="skill-tag">Semantic & Hybrid Search</span>
-                <span class="skill-tag">RAGAS (Evaluation)</span>
+                <span class="skill-tag">Semantic Search</span>
+                <span class="skill-tag">Hybrid Search</span>
+                <span class="skill-tag">Re-ranking</span>
+                <span class="skill-tag">RAGAS</span>
               </div>
             </div>
             <div class="skills-group">
-              <div class="skills-group-label">Security & Systems</div>
+              <div class="skills-group-label">Machine Learning</div>
               <div class="skill-tags">
-                <span class="skill-tag">Honeypots</span>
+                <span class="skill-tag">scikit-learn</span>
+                <span class="skill-tag">Isolation Forest</span>
+                <span class="skill-tag">Random Forest</span>
+                <span class="skill-tag">LSTM</span>
+                <span class="skill-tag">MLOps Metrics</span>
+                <span class="skill-tag">Model Drift Monitoring</span>
+              </div>
+            </div>
+            <div class="skills-group">
+              <div class="skills-group-label">Security</div>
+              <div class="skill-tags">
                 <span class="skill-tag">JWT Authentication</span>
-                <span class="skill-tag">Argon2id & SHA-256</span>
+                <span class="skill-tag">SHA-256 Hashing</span>
+                <span class="skill-tag">Argon2id</span>
+                <span class="skill-tag">bcrypt</span>
                 <span class="skill-tag">Role-Based Access Control (RBAC)</span>
-                <span class="skill-tag">POSIX Storage Engines</span>
+                <span class="skill-tag">Honeypots</span>
+                <span class="skill-tag">POSIX Permissions</span>
               </div>
             </div>
             <div class="skills-group">
-              <div class="skills-group-label">Tools & CS Fundamentals</div>
+              <div class="skills-group-label">Systems Programming</div>
               <div class="skill-tags">
-                <span class="skill-tag">Git & GitHub</span>
+                <span class="skill-tag">C++17</span>
+                <span class="skill-tag">Block Storage Engines</span>
+                <span class="skill-tag">B-Tree Indexing</span>
+                <span class="skill-tag">Thread-Safe Concurrency (Readers-Writer lock)</span>
+                <span class="skill-tag">CUDA/GPU Parallelization</span>
+              </div>
+            </div>
+            <div class="skills-group">
+              <div class="skills-group-label">Mobile</div>
+              <div class="skill-tags">
+                <span class="skill-tag">Android (Kotlin)</span>
+              </div>
+            </div>
+            <div class="skills-group">
+              <div class="skills-group-label">Tools</div>
+              <div class="skill-tags">
+                <span class="skill-tag">Git</span>
+                <span class="skill-tag">GitHub</span>
                 <span class="skill-tag">Linux</span>
-                <span class="skill-tag">DSA</span>
-                <span class="skill-tag">OOP</span>
-                <span class="skill-tag">OS & Networks</span>
-                <span class="skill-tag">DBMS</span>
-                <span class="skill-tag">WordPress</span>
               </div>
             </div>
           </div>
@@ -861,9 +885,8 @@
             <div class="timeline-title">Python Developer Intern</div>
             <div class="timeline-org">AI Adventures LLP · JM Road, Pune</div>
             <ul class="timeline-bullets">
-              <li>Built an end-to-end <strong>Absence Detection System</strong> (Python + Google Sheets API + GitHub Actions) — cut reporting time by <strong>~80%</strong> and reduced human error to zero.</li>
-              <li>Redesigned <strong>3 Python course modules</strong> and authored <strong>10+ interactive quizzes</strong> on MOODLE LMS.</li>
-              <li>Built a <strong>real-time Google Sheets monitoring pipeline</strong> automating data reconciliation across multiple workflows.</li>
+              <li>Eliminated manual attendance tracking by building an end-to-end <strong>Absence Detection System</strong> (Python + Google Sheets API + GitHub Actions), reducing reporting time by <strong>~80%</strong> and human error to zero.</li>
+              <li>Built a <strong>real-time Google Sheets monitoring pipeline</strong> that automated data reconciliation across internal workflows, replacing a manual, error-prone process.</li>
             </ul>
           </div>
           <div class="timeline-item reveal reveal-delay-1">
@@ -877,6 +900,14 @@
               <li>Coursework: DSA, DBMS, OS, Computer Networks, OOP, Software Engineering, Machine Learning.</li>
               <li>Applied knowledge through multiple deployed projects, 1 internship, and 2 intercollegiate competition wins.</li>
             </ul>
+          </div>
+          <div class="timeline-item reveal reveal-delay-2">
+            <div class="timeline-meta">
+              <span class="timeline-date">2019 – 2021</span>
+              <span class="timeline-type">Education</span>
+            </div>
+            <div class="timeline-title">HSC — Science (Class XII)</div>
+            <div class="timeline-org">Gurukul Grand Union High School & Jr. College · Percentage: 74%</div>
           </div>
         </div>
 
@@ -895,6 +926,84 @@
               <div class="achievement-label">Runner-Up</div>
               <div class="achievement-title">Prep-A-Thon Coding Competition</div>
               <div class="achievement-sub">Technobash 2025 · Savitribai Phule Pune University, Pune</div>
+            </div>
+          </div>
+          <div class="achievement-card reveal reveal-delay-3">
+            <div class="achievement-icon">🌐</div>
+            <div>
+              <div class="achievement-label">Open Source</div>
+              <div class="achievement-title">GirlScript Summer of Code 2026</div>
+              <div class="achievement-sub">Contributor (GSSoC'26) · May 2026 – Present</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CERTIFICATIONS -->
+        <div class="certifications-section reveal" style="margin-top: 56px;">
+          <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 24px; color: var(--text);">Certifications</h3>
+          <div class="certifications-grid">
+            <div class="achievement-card reveal">
+              <div class="achievement-icon">🎖️</div>
+              <div>
+                <div class="achievement-label">IIT Bombay / SINE</div>
+                <div class="achievement-title">Python for Machine Learning</div>
+                <div class="achievement-sub">Issued Apr 2026 · ID: 3809497GNS (Score: 96%)</div>
+              </div>
+            </div>
+            <div class="achievement-card reveal">
+              <div class="achievement-icon">🤖</div>
+              <div>
+                <div class="achievement-label">Google</div>
+                <div class="achievement-title">Google AI Essentials</div>
+                <div class="achievement-sub">Issued Feb 2025 · Credential: VM5936N7UHK7</div>
+              </div>
+            </div>
+            <div class="achievement-card reveal">
+              <div class="achievement-icon">💡</div>
+              <div>
+                <div class="achievement-label">Google</div>
+                <div class="achievement-title">Google Prompting Essentials</div>
+                <div class="achievement-sub">Issued Jan 2025 · Credential: E5DFX4240VYK</div>
+              </div>
+            </div>
+            <div class="achievement-card reveal">
+              <div class="achievement-icon">🛡️</div>
+              <div>
+                <div class="achievement-label">Cisco Networking Academy</div>
+                <div class="achievement-title">Introduction to Cybersecurity</div>
+                <div class="achievement-sub">Credential course covering core security concepts</div>
+              </div>
+            </div>
+            <div class="achievement-card reveal" style="grid-column: span 2;">
+              <div class="achievement-icon">🧠</div>
+              <div>
+                <div class="achievement-label">Generative AI</div>
+                <div class="achievement-title">Certification in Learn Generative AI</div>
+                <div class="achievement-sub">Core methodologies and implementation strategies</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PUBLICATIONS -->
+        <div class="publications-section reveal" style="margin-top: 56px;">
+          <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 24px; color: var(--text);">Publications & Research</h3>
+          <div class="publications-grid">
+            <div class="achievement-card reveal" style="grid-column: span 2;">
+              <div class="achievement-icon">📄</div>
+              <div>
+                <div class="achievement-label">Research Paper</div>
+                <div class="achievement-title">HoneyCloud: A Smart Scalable Honeypot Platform with ML-Based Threat Classification and Real-Time Attacker Profiling</div>
+                <div class="achievement-sub">Co-authored research on containerized, distributed honeypots with integrated Isolation Forest and Random Forest threat classification.</div>
+              </div>
+            </div>
+            <div class="achievement-card reveal" style="grid-column: span 2;">
+              <div class="achievement-icon">📰</div>
+              <div>
+                <div class="achievement-label">Literature Review</div>
+                <div class="achievement-title">A Survey on AI-Driven Honeypot Systems and Real-Time Intrusion Detection</div>
+                <div class="achievement-sub">Co-authored survey exploring machine learning advances in decoy systems and threat intelligence.</div>
+              </div>
             </div>
           </div>
         </div>
@@ -916,30 +1025,8 @@
 
         <div class="projects-grid">
 
-          <!-- 1. HoneyCloud — featured (spans 2 cols) -->
+          <!-- 1. RepoSage — featured (spans 2 cols) -->
           <div class="project-card featured reveal">
-            <div class="project-top">
-              <div class="project-icon">🍯</div>
-              <div style="display:flex;align-items:center;gap:10px;">
-                <span class="project-status wip">In Progress</span>
-                <a href="https://github.com/Ganesh-403/honeycloud" target="_blank" class="project-link">↗</a>
-              </div>
-            </div>
-            <div class="project-tag-row">
-              <span class="project-tag">FastAPI</span>
-              <span class="project-tag">SQLAlchemy</span>
-              <span class="project-tag">TensorFlow</span>
-              <span class="project-tag">Docker</span>
-              <span class="project-tag">WebSocket</span>
-              <span class="project-tag">Cybersecurity</span>
-            </div>
-            <div class="project-name">HoneyCloud — Scalable Honeypot Platform</div>
-            <p class="project-desc">Graduation project. A scalable multi-protocol honeypot platform (SSH, FTP, HTTP, Telnet, SMTP, RDP) built with FastAPI and SQLAlchemy 2. Streams attacks in real-time via WebSocket/SSE, detects threats using scikit-learn + TensorFlow LSTM, profiles attackers with pattern detection, and delivers analytics with Telegram alerts — all in a Docker + Nginx stack.</p>
-            <div class="project-metric">6 Protocols · Keras LSTM threat detection · Real-time WebSocket dashboard</div>
-          </div>
-
-          <!-- 2. RepoSage — Codebase Intelligence -->
-          <div class="project-card reveal reveal-delay-1">
             <div class="project-top">
               <div class="project-icon">🧙‍♂️</div>
               <div style="display:flex;align-items:center;gap:10px;">
@@ -953,14 +1040,85 @@
               <span class="project-tag">FastAPI</span>
               <span class="project-tag">ChromaDB</span>
               <span class="project-tag">NetworkX</span>
+              <span class="project-tag">Ollama</span>
             </div>
-            <div class="project-name">RepoSage — Codebase Intelligence System</div>
-            <p class="project-desc">An autonomous, 100% offline Agentic GraphRAG system for codebase intelligence. Paste any GitHub URL or local directory to chat with your code. Traverses functional dependencies via NetworkX, parses code into AST chunk units, performs hybrid BM25 + vector search, and operates entirely locally using Ollama (qwen2.5-coder) to guarantee absolute privacy.</p>
-            <div class="project-metric">100% Offline & Local · LangGraph Agentic Search · AST-Based GraphRAG</div>
+            <div class="project-name">RepoSage — Agentic GraphRAG Codebase Intelligence</div>
+            <p class="project-desc">Engineered a 100% offline, agentic GraphRAG system using LangGraph and NetworkX to autonomously traverse function-call dependency graphs from local directories or GitHub URLs. Resolves natural-language queries via AST-based chunking and hybrid retrieval (ChromaDB + BM25) with Reciprocal Rank Fusion, running Qwen2.5-coder locally with exact file-path and line-number citations and a codebase synchronization watchdog daemon.</p>
+            <div class="project-metric">Local LLM Multi-Tool Agent · AST GraphRAG & NetworkX · Real-Time Watchdog Daemon</div>
           </div>
 
-          <!-- 3. SVF -->
+          <!-- 2. HoneyCloud -->
+          <div class="project-card reveal reveal-delay-1">
+            <div class="project-top">
+              <div class="project-icon">🍯</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="project-status">Deployed</span>
+                <a href="https://github.com/Ganesh-403/honeycloud" target="_blank" class="project-link">↗</a>
+              </div>
+            </div>
+            <div class="project-tag-row">
+              <span class="project-tag">FastAPI</span>
+              <span class="project-tag">PostgreSQL</span>
+              <span class="project-tag">Docker</span>
+              <span class="project-tag">React</span>
+              <span class="project-tag">Vite</span>
+              <span class="project-tag">Isolation Forest</span>
+              <span class="project-tag">Random Forest</span>
+              <span class="project-tag">Cybersecurity</span>
+            </div>
+            <div class="project-name">HoneyCloud — Smart Scalable Honeypot</div>
+            <p class="project-desc">Built a scalable, cloud-deployed honeypot system (FastAPI, PostgreSQL, Docker) detecting and logging intrusion attempts in real time, with ML-based anomaly detection (Isolation Forest, Random Forest) for automated threat classification. Designed a real-time attacker analytics dashboard (React + Vite) with containerized deployment via Render/Vercel, co-authoring two research publications.</p>
+            <div class="project-metric">Published Research · React Analytics Dashboard · Anomaly Threat Classification</div>
+          </div>
+
+          <!-- 3. Flight Delay AI -->
           <div class="project-card reveal">
+            <div class="project-top">
+              <div class="project-icon">✈️</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="project-status">Deployed</span>
+                <a href="https://github.com/Ganesh-403/FlightDelayAI" target="_blank" class="project-link">↗</a>
+              </div>
+            </div>
+            <div class="project-tag-row">
+              <span class="project-tag">Python</span>
+              <span class="project-tag">React</span>
+              <span class="project-tag">Flask</span>
+              <span class="project-tag">XGBoost</span>
+              <span class="project-tag">SHAP (XAI)</span>
+              <span class="project-tag">Redis</span>
+              <span class="project-tag">WebSockets</span>
+              <span class="project-tag">MLOps</span>
+            </div>
+            <div class="project-name">Flight Delay AI Prediction Platform</div>
+            <p class="project-desc">Architected a decoupled, multi-service ML platform integrating an inference pipeline, distributed weather caching via Redis, and real-time client updates using React.js and Python. Implemented statistical model drift monitoring and MLOps metrics tracking to maintain prediction reliability as live data distributions shifted.</p>
+            <div class="project-metric">XGBoost & SHAP (XAI) · Decoupled Inference Pipeline · Drift & MLOps Monitoring</div>
+          </div>
+
+          <!-- 4. AWS Serverless URL Shortener -->
+          <div class="project-card reveal reveal-delay-1">
+            <div class="project-top">
+              <div class="project-icon">🔗</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="project-status">Deployed</span>
+                <a href="https://github.com/Ganesh-403/aws-serverless-url-shortener" target="_blank" class="project-link">↗</a>
+              </div>
+            </div>
+            <div class="project-tag-row">
+              <span class="project-tag">AWS Lambda</span>
+              <span class="project-tag">API Gateway</span>
+              <span class="project-tag">DynamoDB</span>
+              <span class="project-tag">S3</span>
+              <span class="project-tag">CloudFront</span>
+              <span class="project-tag">Serverless</span>
+            </div>
+            <div class="project-name">AWS Serverless URL Shortener</div>
+            <p class="project-desc">Built a fully serverless, event-driven URL shortener using AWS Lambda, API Gateway, DynamoDB, S3, and CloudFront. Demonstrates scalable, cost-efficient, and highly available cloud-native backend design capable of handling high-throughput request rates.</p>
+            <div class="project-metric">Serverless Lambda Architecture · S3 & CloudFront static hosting · DynamoDB store</div>
+          </div>
+
+          <!-- 5. SVF -->
+          <div class="project-card reveal reveal-delay-2">
             <div class="project-top">
               <div class="project-icon">🔐</div>
               <div style="display:flex;align-items:center;gap:10px;">
@@ -973,36 +1131,15 @@
               <span class="project-tag">Argon2id</span>
               <span class="project-tag">B-Tree</span>
               <span class="project-tag">POSIX</span>
+              <span class="project-tag">Readers-Writer lock</span>
             </div>
             <div class="project-name">SVF — Secure Virtual File System</div>
-            <p class="project-desc">A production-grade, C++17 virtual file system engine simulating ext4-like block storage with 4KB data blocks, persistent B-Tree directory structures, concurrent inode locking via std::shared_mutex, POSIX permissions (rwxr-xr-x), and Argon2id cryptographic authentication. Production-hardened with B-Tree recursion limits and Windows I/O fixes.</p>
-            <div class="project-metric">4KB block storage · Concurrent inode locks · Production-hardened (May 2026)</div>
+            <p class="project-desc">Engineered a persistent virtual file system in C++17 implementing physical block storage simulation, POSIX permissions, and concurrent inode access via a thread-safe Readers-Writer lock model. Passed a comprehensive security audit hardening I/O operations, Argon2id-based authentication, and protected B-Tree operations.</p>
+            <div class="project-metric">4KB block storage · Concurrent Readers-Writer locks · Security Audited</div>
           </div>
 
-          <!-- 4. FlightDelayAI -->
-          <div class="project-card reveal reveal-delay-1">
-            <div class="project-top">
-              <div class="project-icon">✈️</div>
-              <div style="display:flex;align-items:center;gap:10px;">
-                <span class="project-status">Deployed</span>
-                <a href="https://github.com/Ganesh-403/FlightDelayAI" target="_blank" class="project-link">↗</a>
-              </div>
-            </div>
-            <div class="project-tag-row">
-              <span class="project-tag">Flask</span>
-              <span class="project-tag">React</span>
-              <span class="project-tag">XGBoost</span>
-              <span class="project-tag">SHAP (XAI)</span>
-              <span class="project-tag">Redis</span>
-              <span class="project-tag">WebSockets</span>
-            </div>
-            <div class="project-name">FlightDelayAI — Predictor & Analytics</div>
-            <p class="project-desc">Real-time flight delay prediction system featuring XGBoost models, SHAP Explainable AI (XAI) feature importance, Redis caching, Flask-SocketIO WebSockets, dynamic database fallbacks (PostgreSQL/SQLite), and MLOps data drift monitoring. Built with a Flask backend, React frontend, and interactive Dash analytics dashboard.</p>
-            <div class="project-metric">XGBoost & SHAP (XAI) · Redis Caching & SocketIO · MLOps Drift Monitoring</div>
-          </div>
-
-          <!-- 5. GPU-huffman -->
-          <div class="project-card reveal reveal-delay-2">
+          <!-- 6. GPU Huffman -->
+          <div class="project-card reveal">
             <div class="project-top">
               <div class="project-icon">⚡</div>
               <div style="display:flex;align-items:center;gap:10px;">
@@ -1017,9 +1154,51 @@
               <span class="project-tag">OpenMP</span>
               <span class="project-tag">CMake</span>
             </div>
-            <div class="project-name">GPU-huffman — Parallel CUDA Compressor</div>
-            <p class="project-desc">CUDA-accelerated Huffman encoding system in C++17 leveraging massive GPU parallelism. Features naive global atomics, shared memory histograms, and warp-level aggregation kernels, achieving 45+ GB/s throughput (~10x-50x speedup over serialized CPU implementations) with automated performance harness and Python dashboards.</p>
+            <div class="project-name">GPU Parallel Compression Engine</div>
+            <p class="project-desc">Production-grade GPU acceleration project demonstrating advanced CUDA optimization techniques for Huffman Encoding. Achieved substantial throughput gains (45+ GB/s) over CPU-based frequency counting through massive parallelism on NVIDIA GPUs, featuring warp-level aggregation kernels and shared memory histograms.</p>
             <div class="project-metric">45+ GB/s CUDA throughput · Warp-level aggregation · Performance dashboards</div>
+          </div>
+
+          <!-- 7. RailExp -->
+          <div class="project-card reveal reveal-delay-1">
+            <div class="project-top">
+              <div class="project-icon">🚂</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="project-status">Deployed</span>
+                <a href="https://github.com/Ganesh-403/railexp" target="_blank" class="project-link">↗</a>
+              </div>
+            </div>
+            <div class="project-tag-row">
+              <span class="project-tag">React.js</span>
+              <span class="project-tag">Vite</span>
+              <span class="project-tag">FastAPI</span>
+              <span class="project-tag">TailwindCSS</span>
+              <span class="project-tag">Docker</span>
+              <span class="project-tag">Flask</span>
+            </div>
+            <div class="project-name">RailExp — Railway Management System</div>
+            <p class="project-desc">Re-engineered a legacy Flask + raw HTML application into a modern multi-tier architecture featuring a concurrent FastAPI backend and a Vite React + TailwindCSS SPA frontend. Containerized the development and production cluster using Docker to streamline environment parity.</p>
+            <div class="project-metric">FastAPI REST API · React & Tailwind SPA · Docker multi-tier deployment</div>
+          </div>
+
+          <!-- 8. Aura Wellness -->
+          <div class="project-card reveal reveal-delay-2">
+            <div class="project-top">
+              <div class="project-icon">🌸</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span class="project-status">Deployed</span>
+                <a href="https://github.com/Ganesh-403/aura-wellness" target="_blank" class="project-link">↗</a>
+              </div>
+            </div>
+            <div class="project-tag-row">
+              <span class="project-tag">Kotlin</span>
+              <span class="project-tag">Android</span>
+              <span class="project-tag">AI Guides</span>
+              <span class="project-tag">Gamified Quests</span>
+            </div>
+            <div class="project-name">Aura Wellness — Digital Wellbeing App</div>
+            <p class="project-desc">Built a mobile application in Android (Kotlin) that intervenes on distracting app usage and offers gamified wellness quests and AI-guided check-ins. Aims to reduce doomscrolling and improve focus through mindful tech habits and responsive wellness metrics.</p>
+            <div class="project-metric">Kotlin Android App · Gamified Wellness Quests · AI-Guided Interventions</div>
           </div>
 
          
@@ -1223,7 +1402,7 @@
     }
 
     // ─── TYPEWRITER
-    const roles = ['Python Developer.', 'Backend Engineer.', 'Cloud Builder.', 'Security Enthusiast.', 'Aspiring SDE.'];
+    const roles = ['Software Engineer.', 'Backend Developer.', 'AI/ML Engineer.', 'Cloud & Systems Engineer.'];
     let ri = 0, ci = 0, deleting = false;
     const tw = document.getElementById('typewriter');
     function type() {
