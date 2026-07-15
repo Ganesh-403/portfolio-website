@@ -6,7 +6,7 @@
 
 ## About the Portfolio
 
-I'm **Ganesh Kambli** — a Computer Engineering graduate from **Savitribai Phule Pune University, Pune** (graduated 2026, CGPA 8.65). I specialize in **Python development**, building production-grade backends, cloud platforms, cybersecurity tools, and full-stack web applications. Currently interning at **AI Adventures LLP**, a Pune-based AI startup.
+I'm **Ganesh Kambli** — a Computer Engineering graduate from **Savitribai Phule Pune University, Pune** (graduated 2026, CGPA 7.95). I specialize in **Python development**, building production-grade backends, cloud platforms, cybersecurity tools, and full-stack web applications. Currently interning at **AI Adventures LLP**, a Pune-based AI startup.
 
 **Open to SDE roles** — Pune / Remote
 
@@ -17,7 +17,7 @@ I'm **Ganesh Kambli** — a Computer Engineering graduate from **Savitribai Phul
 ### **Hero Section**
 - Typewriter animation rotating through 5 roles (Python Developer · Backend Engineer · Cloud Builder · Security Enthusiast · Aspiring SDE)
 - Animated profile photo with rotating gradient border
-- Live stat counters: **1 Internship · 20+ Projects · 2 Competition Wins · 8.65 CGPA**
+- Live stat counters: **1 Internship · 20+ Projects · 2 Competition Wins · 7.95 CGPA**
 - Call-to-action buttons linking to projects, GitHub, and LinkedIn
 
 ### **About Section**
@@ -41,7 +41,7 @@ I'm **Ganesh Kambli** — a Computer Engineering graduate from **Savitribai Phul
   - Built a real-time Google Sheets monitoring pipeline that automated data reconciliation across internal workflows, replacing a manual, error-prone process.
   
 - **B.E. Computer Engineering** (2022–2026) at Savitribai Phule Pune University
-  - CGPA: 8.65
+  - CGPA: 7.95
   - Relevant coursework: DSA, DBMS, OS, Computer Networks, OOP, Machine Learning
   
 - **HSC - Science (Class XII)** (2019–2021) at Gurukul Grand Union High School & Jr. College
