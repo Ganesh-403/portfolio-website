@@ -6,98 +6,104 @@
 
 ## About the Portfolio
 
-I'm **Ganesh Kambli** — a Computer Engineering graduate from **Savitribai Phule Pune University, Pune** (graduated 2026, CGPA 7.95). I specialize in **Python development**, building production-grade backends, cloud platforms, cybersecurity tools, and full-stack web applications. Currently interning at **AI Adventures LLP**, a Pune-based AI startup.
+I'm **Ganesh Kambli** — an **AI Engineer at Flid AI**, currently building **[LeapView](https://github.com/flidai/leapview)** — an open-source, agent-native BI platform powered by **Go** and **DuckDB**. I specialize in building scalable backend systems, governed semantic data layers, analytics-as-code engines, and autonomous AI agents.
 
-**Open to SDE roles** — Pune / Remote
+Computer Engineering graduate from **Savitribai Phule Pune University, Pune** (graduated 2026, CGPA 7.95). Published **2 research papers** on distributed honeypot architectures and AI-driven threat classification.
+
+**Open to freelance & contract work** — agent-native systems, Go infrastructure, analytics platforms.
 
 ---
 
 ## What's Inside
 
 ### **Hero Section**
-- Typewriter animation rotating through 5 roles (Python Developer · Backend Engineer · Cloud Builder · Security Enthusiast · Aspiring SDE)
+- Typewriter animation rotating through 4 roles (AI Engineer @ Flid AI · Building LeapView · Go · DuckDB · Agent-Native BI · Open to Freelance & Contract Work)
 - Animated profile photo with rotating gradient border
-- Live stat counters: **1 Internship · 20+ Projects · 2 Competition Wins · 7.95 CGPA**
+- Live stat counters: **2 Papers · 20+ Projects · 2 Competition Wins · 7.95 CGPA**
 - Call-to-action buttons linking to projects, GitHub, and LinkedIn
 
 ### **About Section**
-- Personal introduction and career goals
-- 11 skill categories representing his technical expertise:
-  - **Programming Languages**: Python, C++, JavaScript, SQL, Kotlin
-  - **Web & Backend**: HTML, CSS, REST APIs, FastAPI, Flask, async programming, Redis, WebSockets/SSE
-  - **Frontend**: React.js, Vite, TailwindCSS
-  - **Databases**: MySQL, PostgreSQL, MongoDB, DynamoDB, ChromaDB, pgvector
-  - **Cloud & DevOps**: AWS (EC2, S3, Lambda, RDS, API Gateway, CloudWatch, VPC, IAM, CloudFront), Docker, CI/CD, GitHub Actions, Render, Vercel
-  - **AI / LLM**: Prompt Engineering, RAG, GraphRAG, LangChain, LangGraph, Local LLM Inference (Ollama), FAISS, semantic search, hybrid search, re-ranking, RAGAS
-  - **Machine Learning**: scikit-learn, Isolation Forest, Random Forest, LSTM, MLOps metrics, model drift monitoring
-  - **Security**: JWT Authentication, SHA-256 Hashing, Argon2id, bcrypt, Role-Based Access Control (RBAC), Honeypots, POSIX permissions
-  - **Systems Programming**: C++17, block storage engines, B-Tree indexing, thread-safe concurrency (Readers-Writer lock), CUDA/GPU parallelization
-  - **Mobile**: Android (Kotlin)
-  - **Tools**: Git, GitHub, Linux
+- Personal introduction highlighting current role at Flid AI building LeapView
+- 4 condensed skill categories:
+  - **Languages & Core**: Go (Golang), Python, C++, SQL, TypeScript
+  - **AI & Agent Systems**: Agent-Native BI, LangGraph, LangChain, RAG/GraphRAG, MCP, ChromaDB, Qdrant, FAISS, PyTorch
+  - **Data & Backend Infrastructure**: DuckDB, FastAPI, PostgreSQL, Redis, MongoDB, Kafka, REST & WebSockets
+  - **Cloud & DevOps**: Docker, Kubernetes, AWS, GitHub Actions, Linux, Terraform
 
 ### **Experience Section**
+- **AI Engineer** (2026 – Present) at Flid AI ApS
+  - Building LeapView — agent-native BI platform
+  - Go, DuckDB, analytics as code, AI agents
+
 - **Python Developer Intern** (Dec 2024 – Feb 2025) at AI Adventures LLP
-  - Eliminated manual attendance tracking by building an end-to-end Absence Detection System (Python + Google Sheets API + GitHub Actions), reducing reporting time by ~80% and human error to zero.
-  - Built a real-time Google Sheets monitoring pipeline that automated data reconciliation across internal workflows, replacing a manual, error-prone process.
-  
+  - Built end-to-end Absence Detection System and real-time monitoring pipeline
+
 - **B.E. Computer Engineering** (2022–2026) at Savitribai Phule Pune University
   - CGPA: 7.95
-  - Relevant coursework: DSA, DBMS, OS, Computer Networks, OOP, Machine Learning
-  
+
 - **HSC - Science (Class XII)** (2019–2021) at Gurukul Grand Union High School & Jr. College
   - Percentage: 74%
-  
-- **Achievements & Certifications**
+
+- **Achievements**
   - Winner: Site Craft Web Dev Challenge (VAMINT Club 2025)
   - Runner-up: Prep-A-Thon Coding Competition (Technobash 2025)
   - Open Source Contributor: GirlScript Summer of Code 2026 (GSSoC'26)
-  - Certifications: Python for Machine Learning (IIT Bombay / SINE), Google AI Essentials, Google Prompting Essentials, Cisco Cybersecurity, Learn Generative AI
 
 - **Publications & Research**
-  - HoneyCloud: A Smart Scalable Honeypot Platform with ML-Based Threat Classification and Real-Time Attacker Profiling (Co-authored research paper)
-  - A Survey on AI-Driven Honeypot Systems and Real-Time Intrusion Detection (Co-authored literature review)
+  - HoneyCloud: A Smart Scalable Honeypot Platform with ML-Based Threat Classification and Real-Time Attacker Profiling
+  - A Survey on AI-Driven Honeypot Systems and Real-Time Intrusion Detection
 
-### **Projects Section** (8 Projects)
+### **Projects Section** (10 Projects)
 
-1. **RepoSage — Agentic GraphRAG Codebase Intelligence System** *(Deployed)*
-   - Engineered a 100% offline, agentic GraphRAG system using LangGraph and NetworkX to autonomously traverse function-call dependency graphs, resolving queries via AST-based chunking and hybrid retrieval (ChromaDB + BM25) with Reciprocal Rank Fusion.
+1. **LeapView — Agent-Native BI Platform @ Flid AI** *(In Development)*
+   - Open-source, agent-native BI platform. Build governed semantic models and dashboards as code, review every change in Git, and explore trusted analytics through interactive dashboards and AI agents.
+   - Stack: Go (Golang) · DuckDB · Analytics as Code · Docker · AI Agents
+   - [GitHub](https://github.com/flidai/leapview)
+
+2. **RepoSage — Agentic GraphRAG Codebase Intelligence System** *(Deployed)*
+   - Engineered a 100% offline, agentic GraphRAG system using LangGraph and NetworkX to autonomously traverse function-call dependency graphs.
    - Stack: Python · LangGraph · FastAPI · ChromaDB · NetworkX · Ollama
    - [GitHub](https://github.com/Ganesh-403/Repo-Sage)
 
-2. **HoneyCloud — Smart Scalable Honeypot Platform** *(Published Research / Deployed)*
-   - Built a scalable, cloud-deployed honeypot system (FastAPI, PostgreSQL, Docker) detecting and logging intrusion attempts in real time, with ML-based anomaly detection (Isolation Forest, Random Forest) for automated threat classification. Deployed a React + Vite dashboard on Render/Vercel.
-   - Stack: FastAPI · PostgreSQL · Docker · React · Vite · Anomaly Detection
+3. **HoneyCloud — Cloud Honeypot & Threat Intel System** *(Deployed)*
+   - Cloud-native multi-protocol honeypot infrastructure featuring real-time attack telemetry and an LSTM-based threat classification engine. Backed by 2 published research papers.
+   - Stack: Python · LSTM / PyTorch · Docker · AWS · WebSockets
    - [GitHub](https://github.com/Ganesh-403/honeycloud)
 
-3. **Flight Delay AI — Real-Time Flight Delay Prediction Infrastructure** *(Deployed)*
-   - Architected a decoupled, multi-service ML platform integrating an inference pipeline, distributed weather caching, and real-time client updates using React.js and Python. Implemented model drift monitoring and MLOps metrics.
+4. **Semantic Plagiarism Detector — AI-Powered NLP** *(Deployed)*
+   - Deep semantic text similarity and originality scoring engine utilizing modern transformer embeddings and vector indexing.
+   - Stack: Transformers · FAISS · FastAPI · Python
+   - [GitHub](https://github.com/Ganesh-403/semantic-plagiarism-detector)
+
+5. **Flight Delay AI — Real-Time Flight Delay Prediction Infrastructure** *(Deployed)*
+   - Architected a decoupled, multi-service ML platform with model drift monitoring and MLOps metrics.
    - Stack: Flask · React · XGBoost · SHAP (XAI) · Redis · WebSockets · MLOps
    - [GitHub](https://github.com/Ganesh-403/FlightDelayAI)
 
-4. **AWS Serverless URL Shortener** *(Deployed)*
-   - Built a fully serverless, event-driven URL shortener using AWS Lambda, API Gateway, DynamoDB, S3, and CloudFront.
+6. **AWS Serverless URL Shortener** *(Deployed)*
+   - Fully serverless, event-driven URL shortener using AWS Lambda, API Gateway, DynamoDB, S3, and CloudFront.
    - Stack: AWS Lambda · API Gateway · DynamoDB · S3 · CloudFront
    - [GitHub](https://github.com/Ganesh-403/aws-serverless-url-shortener)
 
-5. **SVF — Secure Virtual File System** *(Deployed)*
-   - Engineered a persistent virtual file system in C++17 implementing physical block storage simulation, POSIX permissions, and concurrent inode access via a thread-safe Readers-Writer lock model. Passed a comprehensive security audit.
+7. **SVF — Secure Virtual File System** *(Deployed)*
+   - Persistent virtual file system in C++17 with block storage, POSIX permissions, and concurrent inode access.
    - Stack: C++17 · Argon2id · B-Tree · POSIX · Concurrency
    - [GitHub](https://github.com/Ganesh-403/SVF)
 
-6. **GPU-Accelerated Parallel Compression Engine (CUDA Huffman)** *(Deployed)*
-   - CUDA-accelerated Huffman encoding system in C++17 leveraging massive GPU parallelism, shared memory histograms, and warp-level aggregation kernels, achieving 45+ GB/s throughput.
+8. **GPU-Accelerated Parallel Compression Engine (CUDA Huffman)** *(Deployed)*
+   - CUDA-accelerated Huffman encoding achieving 45+ GB/s throughput via GPU parallelism.
    - Stack: C++17 · CUDA · Warp-Level Aggregation · OpenMP · CMake
    - [GitHub](https://github.com/Ganesh-403/GPU-huffman)
 
-7. **RailExp — Modern Railway Management System** *(Deployed)*
-   - Re-engineered a legacy Flask + raw HTML application into a multi-tier architecture with a concurrent FastAPI backend and a Vite React + TailwindCSS SPA frontend. Containerized via Docker.
+9. **RailExp — Modern Railway Management System** *(Deployed)*
+   - Re-engineered legacy Flask app into modern multi-tier architecture with FastAPI and React.
    - Stack: FastAPI · React.js · Vite · TailwindCSS · Docker · Flask
    - [GitHub](https://github.com/Ganesh-403/railexp)
 
-8. **Aura Wellness — Mindful Digital Wellbeing App** *(Deployed)*
-   - Built an Android application in Kotlin that intervenes on distracting app usage and offers gamified wellness quests and AI-guided check-ins.
-   - Stack: Kotlin · Android · AI Guides · Gamified Quests
-   - [GitHub](https://github.com/Ganesh-403/aura-wellness)
+10. **Aura Wellness — Mindful Digital Wellbeing App** *(Deployed)*
+    - Android application with gamified wellness quests and AI-guided check-ins.
+    - Stack: Kotlin · Android · AI Guides · Gamified Quests
+    - [GitHub](https://github.com/Ganesh-403/aura-wellness)
 
 ### **Contact Section**
 - Direct email, LinkedIn, and GitHub links
