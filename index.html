@@ -11,7 +11,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 
   <style>
     /* ─── RESET & BASE ─────────────────────────────────── */
@@ -233,13 +233,13 @@
       width: 32px; height: 1px; background: var(--orange);
     }
     .hero-title {
-      font-family: var(--font-display);
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      font-weight: 800; line-height: 0.95;
-      letter-spacing: -0.04em; margin-bottom: 14px; color: var(--text);
+      font-family: 'Space Grotesk', var(--font-display), sans-serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 700; line-height: 1.05;
+      letter-spacing: -0.03em; margin-bottom: 18px; color: var(--text);
     }
     .hero-title .line { display: block; overflow: hidden; }
-    .hero-title .line span { display: block; transform: translateY(110%); animation: slideUp 0.8s cubic-bezier(0.4,0,0.2,1) forwards; }
+    .hero-title .line span:not(.accent) { display: block; transform: translateY(110%); animation: slideUp 0.8s cubic-bezier(0.4,0,0.2,1) forwards; }
     .hero-title .line:nth-child(1) span { animation-delay: 0.1s; }
     .hero-title .line:nth-child(2) span { animation-delay: 0.22s; }
     .hero-title .accent {
@@ -620,7 +620,7 @@
     }
     @media (max-width: 600px) {
       section { padding: 72px 0; }
-      .hero-title { font-size: 2.8rem; }
+      .hero-title { font-size: 2.4rem; }
       .projects-grid { grid-template-columns: 1fr; }
       .project-card.featured { grid-column: span 1; }
       .hero-stats { grid-template-columns: repeat(2, 1fr); }
@@ -682,8 +682,7 @@
           <div>
             <div class="hero-label">AI Engineer @ Flid AI · Building LeapView</div>
             <h1 class="hero-title">
-              <span class="line"><span>AI</span></span>
-              <span class="line"><span>Engineer<span class="accent">.</span></span></span>
+              <span class="line"><span>AI Engineer<span class="accent">.</span></span></span>
             </h1>
             <p class="hero-role">
               <span id="typewriter"></span><span class="cursor-blink"></span>
