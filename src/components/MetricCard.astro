@@ -1,0 +1,163 @@
+---
+// LeapView's idea, applied to my own work: a metric defined in code, rendered as a chart.
+// Numbers come from the committed GitHub snapshot (npm run sync:github).
+import { leapview } from '../data/profile';
+import { dayMonth as short, dayMonthYear } from '../lib/format';
+
+const { mergedPRs, firstMerged, lastMerged } = leapview.stats;
+// The total covers everything; the chart shows the most recent weeks so bars stay readable.
+const weekly = leapview.stats.weekly.slice(-12);
+
+const max = Math.max(...weekly.map((w) => w.merged), 1);
+const peak = weekly.reduce((a, b) => (b.merged > a.merged ? b : a), weekly[0]);
+const barWidth = 10;
+const gap = 4;
+const height = 64;
+const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
+const range = firstMerged && lastMerged ? `${short(firstMerged)} to ${dayMonthYear(lastMerged)}` : '';
+const summary = peak
+  ? `Bar chart of merged pull requests per week, ${weekly.length} weeks from ${short(weekly[0].week)} to ${short(weekly.at(-1)!.week)}, peaking at ${peak.merged} in the week of ${short(peak.week)}.`
+  : '';
+
+const yaml: [string, string][] = [
+  ['metric', 'merged_pull_requests'],
+  ['source', 'github.com/flidai/leapview'],
+  ['author', 'Ganesh-403'],
+  ['grain', 'week'],
+];
+---
+
+<figure class="metric">
+  <div class="file">
+    <span class="path">metrics/contributions.yaml</span>
+    <pre><code>{yaml.map(([key, value]) => <span class="line"><span class="key">{key}:</span> <span class="value">{value}</span></span>)}</code></pre>
+  </div>
+  <div class="render">
+    <p class="figure"><span class="number">{mergedPRs}</span> merged pull requests</p>
+    {range && <p class="range muted">{range}</p>}
+    {
+      peak && (
+        <>
+          <svg class="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img" aria-label={summary}>
+            {weekly.map((w, i) => {
+              const h = Math.max(1.5, (w.merged / max) * height);
+              return (
+                <rect class="bar" x={i * (barWidth + gap)} y={height - h} width={barWidth} height={h} style={`--i:${i}`}>
+                  <title>{`Week of ${short(w.week)}: ${w.merged}`}</title>
+                </rect>
+              );
+            })}
+          </svg>
+          <div class="axis muted" aria-hidden="true">
+            <span>Week of {short(weekly[0].week)}</span>
+            <span>Week of {short(weekly.at(-1)!.week)}</span>
+          </div>
+        </>
+      )
+    }
+  </div>
+  <figcaption class="visually-hidden">My merged pull requests in LeapView, by week.</figcaption>
+</figure>
+
+<style>
+  .metric {
+    border: 1px solid var(--rule);
+    border-radius: calc(var(--radius) + 4px);
+    background: var(--raised);
+    overflow: hidden;
+  }
+
+  .file {
+    padding: 1rem 1.25rem 1.1rem;
+    background: var(--code);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .path {
+    display: block;
+    margin-bottom: 0.6rem;
+    color: var(--graphite);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  pre {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .line {
+    display: block;
+  }
+
+  .key {
+    color: var(--graphite);
+  }
+
+  .value {
+    color: var(--ink);
+  }
+
+  .render {
+    padding: 1.25rem 1.25rem 1rem;
+  }
+
+  .figure {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0 0.6rem;
+    font-weight: 650;
+  }
+
+  .number {
+    font-size: var(--step-3);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .range {
+    margin-top: 0.35rem;
+    font-size: var(--step--1);
+  }
+
+  .chart {
+    width: 100%;
+    height: 4.5rem;
+    margin-top: 1.25rem;
+  }
+
+  .bar {
+    fill: var(--signal);
+    transform-box: fill-box;
+    transform-origin: bottom;
+  }
+
+  /* The page's one orchestrated moment: the bars draw in once on load. */
+  @media (prefers-reduced-motion: no-preference) {
+    .bar {
+      animation: grow 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(250ms + var(--i) * 55ms);
+    }
+  }
+
+  @keyframes grow {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  .axis {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.78rem;
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+import { person } from '../data/profile';
+import github from '../data/github.json';
+
+const built = new Date();
+const updated = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' }).format(built);
+const synced = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(github.syncedAt));
+---
+
+<footer class="site-footer">
+  <div class="page row">
+    <p>© {built.getFullYear()} {person.name}</p>
+    <p class="muted">
+      Updated {updated}. GitHub numbers as of {synced}.
+    </p>
+    <p><a href="https://github.com/Ganesh-403/portfolio-website">Source</a></p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--rule);
+    font-size: var(--step--1);
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 2rem 2.5rem;
+  }
+</style>

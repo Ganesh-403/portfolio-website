@@ -1,0 +1,153 @@
+---
+import { person } from '../data/profile';
+
+// Root-relative so the links also work from the 404 page.
+const nav = [
+  { href: '/#work', label: 'Work' },
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#open-source', label: 'Open source' },
+  { href: '/#freelance', label: 'Freelance' },
+  { href: '/#contact', label: 'Contact' },
+];
+---
+
+<header class="site-header">
+  <div class="page bar">
+    <a class="home" href="/">{person.name}</a>
+    <nav aria-label="Sections">
+      <ul>
+        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+    <button class="theme" type="button" aria-label="Switch to dark theme" data-theme-toggle>
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
+        <circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+        <path d="M10 2.75a7.25 7.25 0 0 1 0 14.5Z" fill="currentColor"></path>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const root = document.documentElement;
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const current = () => root.dataset.theme ?? (systemDark.matches ? 'dark' : 'light');
+  const label = () => button?.setAttribute('aria-label', `Switch to ${current() === 'dark' ? 'light' : 'dark'} theme`);
+  // The theme-color metas follow the system scheme; once a theme is chosen, point both at it.
+  const syncBrowserChrome = () => {
+    if (!root.dataset.theme) return;
+    const paper = getComputedStyle(root).getPropertyValue('--paper').trim();
+    document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => meta.setAttribute('content', paper));
+  };
+
+  label();
+  syncBrowserChrome();
+  systemDark.addEventListener('change', label);
+  button?.addEventListener('click', () => {
+    const next = current() === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {}
+    label();
+    syncBrowserChrome();
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem 2rem;
+    min-height: 3.75rem;
+  }
+
+  .home {
+    color: var(--ink);
+    font-weight: 750;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  nav {
+    margin-left: auto;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  nav a {
+    display: inline-block;
+    padding-block: 0.6rem;
+    color: var(--graphite);
+    font-size: var(--step--1);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  nav a:hover {
+    color: var(--ink);
+  }
+
+  .theme {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .theme:hover {
+    border-color: var(--ink);
+  }
+
+  /* On phones the section links move to their own scrollable row under the name. */
+  @media (max-width: 40rem) {
+    .bar {
+      flex-wrap: wrap;
+      padding-block: 0.5rem 0;
+      gap: 0 1rem;
+    }
+
+    .theme {
+      margin-left: auto;
+    }
+
+    nav {
+      order: 3;
+      flex-basis: 100%;
+      margin-left: 0;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+    }
+
+    nav ul {
+      gap: 0.8rem;
+    }
+
+    nav a {
+      font-size: 0.85rem;
+    }
+  }
+</style>

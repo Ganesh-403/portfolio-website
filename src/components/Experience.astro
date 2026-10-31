@@ -1,0 +1,211 @@
+---
+import { experience, papers, awards, certifications } from '../data/profile';
+---
+
+<section class="section" id="experience" aria-labelledby="experience-name">
+  <h2 class="section-name" id="experience-name">Experience</h2>
+  <div class="section-body">
+    <ol class="roles">
+      {
+        experience.map((role) => (
+          <li class="role">
+            <p class="period muted">
+              {role.start} to {role.end}
+            </p>
+            <div>
+              <h3>{role.title}</h3>
+              <p class="org">
+                {role.place ? `${role.org}, ${role.place}` : role.org}
+                <span class="kind muted">{role.kind}</span>
+              </p>
+              {role.points && (
+                <ul class="points">
+                  {role.points.map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="research" aria-labelledby="research-name">
+  <h2 class="section-name" id="research-name">Research and recognition</h2>
+  <div class="section-body">
+    <h3 class="sub">Papers</h3>
+    <ul class="papers">
+      {
+        papers.map((paper) => (
+          <li>
+            <p class="paper-title">{paper.url ? <a href={paper.url}>{paper.title}</a> : paper.title}</p>
+            {paper.authors && (
+              <p class="muted">
+                <strong class="me">{paper.authors[0]}</strong>{paper.authors.length > 1 && `, ${paper.authors.slice(1).join(', ')}`}
+              </p>
+            )}
+            <p class="muted">{[paper.venue, paper.year].filter(Boolean).join(', ')}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="columns">
+      <div>
+        <h3 class="sub">Awards</h3>
+        <ul class="plain">
+          {
+            awards.map((award) => (
+              <li>
+                {award.title}
+                <span class="muted">
+                  {' '}
+                  {award.by}, {award.year}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h3 class="sub">Certifications</h3>
+        <ul class="plain">
+          {
+            certifications.map((cert) => (
+              <li>
+                {cert.title}
+                {(cert.by || cert.year) && <span class="muted"> {[cert.by, cert.year].filter(Boolean).join(', ')}</span>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+    <p class="languages muted">I speak English, Hindi, Marathi and Konkani.</p>
+  </div>
+</section>
+
+<style>
+  .roles {
+    border-top: 1px solid var(--rule);
+  }
+
+  /* The next section's top rule closes the list. */
+  .role:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .role {
+    display: grid;
+    gap: 0.25rem 2rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 44rem) {
+    .role {
+      grid-template-columns: 10rem minmax(0, 1fr);
+    }
+  }
+
+  .period {
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.2rem;
+  }
+
+  h3 {
+    font-size: var(--step-1);
+  }
+
+  .org {
+    margin-top: 0.15rem;
+  }
+
+  .kind {
+    display: inline-block;
+    margin-left: 0.6rem;
+    padding: 0 0.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    vertical-align: 0.1em;
+  }
+
+  .points {
+    margin-top: 0.75rem;
+    padding-left: 1.1rem;
+    list-style: disc;
+    max-width: var(--measure);
+  }
+
+  .points li + li {
+    margin-top: 0.35rem;
+  }
+
+  .points li::marker {
+    color: var(--graphite);
+  }
+
+  .sub {
+    font-size: var(--step-1);
+    margin-bottom: 0.75rem;
+  }
+
+  .papers li {
+    padding-block: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .papers li:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .paper-title {
+    font-weight: 650;
+    line-height: 1.4;
+    margin-bottom: 0.3rem;
+  }
+
+  .paper-title a {
+    color: var(--ink);
+  }
+
+  .papers .muted {
+    font-size: var(--step--1);
+  }
+
+  .me {
+    color: var(--ink);
+    font-weight: 650;
+  }
+
+  .columns {
+    display: grid;
+    gap: 2.5rem;
+    margin-top: 3rem;
+  }
+
+  @media (min-width: 44rem) {
+    .columns {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .plain li + li {
+    margin-top: 0.6rem;
+  }
+
+  .plain .muted {
+    display: block;
+    font-size: var(--step--1);
+  }
+
+  .languages {
+    margin-top: 2.5rem;
+  }
+</style>

@@ -1,0 +1,114 @@
+{
+  "syncedAt": "2026-10-31",
+  "stars": {
+    "flidai/leapview": 13,
+    "Ganesh-403/Repo-Sage": 26,
+    "Ganesh-403/semantic-plagiarism-detector": 16,
+    "Ganesh-403/envtether": 0,
+    "Ganesh-403/honeycloud": 1,
+    "Ganesh-403/SVF": 0,
+    "Ganesh-403/GPU-huffman": 0,
+    "Ganesh-403/FlightDelayAI": 1,
+    "Ganesh-403/aws-url-shortener": 0,
+    "Ganesh-403/Rail-Exp": 0,
+    "Ganesh-403/Aura-Wellness": 0
+  },
+  "leapview": {
+    "mergedPRs": 390,
+    "firstMerged": "2026-08-20",
+    "lastMerged": "2026-10-24",
+    "weekly": [
+      {
+        "week": "2026-08-17",
+        "merged": 3
+      },
+      {
+        "week": "2026-08-24",
+        "merged": 34
+      },
+      {
+        "week": "2026-08-31",
+        "merged": 44
+      },
+      {
+        "week": "2026-09-07",
+        "merged": 43
+      },
+      {
+        "week": "2026-09-14",
+        "merged": 25
+      },
+      {
+        "week": "2026-09-21",
+        "merged": 33
+      },
+      {
+        "week": "2026-09-28",
+        "merged": 55
+      },
+      {
+        "week": "2026-10-05",
+        "merged": 131
+      },
+      {
+        "week": "2026-10-12",
+        "merged": 15
+      },
+      {
+        "week": "2026-10-19",
+        "merged": 7
+      }
+    ]
+  },
+  "upstream": [
+    {
+      "repo": "riscv/riscv-unified-db",
+      "number": 2461,
+      "title": "fix(param): populate long_name for LRSC, MISA, and trap parameters",
+      "url": "https://github.com/riscv/riscv-unified-db/pull/2461",
+      "merged": "2026-09-03"
+    },
+    {
+      "repo": "Apicurio/apicurio-registry",
+      "number": 9467,
+      "title": "fix: replace custom HSTSFilter with Quarkus-managed security headers",
+      "url": "https://github.com/Apicurio/apicurio-registry/pull/9467",
+      "merged": "2026-08-20"
+    },
+    {
+      "repo": "riscv/riscv-unified-db",
+      "number": 2481,
+      "title": "Add missing Smctr CSR models and CTR depth parameter (#2478)",
+      "url": "https://github.com/riscv/riscv-unified-db/pull/2481",
+      "merged": "2026-08-19"
+    },
+    {
+      "repo": "sudarshan9518/sudarshan9518",
+      "number": 1,
+      "title": "docs: improve GitHub profile README with enhanced layout",
+      "url": "https://github.com/sudarshan9518/sudarshan9518/pull/1",
+      "merged": "2026-07-20"
+    },
+    {
+      "repo": "Anand-Bora-0001/HoneyCloud-X",
+      "number": 3,
+      "title": "Update README",
+      "url": "https://github.com/Anand-Bora-0001/HoneyCloud-X/pull/3",
+      "merged": "2026-07-09"
+    },
+    {
+      "repo": "Anand-Bora-0001/HoneyCloud-X",
+      "number": 2,
+      "title": "Fix documentation",
+      "url": "https://github.com/Anand-Bora-0001/HoneyCloud-X/pull/2",
+      "merged": "2026-07-09"
+    },
+    {
+      "repo": "Anand-Bora-0001/HoneyCloud-X",
+      "number": 1,
+      "title": "fix README",
+      "url": "https://github.com/Anand-Bora-0001/HoneyCloud-X/pull/1",
+      "merged": "2026-07-08"
+    }
+  ]
+}

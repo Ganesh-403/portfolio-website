@@ -1,0 +1,99 @@
+---
+import { Image } from 'astro:assets';
+import photo from '../assets/ganesh.jpg';
+import MetricCard from './MetricCard.astro';
+import { person, hero } from '../data/profile';
+---
+
+<section class="hero" aria-labelledby="hero-name">
+  <div class="intro">
+    <div class="byline">
+      <Image src={photo} alt="" width={72} height={72} densities={[1, 2]} loading="eager" fetchpriority="high" class="avatar" />
+      <p class="where muted">
+        {person.role} at <a href={person.companyUrl}>{person.company}</a><br />{person.location}
+      </p>
+    </div>
+    <h1 id="hero-name">{person.name}</h1>
+    <p class="lede">{hero.intro}</p>
+    <p class="freelance">{hero.freelance}</p>
+    <div class="actions">
+      <a class="button primary" href="#contact">Work with me</a>
+      <a class="button" href={`mailto:${person.email}`}>Email</a>
+      <a class="button" href={person.links.linkedin}>LinkedIn</a>
+      <a class="button" href={person.links.github}>GitHub</a>
+    </div>
+  </div>
+  <div class="evidence">
+    <MetricCard />
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+    padding-block: clamp(3rem, 2rem + 5vw, 6.5rem) clamp(3.5rem, 2.5rem + 4vw, 6rem);
+  }
+
+  @media (min-width: 60rem) {
+    .hero {
+      grid-template-columns: minmax(0, 1.35fr) minmax(20rem, 1fr);
+      gap: 4.5rem;
+    }
+  }
+
+  .byline {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .where {
+    font-size: var(--step--1);
+    line-height: 1.45;
+  }
+
+  h1 {
+    font-size: var(--step-4);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+  }
+
+  .freelance {
+    max-width: var(--measure);
+    margin-top: 1.1rem;
+    color: var(--graphite);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  /* On phones the primary action takes its own row so the other three fit on one line. */
+  @media (max-width: 30rem) {
+    .actions .primary {
+      flex-basis: 100%;
+      justify-content: center;
+    }
+
+    .actions .button:not(.primary) {
+      flex: 1 1 0;
+      justify-content: center;
+      padding-inline: 0.5rem;
+    }
+  }
+</style>
