@@ -26,10 +26,8 @@ export const person = {
     'Ganesh Kambli is an AI engineer at Flid AI, based in Mumbai, working on LeapView, open-source BI in Go and DuckDB. He also builds software for clients end to end, from first design to deployment.',
 };
 
-// The hero reads top to bottom in priority order: what I do, then where, then the offer.
 export const hero = {
   lede: 'I build software end to end, from the first sketch to a product running in production.',
-  detail: `At Flid AI I work on LeapView, open-source BI in Go and DuckDB, mostly the parts that have to be right: who can see which data, how fast queries come back, and whether a release installs and upgrades cleanly. I also take on freelance projects.`,
 };
 
 export type PullRequest = { repo: string; number: number; title: string };
@@ -41,7 +39,10 @@ export const leapview = {
   site: 'https://leapview.dev/',
   tagline: 'Define metrics in code. Explore them everywhere.',
   summary:
-    'LeapView is open-source BI. Teams define a metric once in Git and use it in dashboards, APIs and AI tools, with the same access rules applied everywhere. The server is Go, queries run on DuckDB, and it is licensed Apache-2.0.',
+    'Open-source BI: teams define a metric once in Git and use it in dashboards, APIs and AI tools, with the same access rules everywhere. Go on DuckDB, Apache-2.0.',
+  // What I do there, in one line.
+  focus:
+    'I work on the parts that have to be right: who can see which data, how fast queries come back, and whether a release installs and upgrades cleanly.',
   joined: 'August 2026',
   stats: github.leapview,
   stars: github.stars['flidai/leapview'],

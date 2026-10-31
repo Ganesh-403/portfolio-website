@@ -7,149 +7,168 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
 
 <section class="section" id="background" aria-labelledby="background-name">
   <h2 class="section-name" id="background-name">Background</h2>
-  <div class="section-body">
-    <h3 class="sub">Experience</h3>
-    <ol class="roles">
-      {
-        experience.map((role) =>
-          role.points ? (
-            <li>
-              <details class="disclosure role-details">
-                <summary>
-                  <span class="period">
-                    {role.start} to {role.end}
-                  </span>
-                  <span class="what">
-                    <strong class="title">{role.title}</strong>
-                    <span class="org">
-                      {role.place ? `${role.org}, ${role.place}` : role.org}
-                      <span class="kind">{role.kind}</span>
+
+  <div class="layout">
+    <div class="block card experience">
+      <h3 class="sub">Experience</h3>
+      <ol class="roles">
+        {
+          experience.map((role) =>
+            role.points ? (
+              <li>
+                <details class="disclosure role-details">
+                  <summary>
+                    <span class="period">
+                      {role.start} to {role.end}
                     </span>
+                    <span class="what">
+                      <strong class="title">{role.title}</strong>
+                      <span class="org">
+                        {role.place ? `${role.org}, ${role.place}` : role.org}
+                        <span class="kind">{role.kind}</span>
+                      </span>
+                    </span>
+                  </summary>
+                  <ul class="points">
+                    {role.points.map((point) => (
+                      <li>{point}</li>
+                    ))}
+                  </ul>
+                </details>
+              </li>
+            ) : (
+              <li class="role">
+                <span class="period">
+                  {role.start} to {role.end}
+                </span>
+                <span class="what">
+                  <strong class="title">{role.title}</strong>
+                  <span class="org">
+                    {role.place ? `${role.org}, ${role.place}` : role.org}
+                    <span class="kind">{role.kind}</span>
                   </span>
-                </summary>
-                <ul class="points">
-                  {role.points.map((point) => (
-                    <li>{point}</li>
-                  ))}
-                </ul>
-              </details>
-            </li>
-          ) : (
-            <li class="role">
-              <span class="period">
-                {role.start} to {role.end}
-              </span>
-              <span class="what">
-                <strong class="title">{role.title}</strong>
-                <span class="org">
-                  {role.place ? `${role.org}, ${role.place}` : role.org}
-                  <span class="kind">{role.kind}</span>
+                  {role.note && <span class="note">{role.note}</span>}
                 </span>
-                {role.note && <span class="note">{role.note}</span>}
-              </span>
-            </li>
-          ),
-        )
-      }
-    </ol>
+              </li>
+            ),
+          )
+        }
+      </ol>
+    </div>
 
-    <h3 class="sub">Open source</h3>
-    <p class="intro">Outside LeapView, I send fixes upstream to projects I use and help run open-source programs for students.</p>
-    <ul class="list">
-      {
-        upstream.map((pr) => (
-          <li class="upstream">
-            <span class="repo">{pr.repo}</span>
-            <a href={pr.url}>{plainTitle(pr.title)}</a>
-            <span class="when">{monthYear(pr.merged)}</span>
-          </li>
-        ))
-      }
-      {
-        community.map((item) => (
-          <li class="program">
-            <span class="what-line">
+    <div class="block card">
+      <h3 class="sub">Open source</h3>
+      <p class="intro">Outside LeapView, I send fixes upstream to projects I use and help run open-source programs for students.</p>
+      <ul class="list">
+        {
+          upstream.map((pr) => (
+            <li>
+              <span class="repo">
+                {pr.repo}, {monthYear(pr.merged)}
+              </span>
+              <a href={pr.url}>{plainTitle(pr.title)}</a>
+            </li>
+          ))
+        }
+        {
+          community.map((item) => (
+            <li>
+              <span class="repo">{item.period}</span>
               <strong>{item.title}</strong>
-              <span class="when">{item.period}</span>
-            </span>
-            {item.body && <span class="body">{item.body}</span>}
-          </li>
-        ))
-      }
-    </ul>
+              {item.body && <span class="body">{item.body}</span>}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
 
-    <h3 class="sub">Research</h3>
-    <ul class="list">
-      {
-        papers.map((paper) => (
-          <li class="paper">
-            <span class="paper-title">{paper.url ? <a href={paper.url}>{paper.title}</a> : paper.title}</span>
-            {paper.authors && (
-              <span class="byline">
-                <strong class="me">{paper.authors[0]}</strong>{paper.authors.length > 1 && `, ${paper.authors.slice(1).join(', ')}`}
-              </span>
-            )}
-            <span class="byline">{[paper.venue, paper.year].filter(Boolean).join(', ')}</span>
-          </li>
-        ))
-      }
-    </ul>
-
-    <details class="disclosure recognition">
-      <summary>
-        <span>Awards and certifications</span>
-        <span class="count">
-          {plural(awards.length, 'award', 'awards')}, {plural(certifications.length, 'certification', 'certifications')}
-        </span>
-      </summary>
-      <div class="columns">
-        <ul class="plain" aria-label="Awards">
-          {
-            awards.map((award) => (
-              <li>
-                {award.title}
-                <span class="by">
-                  {award.by}, {award.year}
+    <div class="block card">
+      <h3 class="sub">Research</h3>
+      <ul class="list">
+        {
+          papers.map((paper) => (
+            <li>
+              <span class="paper-title">{paper.url ? <a href={paper.url}>{paper.title}</a> : paper.title}</span>
+              {paper.authors && (
+                <span class="byline">
+                  <strong class="me">{paper.authors[0]}</strong>{paper.authors.length > 1 && `, ${paper.authors.slice(1).join(', ')}`}
                 </span>
-              </li>
-            ))
-          }
-        </ul>
-        <ul class="plain" aria-label="Certifications">
-          {
-            certifications.map((cert) => (
-              <li>
-                {cert.title}
-                {(cert.by || cert.year) && <span class="by">{[cert.by, cert.year].filter(Boolean).join(', ')}</span>}
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </details>
+              )}
+              <span class="byline">{[paper.venue, paper.year].filter(Boolean).join(', ')}</span>
+            </li>
+          ))
+        }
+      </ul>
 
-    <p class="languages">I speak {person.languages.slice(0, -1).join(', ')} and {person.languages.at(-1)}.</p>
+      <details class="disclosure recognition">
+        <summary>
+          <span class="rec-title">Awards and certifications</span>
+          <span class="count">
+            {plural(awards.length, 'award', 'awards')}, {plural(certifications.length, 'certification', 'certifications')}
+          </span>
+        </summary>
+        <div class="columns">
+          <ul class="plain" aria-label="Awards">
+            {
+              awards.map((award) => (
+                <li>
+                  {award.title}
+                  <span class="by">
+                    {award.by}, {award.year}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+          <ul class="plain" aria-label="Certifications">
+            {
+              certifications.map((cert) => (
+                <li>
+                  {cert.title}
+                  {(cert.by || cert.year) && <span class="by">{[cert.by, cert.year].filter(Boolean).join(', ')}</span>}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </details>
+
+      <p class="languages">I speak {person.languages.slice(0, -1).join(', ')} and {person.languages.at(-1)}.</p>
+    </div>
   </div>
 </section>
 
 <style>
+  .layout {
+    display: grid;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  @media (min-width: 60rem) {
+    .layout {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .experience {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .block {
+    padding: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+    border-radius: var(--radius-sm);
+  }
+
   .sub {
-    margin-bottom: 0.75rem;
-    font-size: var(--step-1);
-  }
-
-  .sub:not(:first-child) {
-    margin-top: 3rem;
-  }
-
-  .roles,
-  .list {
-    border-top: 1px solid var(--rule);
+    margin-bottom: 1rem;
+    font-size: var(--step-2);
+    font-weight: 750;
   }
 
   .roles > li,
   .list > li {
-    border-bottom: 1px solid var(--rule);
+    border-top: 1px solid var(--line);
   }
 
   /* A role is a period beside what and where; the same grid works in a row or a summary. */
@@ -172,7 +191,7 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
   @media (min-width: 44rem) {
     .role,
     .role-details > summary {
-      grid-template-columns: 9rem minmax(0, 1fr) auto;
+      grid-template-columns: 10rem minmax(0, 1fr) auto;
     }
 
     .role-details > summary::after {
@@ -182,7 +201,7 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
 
   .period {
     padding-top: 0.15rem;
-    color: var(--graphite);
+    color: var(--stone);
     font-size: var(--step--1);
     font-variant-numeric: tabular-nums;
   }
@@ -197,19 +216,19 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
   }
 
   .role-details > summary:hover .title {
-    color: var(--accent);
+    color: var(--lamp);
   }
 
   .org,
   .note {
-    color: var(--graphite);
+    color: var(--stone);
   }
 
   .kind {
     display: inline-block;
     margin-left: 0.5rem;
-    padding: 0 0.5rem;
-    border: 1px solid var(--rule);
+    padding: 0 0.55rem;
+    border: 1px solid var(--line);
     border-radius: 999px;
     font-size: 0.78rem;
     vertical-align: 0.1em;
@@ -219,11 +238,12 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
     padding: 0 0 1.25rem 1.1rem;
     list-style: disc;
     max-width: var(--measure);
+    color: var(--stone);
   }
 
   @media (min-width: 44rem) {
     .points {
-      margin-left: 11rem;
+      margin-left: 12rem;
     }
   }
 
@@ -231,58 +251,29 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
     margin-top: 0.35rem;
   }
 
-  .points li::marker {
-    color: var(--graphite);
-  }
-
   .intro {
-    max-width: var(--measure);
     margin-bottom: 1rem;
-    color: var(--graphite);
+    color: var(--stone);
   }
 
   .list > li {
     display: grid;
-    gap: 0.15rem 1rem;
-    padding-block: 0.9rem;
-  }
-
-  @media (min-width: 44rem) {
-    .upstream {
-      grid-template-columns: minmax(0, 1fr) auto;
-    }
-
-    .upstream .repo {
-      grid-column: 1 / -1;
-    }
+    gap: 0.2rem;
+    padding-block: 0.95rem;
   }
 
   .repo {
-    color: var(--graphite);
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
+    color: var(--stone);
+    font-size: 0.85rem;
   }
 
-  .when {
-    color: var(--graphite);
-    font-size: var(--step--1);
-    white-space: nowrap;
-  }
-
-  .what-line {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 0 1rem;
-  }
-
-  .what-line strong {
+  .list strong {
     font-weight: 650;
   }
 
   .body,
   .byline {
-    color: var(--graphite);
+    color: var(--stone);
   }
 
   .byline {
@@ -295,41 +286,46 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
   }
 
   .paper-title a {
-    color: var(--ink);
+    color: var(--plaster);
+  }
+
+  .paper-title a:hover {
+    color: var(--lamp);
   }
 
   .me {
-    color: var(--ink);
-    font-weight: 650;
+    color: var(--plaster);
   }
 
   .recognition {
-    margin-top: 2rem;
+    border-top: 1px solid var(--line);
   }
 
   .recognition > summary {
     flex-wrap: wrap;
-    padding-block: 0.75rem;
+    padding-block: 1rem;
+  }
+
+  .rec-title {
     font-weight: 700;
   }
 
-  .recognition > summary:hover > span:first-child {
-    color: var(--accent);
+  .recognition > summary:hover .rec-title {
+    color: var(--lamp);
   }
 
   .count {
-    color: var(--graphite);
+    color: var(--stone);
     font-size: var(--step--1);
-    font-weight: 400;
   }
 
   .columns {
     display: grid;
-    gap: 1.5rem 2.5rem;
-    padding-block: 0.75rem 0.5rem;
+    gap: 1.25rem 2rem;
+    padding-block: 0.25rem 1rem;
   }
 
-  @media (min-width: 44rem) {
+  @media (min-width: 30rem) {
     .columns {
       grid-template-columns: 1fr 1fr;
     }
@@ -341,12 +337,13 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
 
   .by {
     display: block;
-    color: var(--graphite);
+    color: var(--stone);
     font-size: var(--step--1);
   }
 
   .languages {
-    margin-top: 2.5rem;
-    color: var(--graphite);
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    color: var(--stone);
   }
 </style>

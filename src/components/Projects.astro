@@ -5,127 +5,143 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
 ---
 
 <section class="section" id="projects" aria-labelledby="projects-name">
-  <h2 class="section-name" id="projects-name">Projects</h2>
-  <div class="section-body">
-    <ul class="projects">
-      {
-        projects.map((project) => (
-          <li class="project">
-            <div class="head">
-              <h3>
-                <a href={project.repo}>{project.name}</a>
-              </h3>
-              <p class="meta">
-                {project.stars ? (
-                  <span class="stars" aria-label={`${project.stars} GitHub stars`}>
-                    ★ {project.stars}
-                  </span>
-                ) : null}
-                <a href={project.repo}>
-                  Code<span class="visually-hidden"> for {project.name}</span>
-                </a>
-                {project.links?.map((link) => (
-                  <a href={link.url}>
-                    {link.label}
-                    <span class="visually-hidden"> for {project.name}</span>
-                  </a>
-                ))}
-              </p>
+  <h2 class="section-name" id="projects-name">Things I've built</h2>
+
+  <ul class="grid">
+    {
+      projects.map((project) => (
+        <li class="project card">
+          <div class="head">
+            <h3>
+              <a href={project.repo}>{project.name}</a>
+            </h3>
+            {project.stars ? (
+              <span class="stars" aria-label={`${project.stars} GitHub stars`}>
+                ★ {project.stars}
+              </span>
+            ) : null}
+          </div>
+          <p class="summary">{project.summary}</p>
+          <details class="disclosure how">
+            <summary>
+              How it works<span class="visually-hidden">: {project.name}</span>
+            </summary>
+            <div class="how-body">
+              <p>{project.body}</p>
+              <p class="stack">{project.stack.join(', ')}</p>
             </div>
-            <p class="summary">{project.summary}</p>
-            <details class="disclosure how">
-              <summary>
-                How it works<span class="visually-hidden">: {project.name}</span>
-              </summary>
-              <div class="how-body">
-                <p>{project.body}</p>
-                <p class="stack">{project.stack.join(', ')}</p>
-              </div>
-            </details>
+          </details>
+          <p class="links">
+            <a href={project.repo}>
+              Code<span class="visually-hidden"> for {project.name}</span>
+            </a>
+            {project.links?.map((link) => (
+              <a href={link.url}>
+                {link.label}
+                <span class="visually-hidden"> for {project.name}</span>
+              </a>
+            ))}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <details class="disclosure earlier card">
+    <summary>{count} earlier projects</summary>
+    <ul class="more">
+      {
+        moreProjects.map((project) => (
+          <li>
+            <a href={project.url}>{project.name}</a>
+            <span class="muted">{project.body}</span>
+            {project.demo && (
+              <a class="demo" href={project.demo}>
+                Live demo<span class="visually-hidden"> for {project.name}</span>
+              </a>
+            )}
           </li>
         ))
       }
     </ul>
-
-    <details class="disclosure earlier">
-      <summary>{count} earlier projects</summary>
-      <ul class="more">
-        {
-          moreProjects.map((project) => (
-            <li>
-              <a href={project.url}>{project.name}</a>
-              <span class="muted">{project.body}</span>
-              {project.demo && (
-                <a class="demo" href={project.demo}>
-                  Live demo<span class="visually-hidden"> for {project.name}</span>
-                </a>
-              )}
-            </li>
-          ))
-        }
-      </ul>
-      <p class="all">
-        <a href={`${person.links.github}?tab=repositories`}>Every repository on GitHub</a>
-      </p>
-    </details>
-  </div>
+    <p class="all">
+      <a href={`${person.links.github}?tab=repositories`}>Every repository on GitHub</a>
+    </p>
+  </details>
 </section>
 
 <style>
-  .projects {
-    border-top: 1px solid var(--rule);
+  .grid {
+    display: grid;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  @media (min-width: 44rem) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 66rem) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 
   .project {
-    padding-block: 1.75rem;
-    border-bottom: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    min-height: 15rem;
+    padding: 1.75rem;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .project {
+      transition: border-color 250ms;
+    }
+  }
+
+  .project:hover {
+    border-color: color-mix(in srgb, var(--lamp) 45%, var(--line));
   }
 
   .head {
     display: flex;
-    flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 0.25rem 1.5rem;
+    gap: 1rem;
   }
 
   h3 {
     font-size: var(--step-2);
     font-weight: 750;
-    letter-spacing: -0.02em;
   }
 
   h3 a {
-    color: var(--ink);
+    color: var(--plaster);
     text-decoration: none;
   }
 
   h3 a:hover {
-    color: var(--accent);
-  }
-
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0 1.25rem;
-    font-size: var(--step--1);
+    color: var(--lamp);
   }
 
   .stars {
-    color: var(--graphite);
+    flex: none;
+    color: var(--lamp);
+    font-size: var(--step--1);
     font-variant-numeric: tabular-nums;
   }
 
   .summary {
-    margin-top: 0.35rem;
-    font-size: var(--step-1);
-    line-height: 1.4;
+    margin-top: 0.6rem;
+    color: var(--stone);
   }
 
-  /* The disclosure sits under the one-line summary, with its marker right after the label. */
   .how {
-    margin-top: 0.5rem;
+    margin-top: 1rem;
   }
 
   .how > summary {
@@ -133,7 +149,7 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
     align-items: center;
     gap: 0.6rem;
     min-height: 24px;
-    color: var(--graphite);
+    color: var(--stone);
     font-size: var(--step--1);
   }
 
@@ -144,34 +160,47 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
   }
 
   .how > summary:hover {
-    color: var(--ink);
+    color: var(--plaster);
   }
 
   .how-body {
-    max-width: var(--measure);
-    padding-top: 0.6rem;
+    padding-top: 0.75rem;
+    font-size: var(--step--1);
   }
 
   .stack {
     margin-top: 0.6rem;
+    color: var(--stone);
+  }
+
+  /* Links sit at the bottom of the card, whatever the summary's length. */
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
+    font-size: var(--step--1);
+    font-weight: 650;
   }
 
   .earlier {
-    margin-top: 2rem;
+    margin-top: 1.25rem;
+    padding: 0.5rem 1.75rem;
+    border-radius: var(--radius-sm);
   }
 
   .earlier > summary {
-    padding-block: 0.75rem;
+    padding-block: 1rem;
     font-weight: 700;
   }
 
   .earlier > summary:hover {
-    color: var(--accent);
+    color: var(--lamp);
   }
 
   .more {
-    margin-top: 0.5rem;
-    border-top: 1px solid var(--rule);
+    border-top: 1px solid var(--line);
   }
 
   .more li {
@@ -179,7 +208,7 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
     flex-wrap: wrap;
     gap: 0.15rem 1rem;
     padding-block: 0.85rem;
-    border-bottom: 1px solid var(--rule);
+    border-bottom: 1px solid var(--line);
   }
 
   .more li > a:first-child {
@@ -191,7 +220,8 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
     flex: 1 1 18rem;
   }
 
+  /* Padding, not margin: a trailing margin would escape the animating panel. */
   .all {
-    margin-block: 1.25rem 0.5rem;
+    padding-block: 1.25rem 1rem;
   }
 </style>

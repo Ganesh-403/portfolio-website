@@ -5,59 +5,67 @@ import { person, offers } from '../data/profile';
 
 <section class="section" id="freelance" aria-labelledby="freelance-name">
   <h2 class="section-name" id="freelance-name">Freelance</h2>
-  <div class="section-body">
-    <p class="lede">
-      I take on freelance projects alongside my role at Flid AI and see them all the way through: product decisions,
-      design, code, deployment, and the fixes after launch.
+  <p class="statement">Have something to build? I'll take it from idea to production.</p>
+  <p class="lede">
+    I take on freelance projects alongside my role at Flid AI and see them all the way through: product decisions,
+    design, code, deployment, and the fixes after launch.
+  </p>
+
+  <ul class="offers">
+    {
+      offers.map((offer) => (
+        <li class="card">
+          <h3>{offer.title}</h3>
+          <p>{offer.body}</p>
+          <p class="proof">
+            Related work:{' '}
+            {offer.proof.map((pr) => (
+              <PR pr={pr} />
+            ))}
+            {offer.projects?.map((name) => (
+              <a href="#projects">{name}</a>
+            ))}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="next">
+    <p>
+      I work from Mumbai ({person.timezone}). Tell me what you're building and when you need it, and I'll tell you
+      honestly whether I'm the right fit.
     </p>
-
-    <ul class="offers">
-      {
-        offers.map((offer) => (
-          <li>
-            <h3>{offer.title}</h3>
-            <p>{offer.body}</p>
-            <p class="proof muted">
-              Related work:{' '}
-              {offer.proof.map((pr) => (
-                <PR pr={pr} />
-              ))}
-              {offer.projects?.map((name) => (
-                <a href="#projects">{name}</a>
-              ))}
-            </p>
-          </li>
-        ))
-      }
-    </ul>
-
-    <div class="next">
-      <p>
-        I work from Mumbai ({person.timezone}). Tell me what you're building and when you need it, and I'll tell you
-        honestly whether I'm the right fit.
-      </p>
-      <a class="button primary" href="#contact">Work with me</a>
-    </div>
+    <a class="button primary" href="#contact">Work with me</a>
   </div>
 </section>
 
 <style>
-  /* Three offers side by side need more room than a text column. */
-  .section-body {
-    max-width: 58rem;
+  .statement {
+    max-width: 18ch;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .lede {
+    max-width: var(--measure);
+    margin-top: 1.5rem;
+    color: var(--stone);
+    font-size: var(--step-1);
+    line-height: 1.45;
   }
 
   .offers {
     display: grid;
-    gap: 1px;
-    margin-top: 2.25rem;
-    border: 1px solid var(--rule);
-    border-radius: calc(var(--radius) + 4px);
-    background: var(--rule);
-    overflow: hidden;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
   }
 
-  @media (min-width: 52rem) {
+  @media (min-width: 56rem) {
     .offers {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -66,28 +74,30 @@ import { person, offers } from '../data/profile';
   .offers li {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
-    padding: 1.25rem 1.25rem 1.1rem;
-    background: var(--raised);
+    gap: 0.75rem;
+    padding: 1.75rem;
+    border-radius: var(--radius-sm);
   }
 
   .offers h3 {
     font-size: var(--step-1);
-    line-height: 1.2;
+    font-weight: 750;
   }
 
   .offers li > p:not(.proof) {
+    color: var(--stone);
     font-size: var(--step--1);
-    line-height: 1.55;
+    line-height: 1.6;
   }
 
   .proof {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.4rem 0.5rem;
+    gap: 0.4rem 0.6rem;
     margin-top: auto;
-    padding-top: 0.5rem;
+    padding-top: 0.75rem;
+    color: var(--stone);
     font-size: 0.82rem;
   }
 
@@ -95,12 +105,13 @@ import { person, offers } from '../data/profile';
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 1.25rem 2rem;
-    margin-top: 2rem;
+    gap: 1.25rem 2.5rem;
+    margin-top: 2.5rem;
   }
 
   .next p {
     flex: 1 1 22rem;
     max-width: var(--measure);
+    color: var(--stone);
   }
 </style>

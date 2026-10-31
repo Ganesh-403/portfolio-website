@@ -76,9 +76,9 @@ import { person, contact } from '../data/profile';
     display: grid;
     gap: 2.5rem;
     padding: clamp(1.25rem, 1rem + 1.5vw, 2rem);
-    border: 1px solid var(--rule);
-    border-radius: calc(var(--radius) + 4px);
-    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: linear-gradient(160deg, var(--raised), var(--night));
   }
 
   @media (min-width: 52rem) {
@@ -119,9 +119,9 @@ import { person, contact } from '../data/profile';
     width: 100%;
     padding: 0.7rem 0.85rem;
     border: 1px solid var(--field);
-    border-radius: var(--radius);
-    background: var(--paper);
-    color: var(--ink);
+    border-radius: 14px;
+    background: var(--night);
+    color: var(--plaster);
     font: inherit;
     font-weight: 400;
     font-size: var(--step-0);
@@ -129,13 +129,13 @@ import { person, contact } from '../data/profile';
 
   input:hover,
   textarea:hover {
-    border-color: var(--ink);
+    border-color: var(--plaster);
   }
 
   input:focus-visible,
   textarea:focus-visible {
     outline-offset: 0;
-    border-color: var(--signal);
+    border-color: var(--lamp);
   }
 
   textarea {
@@ -163,16 +163,16 @@ import { person, contact } from '../data/profile';
   .status {
     min-height: 1.6em;
     font-size: var(--step--1);
-    color: var(--graphite);
+    color: var(--stone);
   }
 
   .status[data-state='sent'] {
-    color: var(--ink);
+    color: var(--plaster);
     font-weight: 650;
   }
 
   .status[data-state='error'] {
-    color: var(--accent);
+    color: var(--lamp);
     font-weight: 650;
   }
 </style>
