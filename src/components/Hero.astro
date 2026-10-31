@@ -1,86 +1,179 @@
 ---
 import { Image } from 'astro:assets';
 import photo from '../assets/ganesh.jpg';
-import MetricCard from './MetricCard.astro';
-import { person, hero } from '../data/profile';
+import { person, hero, leapview } from '../data/profile';
+import { monthYear } from '../lib/format';
+
+// Scanning order: photo and name, then the one-line offer, then actions, then proof.
+const [first, ...rest] = person.name.split(' ');
+const { mergedPRs, firstMerged } = leapview.stats;
+
+// A sparkline of the same weeks the Work chart shows; the full, explorable chart lives there.
+const weekly = leapview.stats.weekly.slice(-12);
+const max = Math.max(...weekly.map((w) => w.merged), 1);
+const barWidth = 6;
+const gap = 3;
+const height = 28;
+const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
 ---
 
-<section class="hero" aria-labelledby="hero-name">
-  <div class="intro">
-    <div class="byline">
-      <Image src={photo} alt="" width={72} height={72} densities={[1, 2]} loading="eager" fetchpriority="high" class="avatar" />
-      <p class="where muted">
-        {person.role} at <a href={person.companyUrl}>{person.company}</a><br />{person.location}
-      </p>
-    </div>
-    <h1 id="hero-name">{person.name}</h1>
-    <p class="lede">{hero.intro}</p>
-    <p class="freelance">{hero.freelance}</p>
-    <div class="actions">
-      <a class="button primary" href="#contact">Work with me</a>
-      <a class="button" href={`mailto:${person.email}`}>Email</a>
-      <a class="button" href={person.links.linkedin}>LinkedIn</a>
-      <a class="button" href={person.links.github}>GitHub</a>
-    </div>
+<section class="hero" id="top" aria-labelledby="hero-name">
+  <div class="name">
+    <h1 id="hero-name"><span>{first}</span> <span>{rest.join(' ')}</span></h1>
+    <p class="role">
+      {person.role} at <a href={person.companyUrl}>{person.company}</a>
+    </p>
   </div>
-  <div class="evidence">
-    <MetricCard />
+
+  <figure class="portrait">
+    <Image
+      src={photo}
+      alt={`${person.name} leaning on a balcony railing at night`}
+      widths={[400, 600, 800]}
+      sizes="(min-width: 60rem) 30rem, calc(100vw - 2rem)"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <figcaption>
+      {person.location}. <span data-local-time>{person.timezone}</span>
+    </figcaption>
+  </figure>
+
+  <p class="lede">{hero.lede}</p>
+  <p class="detail">{hero.detail}</p>
+  <div class="actions">
+    <a class="button primary" href="#contact">Work with me</a>
+    <a class="button" href={`mailto:${person.email}`}>Email</a>
+    <a class="button" href={person.links.linkedin}>LinkedIn</a>
+    <a class="button" href={person.links.github}>GitHub</a>
   </div>
+
+  <a class="proof" href="#work">
+    <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height} aria-hidden="true">
+      {
+        weekly.map((w, i) => {
+          const h = Math.max(1.5, (w.merged / max) * height);
+          return <rect class="bar" x={i * (barWidth + gap)} y={height - h} width={barWidth} height={h} rx="1" style={`--i:${i}`} />;
+        })
+      }
+    </svg>
+    <span><strong>{mergedPRs}</strong> merged pull requests in LeapView since {firstMerged ? monthYear(firstMerged) : leapview.joined}</span>
+  </a>
 </section>
 
+<script>
+  // Shows the time in Mumbai, so people abroad know whether I'm likely to reply soon.
+  const el = document.querySelector<HTMLElement>('[data-local-time]');
+  if (el) {
+    const format = new Intl.DateTimeFormat('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
+    const tick = () => (el.textContent = `It's ${format.format(new Date())} here.`);
+    tick();
+    setInterval(tick, 30_000);
+  }
+</script>
+
 <style>
+  /* Phones: name, offer and actions fit the first screen, then the photo. Wide screens put the
+     photo beside everything else. Vertical spacing is set per item, so the grid has no row gap. */
   .hero {
     display: grid;
-    gap: 3rem;
-    align-items: center;
-    padding-block: clamp(3rem, 2rem + 5vw, 6.5rem) clamp(3.5rem, 2.5rem + 4vw, 6rem);
+    grid-template-areas: 'name' 'lede' 'actions' 'portrait' 'detail' 'proof';
+    padding-block: clamp(2rem, 1rem + 4vw, 5rem) clamp(3.5rem, 2.5rem + 4vw, 6rem);
   }
 
   @media (min-width: 60rem) {
     .hero {
-      grid-template-columns: minmax(0, 1.35fr) minmax(20rem, 1fr);
-      gap: 4.5rem;
+      grid-template-columns: minmax(0, 1.2fr) minmax(20rem, 30rem);
+      grid-template-rows: repeat(4, auto) 1fr;
+      grid-template-areas:
+        'name portrait'
+        'lede portrait'
+        'detail portrait'
+        'actions portrait'
+        'proof portrait';
+      column-gap: clamp(3rem, 1rem + 4vw, 5.5rem);
+      align-items: start;
     }
   }
 
-  .byline {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.75rem;
-  }
-
-  .avatar {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  .where {
-    font-size: var(--step--1);
-    line-height: 1.45;
+  .name {
+    grid-area: name;
   }
 
   h1 {
-    font-size: var(--step-4);
+    font-size: var(--step-5);
     font-weight: 800;
-    letter-spacing: -0.035em;
-    line-height: 1;
-    margin-bottom: 1.5rem;
+    letter-spacing: -0.045em;
+    line-height: 0.92;
   }
 
-  .freelance {
-    max-width: var(--measure);
-    margin-top: 1.1rem;
+  /* One word per line on wide screens makes the name a block of type beside the photo. */
+  @media (min-width: 60rem) {
+    h1 span {
+      display: block;
+    }
+  }
+
+  .role {
+    margin-top: 1rem;
+    font-size: var(--step-1);
     color: var(--graphite);
   }
 
+  .portrait {
+    grid-area: portrait;
+    max-width: 30rem;
+    margin: 2.5rem 0 0;
+  }
+
+  @media (min-width: 60rem) {
+    .portrait {
+      margin-top: 0;
+    }
+  }
+
+  .portrait img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: 20px;
+    background: var(--code);
+  }
+
+  figcaption {
+    margin-top: 0.75rem;
+    color: var(--graphite);
+    font-size: var(--step--1);
+  }
+
+  .lede {
+    grid-area: lede;
+    margin-top: 1.75rem;
+    font-size: clamp(1.3rem, 1.1rem + 0.9vw, 1.75rem);
+    font-weight: 650;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .detail {
+    grid-area: detail;
+    max-width: 38rem;
+    margin-top: 1.5rem;
+    color: var(--graphite);
+  }
+
+  @media (min-width: 60rem) {
+    .detail {
+      margin-top: 1rem;
+    }
+  }
+
   .actions {
+    grid-area: actions;
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin-top: 2rem;
+    margin-top: 1.75rem;
   }
 
   /* On phones the primary action takes its own row so the other three fit on one line. */
@@ -94,6 +187,109 @@ import { person, hero } from '../data/profile';
       flex: 1 1 0;
       justify-content: center;
       padding-inline: 0.5rem;
+    }
+  }
+
+  .proof {
+    grid-area: proof;
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 0.9rem;
+    justify-self: start;
+    align-self: end;
+    margin-top: 2.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    color: var(--graphite);
+    font-size: var(--step--1);
+    text-decoration: none;
+  }
+
+  .proof strong {
+    color: var(--ink);
+    font-size: var(--step-1);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .proof:hover span {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .proof svg {
+    flex: none;
+  }
+
+  .bar {
+    fill: var(--signal);
+    transform-box: fill-box;
+    transform-origin: bottom;
+  }
+
+  /* The page's one orchestrated moment: the photo opens out, the lines under the name rise in
+     one after another, and the sparkline draws in. The name itself never waits. */
+  @media (prefers-reduced-motion: no-preference) {
+    .portrait img {
+      animation: open 1000ms var(--ease-out) both;
+    }
+
+    .role,
+    .lede,
+    .detail,
+    .actions,
+    .proof {
+      animation: rise 600ms var(--ease-out) both;
+    }
+
+    .role {
+      animation-delay: 80ms;
+    }
+
+    .lede {
+      animation-delay: 160ms;
+    }
+
+    .detail {
+      animation-delay: 240ms;
+    }
+
+    .actions {
+      animation-delay: 320ms;
+    }
+
+    .proof {
+      animation-delay: 400ms;
+    }
+
+    .bar {
+      animation: grow 600ms var(--ease-out) both;
+      animation-delay: calc(500ms + var(--i) * 45ms);
+    }
+  }
+
+  @keyframes open {
+    from {
+      clip-path: inset(7% 7% 7% 7% round 28px);
+      transform: scale(1.04);
+    }
+    to {
+      clip-path: inset(0 0 0 0 round 20px);
+      transform: none;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+
+  @keyframes grow {
+    from {
+      transform: scaleY(0);
     }
   }
 </style>

@@ -23,12 +23,13 @@ export const person = {
   // Shown in <title>, meta description and the Open Graph image.
   headline: 'AI engineer at Flid AI, working on open-source analytics in Go',
   description:
-    'Ganesh Kambli is an AI engineer at Flid AI, based in Mumbai, working on LeapView, open-source BI in Go and DuckDB. Available for freelance work on Go backends, data platforms and AI agents.',
+    'Ganesh Kambli is an AI engineer at Flid AI, based in Mumbai, working on LeapView, open-source BI in Go and DuckDB. He also builds software for clients end to end, from first design to deployment.',
 };
 
+// The hero reads top to bottom in priority order: what I do, then where, then the offer.
 export const hero = {
-  intro: `I work on LeapView, Flid AI's open-source BI platform written in Go on DuckDB. Mostly the parts that have to be right: who can see which data, how fast queries come back, and whether a release installs and upgrades cleanly.`,
-  freelance: 'I also take on freelance work: Go backends, data platforms, and AI agents that people can rely on.',
+  lede: 'I build software end to end, from the first sketch to a product running in production.',
+  detail: `At Flid AI I work on LeapView, open-source BI in Go and DuckDB, mostly the parts that have to be right: who can see which data, how fast queries come back, and whether a release installs and upgrades cleanly. I also take on freelance projects.`,
 };
 
 export type PullRequest = { repo: string; number: number; title: string };
@@ -225,6 +226,8 @@ export type Role = {
   start: string;
   end: string;
   place?: string;
+  // One line shown with the role; points are tucked behind a disclosure.
+  note?: string;
   points?: string[];
 };
 
@@ -237,9 +240,7 @@ export const experience: Role[] = [
     start: 'Aug 2026',
     end: 'now',
     place: 'remote from Mumbai',
-    points: [
-      'Work on LeapView, open-source BI in Go, TypeScript and DuckDB: governed data access, query performance, releases and upgrades.',
-    ],
+    note: 'LeapView: governed data access, query performance, releases and upgrades.',
   },
   {
     title: 'Java Developer, Backend and Microservices',
@@ -271,7 +272,7 @@ export const experience: Role[] = [
     kind: 'Education',
     start: '2022',
     end: '2026',
-    points: ['CGPA 7.95'],
+    note: 'CGPA 7.95',
   },
 ];
 
@@ -308,29 +309,31 @@ export const certifications = [
   { title: 'Learn Generative AI' },
 ];
 
-// Freelance offers. Each one points at work that proves it.
-export const offers = [
+// Freelance offers, described by outcome rather than by technology. Each one points at work that proves it.
+export type Offer = { title: string; body: string; proof: PullRequest[]; projects?: string[] };
+
+export const offers: Offer[] = [
   {
-    title: 'Go services and data APIs',
-    body: 'Backends that serve analytical data quickly and safely: DuckDB and PostgreSQL, Arrow streaming, caching, and access rules enforced in one place.',
-    proof: [lv(409, 'Governed Arrow streaming'), lv(496, 'Access grants as typed predicates')],
+    title: 'A new product, from idea to launch',
+    body: 'You bring the problem. I handle the rest: product decisions, interface, backend, data and hosting, and hand over something you can run.',
+    proof: [],
+    projects: ['RepoSage', 'Semantic Plagiarism Detector'],
   },
   {
-    title: 'AI agents connected to your systems',
-    body: 'Agents and MCP integrations that work over your code, documents or data, cite their sources, and can run locally when privacy matters.',
+    title: 'An existing system, taken further',
+    body: 'New features, faster queries, AI connected to your own data, or fixes for the parts that keep breaking, without starting over.',
     proof: [
+      lv(409, 'Governed Arrow streaming'),
       lv(943, 'Recover truncated agent responses before executing tools'),
-      lv(880, 'Generate offline agent guidance from the shared catalog'),
     ],
-    projects: ['RepoSage'],
   },
   {
-    title: 'Release pipelines you can trust',
-    body: 'Reproducible builds, signed artifacts with SBOMs, tested upgrade paths, and CI that stops failing at random.',
+    title: 'Ready for real users',
+    body: 'Releases you can repeat, upgrades that don’t lose data, access control and monitoring, so it keeps working after launch.',
     proof: [
       lv(800, 'Signed provenance and SBOMs'),
       lv(646, 'Qualified upgrade path'),
-      lv(498, 'Eliminate dependency install races and flaky tests'),
+      lv(393, 'Dashboard refresh reliability SLI'),
     ],
   },
 ];

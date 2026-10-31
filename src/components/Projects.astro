@@ -1,5 +1,7 @@
 ---
 import { person, projects, moreProjects } from '../data/profile';
+
+const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'][moreProjects.length] ?? moreProjects.length;
 ---
 
 <section class="section" id="projects" aria-labelledby="projects-name">
@@ -13,69 +15,84 @@ import { person, projects, moreProjects } from '../data/profile';
               <h3>
                 <a href={project.repo}>{project.name}</a>
               </h3>
-              {project.stars ? (
-                <span class="stars muted" aria-label={`${project.stars} GitHub stars`}>
-                  ★ {project.stars}
-                </span>
-              ) : null}
+              <p class="meta">
+                {project.stars ? (
+                  <span class="stars" aria-label={`${project.stars} GitHub stars`}>
+                    ★ {project.stars}
+                  </span>
+                ) : null}
+                <a href={project.repo}>
+                  Code<span class="visually-hidden"> for {project.name}</span>
+                </a>
+                {project.links?.map((link) => (
+                  <a href={link.url}>
+                    {link.label}
+                    <span class="visually-hidden"> for {project.name}</span>
+                  </a>
+                ))}
+              </p>
             </div>
             <p class="summary">{project.summary}</p>
-            <p class="body">{project.body}</p>
-            <p class="stack">{project.stack.join(', ')}</p>
-            <p class="links">
-              <a href={project.repo}>
-                Code<span class="visually-hidden"> for {project.name}</span>
-              </a>
-              {project.links?.map((link) => (
-                <a href={link.url}>
-                  {link.label}
-                  <span class="visually-hidden"> for {project.name}</span>
-                </a>
-              ))}
-            </p>
+            <details class="disclosure how">
+              <summary>
+                How it works<span class="visually-hidden">: {project.name}</span>
+              </summary>
+              <div class="how-body">
+                <p>{project.body}</p>
+                <p class="stack">{project.stack.join(', ')}</p>
+              </div>
+            </details>
           </li>
         ))
       }
     </ul>
 
-    <h3 class="more-title">Smaller and earlier projects</h3>
-    <ul class="more">
-      {
-        moreProjects.map((project) => (
-          <li>
-            <a href={project.url}>{project.name}</a>
-            <span class="muted">{project.body}</span>
-            {project.demo && (
-              <a class="demo" href={project.demo}>
-                Live demo
-              </a>
-            )}
-          </li>
-        ))
-      }
-    </ul>
-    <p class="all">
-      <a href={`${person.links.github}?tab=repositories`}>Every repository on GitHub</a>
-    </p>
+    <details class="disclosure earlier">
+      <summary>{count} earlier projects</summary>
+      <ul class="more">
+        {
+          moreProjects.map((project) => (
+            <li>
+              <a href={project.url}>{project.name}</a>
+              <span class="muted">{project.body}</span>
+              {project.demo && (
+                <a class="demo" href={project.demo}>
+                  Live demo<span class="visually-hidden"> for {project.name}</span>
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+      <p class="all">
+        <a href={`${person.links.github}?tab=repositories`}>Every repository on GitHub</a>
+      </p>
+    </details>
   </div>
 </section>
 
 <style>
   .projects {
-    display: grid;
-    gap: 2.75rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .project {
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--rule);
   }
 
   .head {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0.25rem 1.5rem;
   }
 
   h3 {
     font-size: var(--step-2);
     font-weight: 750;
+    letter-spacing: -0.02em;
   }
 
   h3 a {
@@ -84,12 +101,19 @@ import { person, projects, moreProjects } from '../data/profile';
   }
 
   h3 a:hover {
-    text-decoration: underline;
+    color: var(--accent);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 1.25rem;
+    font-size: var(--step--1);
   }
 
   .stars {
-    flex: none;
-    font-size: var(--step--1);
+    color: var(--graphite);
     font-variant-numeric: tabular-nums;
   }
 
@@ -99,29 +123,54 @@ import { person, projects, moreProjects } from '../data/profile';
     line-height: 1.4;
   }
 
-  .body {
-    margin-top: 0.75rem;
-    max-width: var(--measure);
-  }
-
-  .stack {
-    margin-top: 0.75rem;
-  }
-
-  .links {
-    display: flex;
-    gap: 1.25rem;
+  /* The disclosure sits under the one-line summary, with its marker right after the label. */
+  .how {
     margin-top: 0.5rem;
+  }
+
+  .how > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 24px;
+    color: var(--graphite);
     font-size: var(--step--1);
   }
 
-  .more-title {
-    margin-top: 4rem;
-    font-size: var(--step-1);
+  .how > summary::after {
+    margin-left: 0;
+    width: 0.65rem;
+    height: 0.65rem;
+  }
+
+  .how > summary:hover {
+    color: var(--ink);
+  }
+
+  .how-body {
+    max-width: var(--measure);
+    padding-top: 0.6rem;
+  }
+
+  .stack {
+    margin-top: 0.6rem;
+  }
+
+  .earlier {
+    margin-top: 2rem;
+  }
+
+  .earlier > summary {
+    padding-block: 0.75rem;
+    font-weight: 700;
+  }
+
+  .earlier > summary:hover {
+    color: var(--accent);
   }
 
   .more {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     border-top: 1px solid var(--rule);
   }
 
@@ -143,6 +192,6 @@ import { person, projects, moreProjects } from '../data/profile';
   }
 
   .all {
-    margin-top: 1.5rem;
+    margin-block: 1.25rem 0.5rem;
   }
 </style>

@@ -1,17 +1,29 @@
 ---
 // A citation: links a claim to the pull request that backs it.
+// `full` shows the title beside the number, as one link.
 import type { PullRequest } from '../data/profile';
 
 interface Props {
   pr: PullRequest;
+  full?: boolean;
 }
 
-const { pr } = Astro.props;
+const { pr, full = false } = Astro.props;
 const href = `https://github.com/${pr.repo}/pull/${pr.number}`;
 ---
 
-<!-- The accessible name starts with the visible text so voice control ("click #800") works. -->
-<a class="pr" href={href} title={pr.title} aria-label={`#${pr.number}: ${pr.title}`}>#{pr.number}</a>
+{
+  full ? (
+    <a class="line" href={href}>
+      <span class="pr">#{pr.number}</span> <span class="title">{pr.title}</span>
+    </a>
+  ) : (
+    /* The accessible name starts with the visible text so voice control ("click #800") works. */
+    <a class="pr" href={href} title={pr.title} aria-label={`#${pr.number}: ${pr.title}`}>
+      #{pr.number}
+    </a>
+  )
+}
 
 <style>
   .pr {
@@ -28,8 +40,28 @@ const href = `https://github.com/${pr.repo}/pull/${pr.number}`;
     font-variant-numeric: tabular-nums;
   }
 
-  .pr:hover {
+  a.pr:hover,
+  .line:hover .pr {
     border-color: var(--accent);
     color: var(--accent);
+  }
+
+  .line {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    color: var(--graphite);
+    font-size: var(--step--1);
+    text-decoration: none;
+  }
+
+  .line .pr {
+    flex: none;
+  }
+
+  .line:hover .title {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 </style>

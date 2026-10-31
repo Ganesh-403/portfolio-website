@@ -26,6 +26,11 @@
   --step-2: 1.758rem;
   --step-3: 2.197rem;
   --step-4: clamp(2.4rem, 1.6rem + 3.6vw, 3.9rem);
+  /* The hero name only: the largest thing on the page by a clear margin. */
+  --step-5: clamp(3.4rem, 1.2rem + 8.5vw, 7.25rem);
+
+  /* One easing curve for everything that moves: quick out, soft landing. */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   --measure: 42rem;
   --page: 74rem;
@@ -70,15 +75,30 @@
   box-sizing: border-box;
 }
 
+/* Anchors and focused elements stop below the sticky header (taller on phones, where the nav wraps). */
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  scroll-padding-top: 7rem;
+}
+
+@media (min-width: 40.0625rem) {
+  html {
+    scroll-padding-top: 5rem;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
   }
+}
+
+/* The theme switch draws its own circle reveal (Header.astro), so the default crossfade is off. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 body {
@@ -230,7 +250,6 @@ code,
   gap: 1.25rem 3rem;
   padding-block: clamp(3.5rem, 2.5rem + 4vw, 6rem);
   border-top: 1px solid var(--rule);
-  scroll-margin-top: 4.5rem;
 }
 
 .section-name {
@@ -268,4 +287,69 @@ code,
 .stack {
   color: var(--graphite);
   font-size: var(--step--1);
+}
+
+/* Disclosure: a native <details> whose summary is the line people scan and whose content is the
+   detail they ask for. Closed content stays in the page, so find-in-page opens it in Chromium. */
+.disclosure > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A plus that becomes a minus: the vertical stroke collapses when open. */
+.disclosure > summary::after {
+  content: '';
+  flex: none;
+  align-self: center;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-left: auto;
+  color: var(--graphite);
+  background:
+    linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat;
+}
+
+.disclosure[open] > summary::after {
+  background-size:
+    100% 2px,
+    2px 0;
+}
+
+.disclosure > summary:hover::after {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .disclosure > summary::after {
+    transition: background-size 250ms var(--ease-out);
+  }
+}
+
+/* Opening animates the height where the browser can (Chromium 131+); elsewhere it opens at once. */
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .disclosure::details-content {
+      block-size: 0;
+      overflow-y: clip;
+      transition:
+        block-size 320ms var(--ease-out),
+        content-visibility 320ms allow-discrete;
+    }
+
+    .disclosure[open]::details-content {
+      block-size: auto;
+    }
+  }
 }
