@@ -164,6 +164,17 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
     margin-top: 2.25rem;
   }
 
+  /* Where the text column is narrowest, tighter buttons keep all four on one row. */
+  @media (min-width: 60rem) and (max-width: 72rem) {
+    .actions {
+      gap: 0.5rem;
+    }
+
+    .actions .button {
+      padding-inline: 1rem;
+    }
+  }
+
   /* On phones the primary action takes its own row so the other three fit on one line. */
   @media (max-width: 30rem) {
     .actions .primary {
@@ -221,8 +232,9 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
   /* The page's one orchestrated moment: the photo opens out, the lines under the name rise in
      one after another, and the sparkline draws in. The name itself never waits. */
   @media (prefers-reduced-motion: no-preference) {
+    /* backwards, not both: holding the last frame's clip-path would also clip the glow's shadow. */
     .portrait img {
-      animation: open 1000ms var(--ease-out) both;
+      animation: open 1000ms var(--ease-out) backwards;
     }
 
     .role,

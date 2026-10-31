@@ -73,20 +73,21 @@ const jsonLd = {
       // The glow follows a mouse or pen. Touch screens and reduced motion keep it where it starts.
       const fine = window.matchMedia('(pointer: fine)');
       const still = window.matchMedia('(prefers-reduced-motion: reduce)');
-      const root = document.documentElement;
+      // The position is set on the glow itself, so moving it restyles one element, not the page.
+      const glow = document.querySelector<HTMLElement>('.lamp-glow');
       let x = 0;
       let y = 0;
       let frame = 0;
       window.addEventListener(
         'pointermove',
         (event) => {
-          if (!fine.matches || still.matches) return;
+          if (!glow || !fine.matches || still.matches) return;
           x = event.clientX;
           y = event.clientY;
           // One style write per frame, with the latest position.
           frame ||= requestAnimationFrame(() => {
-            root.style.setProperty('--lamp-x', `${x}px`);
-            root.style.setProperty('--lamp-y', `${y}px`);
+            glow.style.setProperty('--lamp-x', `${x}px`);
+            glow.style.setProperty('--lamp-y', `${y}px`);
             frame = 0;
           });
         },

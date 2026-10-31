@@ -105,9 +105,11 @@ const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 </script>
 
 <style>
+  /* clip, not hidden: a hidden overflow would make the card a scroll container, and the chart's
+     scroll-driven animation would then track the card instead of the page. */
   .feature {
     display: grid;
-    overflow: hidden;
+    overflow: clip;
   }
 
   @media (min-width: 60rem) {

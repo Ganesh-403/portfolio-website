@@ -197,7 +197,7 @@ const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)
          shorthand, which browsers reject. */
       .chart .bar {
         animation-timeline: --chart;
-        animation-range: entry calc(var(--i) * 3%) cover 40%;
+        animation-range: entry calc(var(--i) * 3%) entry 100%;
       }
     }
   }
@@ -232,9 +232,10 @@ const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)
     color: var(--plaster);
   }
 
+  /* No bottom margin: it would escape the animating panel and make it jump when it finishes. */
   table {
     width: 100%;
-    margin-block: 0.5rem 0.25rem;
+    margin-top: 0.5rem;
     border-collapse: collapse;
     font-variant-numeric: tabular-nums;
   }

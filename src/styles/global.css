@@ -305,6 +305,8 @@ code,
     .disclosure::details-content {
       block-size: 0;
       overflow-y: clip;
+      /* Room for focus rings at the panel's edges while it animates. */
+      overflow-clip-margin: 0.5rem;
       transition:
         block-size 320ms var(--ease-out),
         content-visibility 320ms allow-discrete;

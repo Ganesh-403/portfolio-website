@@ -28,6 +28,11 @@ const nav = [
 </header>
 
 <script>
+  // On phones the nav scrolls sideways; keep a focused link fully in view.
+  document.querySelector('nav')?.addEventListener('focusin', (event) => {
+    (event.target as HTMLElement).scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  });
+
   // Marks the section being read in the nav, so the header doubles as a map of the page.
   const links = new Map(
     [...document.querySelectorAll<HTMLAnchorElement>('nav a[href^="/#"]')].map((a) => [a.hash.slice(1), a]),
@@ -55,28 +60,38 @@ const nav = [
     position: sticky;
     top: 0;
     z-index: 5;
-    background: color-mix(in srgb, var(--night) 82%, transparent);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
   }
 
-  /* At the top of the page the header is clear, so the lamp glow isn't cut by its edge; its
-     background fades in over the first stretch of scrolling. Elsewhere it is always tinted. */
+  /* The tint and blur live on their own layer so they can fade out together; a blur left on at
+     the top of the page would darken its own edges and cut a line through the lamp glow. */
+  .site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in srgb, var(--night) 82%, transparent);
+    /* Unprefixed only: given both, the minifier keeps just the -webkit- copy, which Chromium
+       ignores. Current Safari supports the unprefixed property. */
+    backdrop-filter: blur(14px);
+  }
+
+  /* At the top of the page the header is clear; the layer fades in over the first stretch of
+     scrolling. Without scroll-driven animations it is always on. */
   @supports (animation-timeline: scroll()) {
-    .site-header {
+    .site-header::before {
       animation: tint linear both;
     }
 
     /* A separate rule: the minifier would otherwise fold the timeline into the animation
        shorthand, which browsers reject. */
-    header.site-header {
+    header.site-header::before {
       animation-timeline: scroll(root);
       animation-range: 0 8rem;
     }
 
     @keyframes tint {
       from {
-        background-color: transparent;
+        opacity: 0;
       }
     }
   }
@@ -105,6 +120,7 @@ const nav = [
     margin-left: auto;
     min-width: 0;
     overflow-x: auto;
+    scroll-padding-inline: 1rem;
     scrollbar-width: none;
   }
 
@@ -112,6 +128,7 @@ const nav = [
   nav ul {
     display: flex;
     gap: 1.75rem;
+    width: max-content;
     padding: 0.35rem;
   }
 
