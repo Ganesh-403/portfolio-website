@@ -50,7 +50,7 @@ Design notes:
 
 The site is static (`dist/`), so any static host works.
 
-- **Cloudflare Pages (primary):** project `ganeshkambli`, served at https://ganeshkambli.pages.dev. Connected to this repository: every push to `main` builds with `npm run build` and publishes `dist/`. Node comes from [`.node-version`](.node-version) and response headers from [`public/_headers`](public/_headers). Cloudflare is primary because Jio, a major Indian ISP, blocks Vercel's (and GitHub Pages') IP addresses.
+- **Cloudflare Pages (primary):** project `ganeshkambli`, served at https://ganeshkambli.pages.dev. Every push to `main` builds with `npm run build` and publishes `dist/`: a repository webhook (Settings → Webhooks, push events) calls the project's Pages deploy hook, because Cloudflare's own Git webhook doesn't fire for this project. A build can also be started from the Cloudflare dashboard. Node comes from [`.node-version`](.node-version) and response headers from [`public/_headers`](public/_headers). Cloudflare is primary because Jio, a major Indian ISP, blocks Vercel's (and GitHub Pages') IP addresses.
 - **Cloudflare Worker `portfolio-website` (legacy):** https://portfolio-website.gkambli70.workers.dev, deployed by hand with `npx wrangler deploy` using [`wrangler.jsonc`](wrangler.jsonc).
 - **Vercel (secondary):** also builds `main`, using [`vercel.json`](vercel.json).
 
