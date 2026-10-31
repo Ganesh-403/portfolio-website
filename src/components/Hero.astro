@@ -17,7 +17,7 @@ const height = 28;
 const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
 ---
 
-<section class="hero" aria-labelledby="hero-name">
+<section class="hero" id="top" aria-labelledby="hero-name">
   <div class="name">
     <h1 id="hero-name"><span>{first}</span> <span>{rest.join(' ')}</span></h1>
     <p class="role">
@@ -122,6 +122,7 @@ const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
 
   .portrait {
     grid-area: portrait;
+    max-width: 30rem;
     margin: 2.5rem 0 0;
   }
 
@@ -227,10 +228,39 @@ const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
     transform-origin: bottom;
   }
 
-  /* The page's one orchestrated moment: the photo opens out and the sparkline draws in. */
+  /* The page's one orchestrated moment: the photo opens out, the lines under the name rise in
+     one after another, and the sparkline draws in. The name itself never waits. */
   @media (prefers-reduced-motion: no-preference) {
     .portrait img {
       animation: open 1000ms var(--ease-out) both;
+    }
+
+    .role,
+    .lede,
+    .detail,
+    .actions,
+    .proof {
+      animation: rise 600ms var(--ease-out) both;
+    }
+
+    .role {
+      animation-delay: 80ms;
+    }
+
+    .lede {
+      animation-delay: 160ms;
+    }
+
+    .detail {
+      animation-delay: 240ms;
+    }
+
+    .actions {
+      animation-delay: 320ms;
+    }
+
+    .proof {
+      animation-delay: 400ms;
     }
 
     .bar {
@@ -247,6 +277,13 @@ const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
     to {
       clip-path: inset(0 0 0 0 round 20px);
       transform: none;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
     }
   }
 

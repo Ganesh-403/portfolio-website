@@ -55,23 +55,27 @@ const yaml: [string, string][] = [
             <span>Week of {short(weekly[0].week)}</span>
             <span>Week of {short(weekly.at(-1)!.week)}</span>
           </div>
-          <table class="visually-hidden">
-            <caption>My merged pull requests in LeapView, by week</caption>
-            <thead>
-              <tr>
-                <th scope="col">Week of</th>
-                <th scope="col">Merged</th>
-              </tr>
-            </thead>
-            <tbody>
-              {weekly.map((w) => (
+          {/* The same numbers as a table, on request: for screen readers, keyboards and anyone who prefers exact values. */}
+          <details class="disclosure numbers">
+            <summary>Weekly numbers</summary>
+            <table>
+              <caption class="visually-hidden">My merged pull requests in LeapView, by week</caption>
+              <thead>
                 <tr>
-                  <th scope="row">{short(w.week)}</th>
-                  <td>{w.merged}</td>
+                  <th scope="col">Week of</th>
+                  <th scope="col">Merged</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {weekly.map((w) => (
+                  <tr>
+                    <th scope="row">{short(w.week)}</th>
+                    <td>{w.merged}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </details>
         </>
       )
     }
@@ -79,8 +83,8 @@ const yaml: [string, string][] = [
 </figure>
 
 <script>
-  // Pointing at (or tapping) a week shows its count in the readout; leaving the chart or pressing
-  // Escape puts the busiest week back. Screen readers get the same numbers from the table.
+  // Pointing at (or tapping) a week shows its count in the readout; leaving the chart, tapping
+  // elsewhere or pressing Escape puts the busiest week back. The table below has the same numbers.
   document.querySelectorAll<HTMLElement>('[data-metric]').forEach((card) => {
     const readout = card.querySelector<HTMLElement>('[data-readout]');
     const chart = card.querySelector<SVGSVGElement>('.chart');
@@ -100,6 +104,9 @@ const yaml: [string, string][] = [
     chart.addEventListener('pointerdown', (event) => show((event.target as Element).closest('.week')));
     chart.addEventListener('pointerleave', (event) => {
       if (event.pointerType === 'mouse') show(null);
+    });
+    document.addEventListener('pointerdown', (event) => {
+      if (active && !chart.contains(event.target as Node)) show(null);
     });
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') show(null);
@@ -205,7 +212,12 @@ const yaml: [string, string][] = [
     fill: var(--signal);
     transform-box: fill-box;
     transform-origin: bottom;
-    transition: opacity 150ms;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bar {
+      transition: opacity 150ms;
+    }
   }
 
   /* While one week is pointed at, the others step back. */
@@ -245,5 +257,47 @@ const yaml: [string, string][] = [
     gap: 1rem;
     margin-top: 0.5rem;
     font-size: 0.78rem;
+  }
+
+  .numbers {
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--rule);
+    font-size: var(--step--1);
+  }
+
+  .numbers > summary {
+    padding-block: 0.6rem 0.2rem;
+    color: var(--graphite);
+  }
+
+  .numbers > summary:hover {
+    color: var(--ink);
+  }
+
+  table {
+    width: 100%;
+    margin-block: 0.5rem 0.25rem;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  th,
+  td {
+    padding: 0.3rem 0;
+    border-bottom: 1px solid var(--rule);
+    font-weight: 400;
+    text-align: left;
+  }
+
+  thead th {
+    color: var(--graphite);
+  }
+
+  td {
+    text-align: right;
+  }
+
+  thead th:last-child {
+    text-align: right;
   }
 </style>

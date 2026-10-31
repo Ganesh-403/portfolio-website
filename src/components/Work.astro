@@ -13,7 +13,7 @@ import { leapview } from '../data/profile';
     <p class="tagline">{leapview.tagline}</p>
     <p class="summary">{leapview.summary}</p>
 
-    <div class="chart">
+    <div class="metric-wrap">
       <MetricCard />
     </div>
 
@@ -84,7 +84,7 @@ import { leapview } from '../data/profile';
     max-width: var(--measure);
   }
 
-  .chart {
+  .metric-wrap {
     margin-top: 2rem;
   }
 
@@ -130,8 +130,9 @@ import { leapview } from '../data/profile';
     color: var(--accent);
   }
 
+  /* Top padding keeps the first link's focus ring inside the clipped, animating panel. */
   .area-body {
-    padding-bottom: 1.25rem;
+    padding-block: 0.4rem 1.25rem;
   }
 
   @media (min-width: 44rem) {

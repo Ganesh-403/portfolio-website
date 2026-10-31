@@ -44,7 +44,7 @@ const nav = [
   label();
   syncBrowserChrome();
   systemDark.addEventListener('change', label);
-  button?.addEventListener('click', () => {
+  button?.addEventListener('click', (event) => {
     const next = current() === 'dark' ? 'light' : 'dark';
     const apply = () => {
       root.dataset.theme = next;
@@ -54,17 +54,27 @@ const nav = [
       label();
       syncBrowserChrome();
     };
-    // Crossfade between themes where the browser can; reduced motion switches instantly.
+    // The new theme spreads out in a circle from the button where the browser can; reduced motion
+    // (or no View Transitions support) switches instantly.
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (document.startViewTransition && !still) document.startViewTransition(apply);
-    else apply();
+    if (!document.startViewTransition || still) return apply();
+    const x = event.clientX || window.innerWidth;
+    const y = event.clientY || 0;
+    const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+    document.startViewTransition(apply).ready.then(() => {
+      document.documentElement.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+        { duration: 450, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', pseudoElement: '::view-transition-new(root)' },
+      );
+    });
   });
 
   // Marks the section being read in the nav, so the header doubles as a map of the page.
   const links = new Map(
     [...document.querySelectorAll<HTMLAnchorElement>('nav a[href^="/#"]')].map((a) => [a.hash.slice(1), a]),
   );
-  const sections = [...links.keys()].map((id) => document.getElementById(id)).filter((el) => el !== null);
+  // The hero has no nav link; reaching it clears the marker.
+  const sections = [...links.keys(), 'top'].map((id) => document.getElementById(id)).filter((el) => el !== null);
   if (sections.length && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -113,9 +123,11 @@ const nav = [
     scrollbar-width: none;
   }
 
+  /* The padding leaves room for focus rings, which the scrolling nav would otherwise clip. */
   nav ul {
     display: flex;
     gap: 1.5rem;
+    padding: 0.35rem;
   }
 
   nav a {
@@ -185,10 +197,9 @@ const nav = [
 
     nav {
       order: 3;
-      flex-basis: 100%;
-      margin-left: 0;
+      flex-basis: calc(100% + 2 * var(--gutter));
       margin-inline: calc(var(--gutter) * -1);
-      padding-inline: var(--gutter);
+      padding-inline: calc(var(--gutter) - 0.35rem);
     }
 
     nav ul {

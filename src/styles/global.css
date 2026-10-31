@@ -75,15 +75,30 @@
   box-sizing: border-box;
 }
 
+/* Anchors and focused elements stop below the sticky header (taller on phones, where the nav wraps). */
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  scroll-padding-top: 7rem;
+}
+
+@media (min-width: 40.0625rem) {
+  html {
+    scroll-padding-top: 5rem;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
   }
+}
+
+/* The theme switch draws its own circle reveal (Header.astro), so the default crossfade is off. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 body {
@@ -235,7 +250,6 @@ code,
   gap: 1.25rem 3rem;
   padding-block: clamp(3.5rem, 2.5rem + 4vw, 6rem);
   border-top: 1px solid var(--rule);
-  scroll-margin-top: 4.5rem;
 }
 
 .section-name {
