@@ -1,12 +1,13 @@
 ---
 import { person } from '../data/profile';
 
+// Root-relative so the links also work from the 404 page.
 const nav = [
-  { href: '#work', label: 'Work' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#open-source', label: 'Open source' },
-  { href: '#experience', label: 'Experience' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/#work', label: 'Work' },
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#open-source', label: 'Open source' },
+  { href: '/#freelance', label: 'Freelance' },
+  { href: '/#contact', label: 'Contact' },
 ];
 ---
 
@@ -33,8 +34,15 @@ const nav = [
   const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
   const current = () => root.dataset.theme ?? (systemDark.matches ? 'dark' : 'light');
   const label = () => button?.setAttribute('aria-label', `Switch to ${current() === 'dark' ? 'light' : 'dark'} theme`);
+  // The theme-color metas follow the system scheme; once a theme is chosen, point both at it.
+  const syncBrowserChrome = () => {
+    if (!root.dataset.theme) return;
+    const paper = getComputedStyle(root).getPropertyValue('--paper').trim();
+    document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => meta.setAttribute('content', paper));
+  };
 
   label();
+  syncBrowserChrome();
   systemDark.addEventListener('change', label);
   button?.addEventListener('click', () => {
     const next = current() === 'dark' ? 'light' : 'dark';
@@ -43,6 +51,7 @@ const nav = [
       localStorage.setItem('theme', next);
     } catch {}
     label();
+    syncBrowserChrome();
   });
 </script>
 

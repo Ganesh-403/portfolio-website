@@ -14,18 +14,24 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og.png', Astro.site);
 const education = experience.find((role) => role.kind === 'Education');
 
+// Google's ProfilePage markup: https://developers.google.com/search/docs/appearance/structured-data/profile-page
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: person.name,
-  url: Astro.site?.href,
-  image: ogImage.href,
-  jobTitle: person.role,
-  worksFor: { '@type': 'Organization', name: person.company, url: person.companyUrl },
-  homeLocation: { '@type': 'Place', name: person.location },
-  alumniOf: education && { '@type': 'CollegeOrUniversity', name: education.org },
-  knowsAbout: ['Go', 'DuckDB', 'Business intelligence', 'AI agents', 'Model Context Protocol', 'Release engineering'],
-  sameAs: [person.links.github, person.links.linkedin],
+  '@type': 'ProfilePage',
+  url: canonical.href,
+  dateModified: new Date().toISOString(),
+  mainEntity: {
+    '@type': 'Person',
+    name: person.name,
+    url: Astro.site?.href,
+    image: ogImage.href,
+    jobTitle: person.role,
+    worksFor: { '@type': 'Organization', name: person.company, url: person.companyUrl },
+    homeLocation: { '@type': 'Place', name: person.location },
+    alumniOf: education && { '@type': 'CollegeOrUniversity', name: education.org },
+    knowsAbout: ['Go', 'DuckDB', 'Business intelligence', 'AI agents', 'Model Context Protocol', 'Release engineering'],
+    sameAs: [person.links.github, person.links.linkedin],
+  },
 };
 ---
 

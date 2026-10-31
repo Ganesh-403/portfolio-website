@@ -14,11 +14,11 @@ GitHub numbers (stars, merged LeapView pull requests, the weekly chart, upstream
 npm run sync:github
 ```
 
-The build never calls GitHub, so deploys don't depend on its API or rate limits. Set `GITHUB_TOKEN` if you hit the unauthenticated limit while syncing.
+The build never calls GitHub, so deploys don't depend on its API or rate limits. Without a token the sync paces itself to GitHub's search limit and takes about a minute; set `GITHUB_TOKEN` to make it faster. If anything fails, the snapshot is left unchanged and the command exits with an error.
 
 ## Running locally
 
-Requires Node 22.23 or newer.
+Requires Node 22.23 or newer (Vercel builds with Node 24).
 
 ```bash
 npm install

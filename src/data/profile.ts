@@ -9,7 +9,9 @@ export const person = {
   role: 'AI Engineer',
   company: 'Flid AI',
   companyUrl: 'https://flid.ai/',
+  // Flid AI ApS is based in Odense, Denmark; I work remotely.
   location: 'Mumbai, India',
+  timezone: 'IST, UTC+5:30',
   email: 'gkambli70@gmail.com',
   photo: 'ganesh',
   languages: ['English', 'Hindi', 'Marathi', 'Konkani'],
@@ -21,11 +23,11 @@ export const person = {
   // Shown in <title>, meta description and the Open Graph image.
   headline: 'AI engineer at Flid AI, working on open-source analytics in Go',
   description:
-    'Ganesh Kambli is an AI engineer at Flid AI in Mumbai, working on LeapView, open-source BI in Go and DuckDB. Available for freelance work on Go backends, data platforms and AI agents.',
+    'Ganesh Kambli is an AI engineer at Flid AI, based in Mumbai, working on LeapView, open-source BI in Go and DuckDB. Available for freelance work on Go backends, data platforms and AI agents.',
 };
 
 export const hero = {
-  intro: `I'm an AI engineer at Flid AI in Mumbai. I work on LeapView, open-source BI written in Go on DuckDB, mostly on the parts that have to be right: who can see which data, how fast queries come back, and whether a release installs and upgrades cleanly.`,
+  intro: `I work on LeapView, Flid AI's open-source BI platform written in Go on DuckDB. Mostly the parts that have to be right: who can see which data, how fast queries come back, and whether a release installs and upgrades cleanly.`,
   freelance: 'I also take on freelance work: Go backends, data platforms, and AI agents that people can rely on.',
 };
 
@@ -204,7 +206,7 @@ export const moreProjects: { name: string; body: string; url: string; demo?: str
 const UPSTREAM_REPOS = ['riscv/riscv-unified-db', 'Apicurio/apicurio-registry'];
 export const upstream = github.upstream.filter((pr) => UPSTREAM_REPOS.includes(pr.repo));
 
-export const community = [
+export const community: { title: string; period: string; body?: string }[] = [
   {
     title: 'Project admin, Elite Coders Summer of Code',
     period: 'Jul – Sep 2026',
@@ -213,7 +215,6 @@ export const community = [
   {
     title: 'Contributor, GirlScript Summer of Code',
     period: 'May – Aug 2026',
-    body: 'Contributed to open-source projects during GSSoC’26.',
   },
 ];
 
@@ -235,7 +236,7 @@ export const experience: Role[] = [
     kind: 'Full-time',
     start: 'Aug 2026',
     end: 'now',
-    place: 'Mumbai',
+    place: 'remote from Mumbai',
     points: [
       'Work on LeapView, open-source BI in Go, TypeScript and DuckDB: governed data access, query performance, releases and upgrades.',
     ],
@@ -317,13 +318,20 @@ export const offers = [
   {
     title: 'AI agents connected to your systems',
     body: 'Agents and MCP integrations that work over your code, documents or data, cite their sources, and can run locally when privacy matters.',
-    proof: [lv(695, 'Revoking MCP sessions on SCIM deactivation')],
+    proof: [
+      lv(943, 'Recover truncated agent responses before executing tools'),
+      lv(880, 'Generate offline agent guidance from the shared catalog'),
+    ],
     projects: ['RepoSage'],
   },
   {
     title: 'Release pipelines you can trust',
     body: 'Reproducible builds, signed artifacts with SBOMs, tested upgrade paths, and CI that stops failing at random.',
-    proof: [lv(800, 'Signed provenance and SBOMs'), lv(646, 'Qualified upgrade path')],
+    proof: [
+      lv(800, 'Signed provenance and SBOMs'),
+      lv(646, 'Qualified upgrade path'),
+      lv(498, 'Eliminate dependency install races and flaky tests'),
+    ],
   },
 ];
 

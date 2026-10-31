@@ -23,9 +23,14 @@ import { person, projects, moreProjects } from '../data/profile';
             <p class="body">{project.body}</p>
             <p class="stack">{project.stack.join(', ')}</p>
             <p class="links">
-              <a href={project.repo}>Code</a>
+              <a href={project.repo}>
+                Code<span class="visually-hidden"> for {project.name}</span>
+              </a>
               {project.links?.map((link) => (
-                <a href={link.url}>{link.label}</a>
+                <a href={link.url}>
+                  {link.label}
+                  <span class="visually-hidden"> for {project.name}</span>
+                </a>
               ))}
             </p>
           </li>

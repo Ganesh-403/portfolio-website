@@ -82,4 +82,18 @@ import { person, hero } from '../data/profile';
     gap: 0.75rem;
     margin-top: 2rem;
   }
+
+  /* On phones the primary action takes its own row so the other three fit on one line. */
+  @media (max-width: 30rem) {
+    .actions .primary {
+      flex-basis: 100%;
+      justify-content: center;
+    }
+
+    .actions .button:not(.primary) {
+      flex: 1 1 0;
+      justify-content: center;
+      padding-inline: 0.5rem;
+    }
+  }
 </style>

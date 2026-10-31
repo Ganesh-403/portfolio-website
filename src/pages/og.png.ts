@@ -15,7 +15,9 @@ const h = (type: string, style: Record<string, unknown>, children?: unknown): No
 
 export const GET: APIRoute = async () => {
   const [regular, heavy] = await Promise.all([font(400), font(800)]);
-  const { weekly, mergedPRs } = leapview.stats;
+  const { mergedPRs } = leapview.stats;
+  // Same 12-week window as the hero chart; fixed-width bars must fit beside the number.
+  const weekly = leapview.stats.weekly.slice(-12);
   const max = Math.max(...weekly.map((w) => w.merged), 1);
 
   const barWidth = 26;

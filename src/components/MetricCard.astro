@@ -4,16 +4,20 @@
 import { leapview } from '../data/profile';
 import { dayMonth as short, dayMonthYear } from '../lib/format';
 
-const { mergedPRs, firstMerged, lastMerged, weekly } = leapview.stats;
+const { mergedPRs, firstMerged, lastMerged } = leapview.stats;
+// The total covers everything; the chart shows the most recent weeks so bars stay readable.
+const weekly = leapview.stats.weekly.slice(-12);
 
 const max = Math.max(...weekly.map((w) => w.merged), 1);
 const peak = weekly.reduce((a, b) => (b.merged > a.merged ? b : a), weekly[0]);
 const barWidth = 10;
 const gap = 4;
 const height = 64;
-const width = weekly.length * (barWidth + gap) - gap;
-const range = `${short(firstMerged!)} to ${dayMonthYear(lastMerged!)}`;
-const summary = `Bar chart of merged pull requests per week, ${weekly.length} weeks from ${short(weekly[0].week)} to ${short(weekly.at(-1)!.week)}, peaking at ${peak.merged} in the week of ${short(peak.week)}.`;
+const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
+const range = firstMerged && lastMerged ? `${short(firstMerged)} to ${dayMonthYear(lastMerged)}` : '';
+const summary = peak
+  ? `Bar chart of merged pull requests per week, ${weekly.length} weeks from ${short(weekly[0].week)} to ${short(weekly.at(-1)!.week)}, peaking at ${peak.merged} in the week of ${short(peak.week)}.`
+  : '';
 
 const yaml: [string, string][] = [
   ['metric', 'merged_pull_requests'],
@@ -30,24 +34,27 @@ const yaml: [string, string][] = [
   </div>
   <div class="render">
     <p class="figure"><span class="number">{mergedPRs}</span> merged pull requests</p>
-    <p class="range muted">{range}</p>
-    <svg class="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img" aria-label={summary}>
-      {
-        weekly.map((w, i) => {
-          const h = Math.max(1.5, (w.merged / max) * height);
-          return (
-            <rect class="bar" x={i * (barWidth + gap)} y={height - h} width={barWidth} height={h} style={`--i:${i}`}>
-              <title>{`Week of ${short(w.week)}: ${w.merged}`}</title>
-            </rect>
-          );
-        })
-      }
-    </svg>
-    <div class="axis muted" aria-hidden="true">
-      <span>{short(weekly[0].week)}</span>
-      <span>Weekly, by merge date</span>
-      <span>{short(weekly.at(-1)!.week)}</span>
-    </div>
+    {range && <p class="range muted">{range}</p>}
+    {
+      peak && (
+        <>
+          <svg class="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img" aria-label={summary}>
+            {weekly.map((w, i) => {
+              const h = Math.max(1.5, (w.merged / max) * height);
+              return (
+                <rect class="bar" x={i * (barWidth + gap)} y={height - h} width={barWidth} height={h} style={`--i:${i}`}>
+                  <title>{`Week of ${short(w.week)}: ${w.merged}`}</title>
+                </rect>
+              );
+            })}
+          </svg>
+          <div class="axis muted" aria-hidden="true">
+            <span>Week of {short(weekly[0].week)}</span>
+            <span>Week of {short(weekly.at(-1)!.week)}</span>
+          </div>
+        </>
+      )
+    }
   </div>
   <figcaption class="visually-hidden">My merged pull requests in LeapView, by week.</figcaption>
 </figure>

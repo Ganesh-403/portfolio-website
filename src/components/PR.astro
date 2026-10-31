@@ -10,12 +10,14 @@ const { pr } = Astro.props;
 const href = `https://github.com/${pr.repo}/pull/${pr.number}`;
 ---
 
-<a class="pr" href={href} title={pr.title} aria-label={`Pull request ${pr.number}: ${pr.title}`}>#{pr.number}</a>
+<!-- The accessible name starts with the visible text so voice control ("click #800") works. -->
+<a class="pr" href={href} title={pr.title} aria-label={`#${pr.number}: ${pr.title}`}>#{pr.number}</a>
 
 <style>
   .pr {
     display: inline-block;
-    padding: 0.05rem 0.45rem;
+    min-height: 24px; /* WCAG 2.5.8 minimum target size */
+    padding: 0.1rem 0.5rem;
     border: 1px solid var(--rule);
     border-radius: 999px;
     color: var(--graphite);

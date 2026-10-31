@@ -30,7 +30,7 @@ import { monthYear, plainTitle } from '../lib/format';
               {item.title}
               <span class="muted when">{item.period}</span>
             </p>
-            <p class="muted">{item.body}</p>
+            {item.body && <p class="muted">{item.body}</p>}
           </li>
         ))
       }
@@ -58,6 +58,12 @@ import { monthYear, plainTitle } from '../lib/format';
   .community li {
     padding-block: 0.9rem;
     border-bottom: 1px solid var(--rule);
+  }
+
+  /* The next section's top rule closes the list. */
+  .community li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
   }
 
   .upstream li {

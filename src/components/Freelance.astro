@@ -1,0 +1,75 @@
+---
+import PR from './PR.astro';
+import { person, offers } from '../data/profile';
+---
+
+<section class="section" id="freelance" aria-labelledby="freelance-name">
+  <h2 class="section-name" id="freelance-name">Freelance</h2>
+  <div class="section-body">
+    <p class="lede">
+      I take on freelance and contract work alongside my role at Flid AI. These are the problems I'm best placed to help
+      with, each backed by work you can read.
+    </p>
+
+    <ul class="offers">
+      {
+        offers.map((offer) => (
+          <li>
+            <h3>{offer.title}</h3>
+            <p>{offer.body}</p>
+            <p class="proof muted">
+              Related work:{' '}
+              {offer.proof.map((pr) => (
+                <PR pr={pr} />
+              ))}
+              {offer.projects?.map((name) => (
+                <a href="#projects">{name}</a>
+              ))}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="next">
+      I work from Mumbai ({person.timezone}). Tell me your scope and timeline and I'll say whether I'm the right fit.
+    </p>
+    <p><a class="button primary" href="#contact">Start a conversation</a></p>
+  </div>
+</section>
+
+<style>
+  .offers {
+    display: grid;
+    gap: 1.75rem;
+    margin-top: 2.25rem;
+  }
+
+  .offers li {
+    padding-left: 1.1rem;
+    border-left: 2px solid var(--signal);
+  }
+
+  .offers h3 {
+    font-size: var(--step-1);
+    margin-bottom: 0.35rem;
+  }
+
+  .offers p {
+    max-width: var(--measure);
+  }
+
+  .proof {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.5rem;
+    margin-top: 0.6rem;
+    font-size: var(--step--1);
+  }
+
+  .next {
+    max-width: var(--measure);
+    margin-block: 2.5rem 1.25rem;
+  }
+</style>
