@@ -46,7 +46,12 @@ Design notes:
 
 ## Deployment
 
-Vercel builds from `main` using [`vercel.json`](vercel.json) (Astro preset, `npm run build`, output `dist/`). Canonical URLs, the sitemap and Open Graph tags use the project's production domain from `VERCEL_PROJECT_PRODUCTION_URL`, so changing the domain in Vercel needs no code change.
+The site is static (`dist/`), so any static host works.
+
+- **Cloudflare Pages (primary):** project `ganeshkambli`, served at https://ganeshkambli.pages.dev. It builds `main` with `npm run build` into `dist`; Node comes from [`.node-version`](.node-version) and response headers from [`public/_headers`](public/_headers). Cloudflare is primary because Jio, a major Indian ISP, blocks Vercel's (and GitHub Pages') IP addresses.
+- **Vercel (secondary):** also builds `main`, using [`vercel.json`](vercel.json).
+
+Canonical URLs, the sitemap and Open Graph tags always point at the address in [`astro.config.mjs`](astro.config.mjs), whichever host serves the build. Set `SITE_URL` to override it, for example after moving to a custom domain.
 
 The contact form posts to Formspree.
 

@@ -2,13 +2,13 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// On Vercel, VERCEL_PROJECT_PRODUCTION_URL is the project's shortest production
-// domain, so canonical URLs follow a domain change without a code edit.
-const productionHost =
-  process.env.VERCEL_PROJECT_PRODUCTION_URL ?? 'portfolio-website-ganesh-kamblis-projects.vercel.app';
+// The canonical address for canonical URLs, the sitemap and Open Graph tags.
+// Cloudflare Pages is the primary host because some Indian ISPs (Jio) block Vercel;
+// every host's build points here so search engines see one site. Override with SITE_URL.
+const site = process.env.SITE_URL ?? 'https://ganeshkambli.pages.dev';
 
 export default defineConfig({
-  site: `https://${productionHost}`,
+  site,
   // Astro 7 defaults to 'jsx' whitespace rules, which drop spaces between inline elements.
   compressHTML: true,
   // The stylesheet is small; inlining it removes the only render-blocking request.
