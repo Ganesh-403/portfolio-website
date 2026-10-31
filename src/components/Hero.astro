@@ -4,61 +4,52 @@ import photo from '../assets/ganesh.jpg';
 import { person, hero, leapview } from '../data/profile';
 import { monthYear } from '../lib/format';
 
-// Scanning order: photo and name, then the one-line offer, then actions, then proof.
+// Scanning order: the name, the one-line offer, the actions, then the proof. The photo sits beside
+// them on wide screens and after the actions on phones, so "Work with me" is on the first screen.
 const [first, ...rest] = person.name.split(' ');
 const { mergedPRs, firstMerged } = leapview.stats;
 
 // A sparkline of the same weeks the Work chart shows; the full, explorable chart lives there.
 const weekly = leapview.stats.weekly.slice(-12);
 const max = Math.max(...weekly.map((w) => w.merged), 1);
-const barWidth = 6;
-const gap = 3;
-const height = 28;
-const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-name">
-  <div class="name">
-    <h1 id="hero-name"><span>{first}</span> <span>{rest.join(' ')}</span></h1>
-    <p class="role">
-      {person.role} at <a href={person.companyUrl}>{person.company}</a>
-    </p>
-  </div>
-
   <figure class="portrait">
     <Image
       src={photo}
       alt={`${person.name} leaning on a balcony railing at night`}
       widths={[400, 600, 800]}
-      sizes="(min-width: 60rem) 30rem, calc(100vw - 2rem)"
+      sizes="(min-width: 60rem) 36rem, calc(100vw - 2.25rem)"
       loading="eager"
       fetchpriority="high"
     />
     <figcaption>
-      {person.location}. <span data-local-time>{person.timezone}</span>
+      <span>{person.location}</span>
+      <span class="time" data-local-time>{person.timezone}</span>
     </figcaption>
   </figure>
 
-  <p class="lede">{hero.lede}</p>
-  <p class="detail">{hero.detail}</p>
-  <div class="actions">
-    <a class="button primary" href="#contact">Work with me</a>
-    <a class="button" href={`mailto:${person.email}`}>Email</a>
-    <a class="button" href={person.links.linkedin}>LinkedIn</a>
-    <a class="button" href={person.links.github}>GitHub</a>
+  <div class="text">
+    <h1 id="hero-name"><span>{first}</span> <span class="last">{rest.join(' ')}</span></h1>
+    <p class="role"><strong>{person.role}</strong> at <a href={person.companyUrl}>{person.company}</a></p>
+    <p class="pitch">{hero.lede}</p>
+    <div class="actions">
+      <a class="button primary" href="#contact">Work with me</a>
+      <a class="button" href={`mailto:${person.email}`}>Email</a>
+      <a class="button" href={person.links.github}>GitHub</a>
+      <a class="button" href={person.links.linkedin}>LinkedIn</a>
+    </div>
+    <a class="proof" href="#work">
+      <span class="spark" aria-hidden="true">
+        {weekly.map((w, i) => <i style={`--h:${Math.max(4, (w.merged / max) * 100)}%;--i:${i}`} />)}
+      </span>
+      <span class="proof-text">
+        <strong>{mergedPRs}</strong>
+        merged pull requests in LeapView since {firstMerged ? monthYear(firstMerged) : leapview.joined}
+      </span>
+    </a>
   </div>
-
-  <a class="proof" href="#work">
-    <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height} aria-hidden="true">
-      {
-        weekly.map((w, i) => {
-          const h = Math.max(1.5, (w.merged / max) * height);
-          return <rect class="bar" x={i * (barWidth + gap)} y={height - h} width={barWidth} height={h} rx="1" style={`--i:${i}`} />;
-        })
-      }
-    </svg>
-    <span><strong>{mergedPRs}</strong> merged pull requests in LeapView since {firstMerged ? monthYear(firstMerged) : leapview.joined}</span>
-  </a>
 </section>
 
 <script>
@@ -66,69 +57,36 @@ const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
   const el = document.querySelector<HTMLElement>('[data-local-time]');
   if (el) {
     const format = new Intl.DateTimeFormat('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
-    const tick = () => (el.textContent = `It's ${format.format(new Date())} here.`);
+    const tick = () => (el.textContent = `${format.format(new Date())} here`);
     tick();
     setInterval(tick, 30_000);
   }
 </script>
 
 <style>
-  /* Phones: name, offer and actions fit the first screen, then the photo. Wide screens put the
-     photo beside everything else. Vertical spacing is set per item, so the grid has no row gap. */
   .hero {
     display: grid;
-    grid-template-areas: 'name' 'lede' 'actions' 'portrait' 'detail' 'proof';
-    padding-block: clamp(2rem, 1rem + 4vw, 5rem) clamp(3.5rem, 2.5rem + 4vw, 6rem);
+    gap: 2.5rem;
+    padding-block: clamp(1.5rem, 1rem + 2vw, 2.5rem) clamp(3rem, 2rem + 4vw, 5.5rem);
   }
 
   @media (min-width: 60rem) {
     .hero {
-      grid-template-columns: minmax(0, 1.2fr) minmax(20rem, 30rem);
-      grid-template-rows: repeat(4, auto) 1fr;
-      grid-template-areas:
-        'name portrait'
-        'lede portrait'
-        'detail portrait'
-        'actions portrait'
-        'proof portrait';
-      column-gap: clamp(3rem, 1rem + 4vw, 5.5rem);
-      align-items: start;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+      gap: clamp(3rem, 1rem + 4vw, 5rem);
+      align-items: center;
     }
   }
 
-  .name {
-    grid-area: name;
-  }
-
-  h1 {
-    font-size: var(--step-5);
-    font-weight: 800;
-    letter-spacing: -0.045em;
-    line-height: 0.92;
-  }
-
-  /* One word per line on wide screens makes the name a block of type beside the photo. */
-  @media (min-width: 60rem) {
-    h1 span {
-      display: block;
-    }
-  }
-
-  .role {
-    margin-top: 1rem;
-    font-size: var(--step-1);
-    color: var(--graphite);
-  }
-
+  /* Phones read the text first; the photo follows the actions. */
   .portrait {
-    grid-area: portrait;
-    max-width: 30rem;
-    margin: 2.5rem 0 0;
+    order: 1;
+    max-width: 36rem;
   }
 
   @media (min-width: 60rem) {
     .portrait {
-      margin-top: 0;
+      order: 0;
     }
   }
 
@@ -136,96 +94,127 @@ const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
     width: 100%;
     height: auto;
     aspect-ratio: 1;
-    border-radius: 20px;
-    background: var(--code);
+    border-radius: var(--radius);
+    background: var(--raised);
+    box-shadow: 0 2.5rem 7.5rem -2rem rgb(243 195 124 / 0.32);
   }
 
   figcaption {
-    margin-top: 0.75rem;
-    color: var(--graphite);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.9rem;
+    color: var(--stone);
     font-size: var(--step--1);
   }
 
-  .lede {
-    grid-area: lede;
-    margin-top: 1.75rem;
-    font-size: clamp(1.3rem, 1.1rem + 0.9vw, 1.75rem);
+  .time {
+    color: var(--lamp);
+  }
+
+  h1 {
+    font-size: var(--step-5);
+    font-weight: 800;
+    line-height: 0.86;
+    letter-spacing: -0.05em;
+  }
+
+  h1 span {
+    display: block;
+  }
+
+  .last {
+    color: var(--lamp);
+  }
+
+  .role {
+    margin-top: 1.4rem;
+    color: var(--stone);
+    font-size: var(--step-1);
+  }
+
+  .role strong {
+    color: var(--plaster);
     font-weight: 650;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
   }
 
-  .detail {
-    grid-area: detail;
-    max-width: 38rem;
-    margin-top: 1.5rem;
-    color: var(--graphite);
+  .role a {
+    color: var(--stone);
   }
 
-  @media (min-width: 60rem) {
-    .detail {
-      margin-top: 1rem;
-    }
+  .role a:hover {
+    color: var(--lamp);
+  }
+
+  .pitch {
+    max-width: 26ch;
+    margin-top: 1.75rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 1.1rem + 1.2vw, 2rem);
+    font-weight: 650;
+    line-height: 1.22;
+    letter-spacing: -0.015em;
   }
 
   .actions {
-    grid-area: actions;
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin-top: 1.75rem;
+    margin-top: 2.25rem;
   }
 
   /* On phones the primary action takes its own row so the other three fit on one line. */
   @media (max-width: 30rem) {
     .actions .primary {
       flex-basis: 100%;
-      justify-content: center;
     }
 
     .actions .button:not(.primary) {
       flex: 1 1 0;
-      justify-content: center;
       padding-inline: 0.5rem;
     }
   }
 
   .proof {
-    grid-area: proof;
-    display: inline-flex;
+    display: flex;
     align-items: flex-end;
-    gap: 0.9rem;
-    justify-self: start;
-    align-self: end;
-    margin-top: 2.25rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--rule);
-    color: var(--graphite);
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    color: var(--stone);
     font-size: var(--step--1);
     text-decoration: none;
   }
 
-  .proof strong {
-    color: var(--ink);
-    font-size: var(--step-1);
-    font-weight: 800;
-    font-variant-numeric: tabular-nums;
+  .proof:hover .proof-text {
+    color: var(--plaster);
   }
 
-  .proof:hover span {
-    color: var(--ink);
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
-  }
-
-  .proof svg {
+  .spark {
+    display: flex;
     flex: none;
+    align-items: flex-end;
+    gap: 4px;
+    height: 2.75rem;
   }
 
-  .bar {
-    fill: var(--signal);
-    transform-box: fill-box;
+  .spark i {
+    width: 8px;
+    height: var(--h);
+    border-radius: 2px;
+    background: var(--lamp);
     transform-origin: bottom;
+  }
+
+  .proof-text strong {
+    display: block;
+    color: var(--plaster);
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
   }
 
   /* The page's one orchestrated moment: the photo opens out, the lines under the name rise in
@@ -236,46 +225,41 @@ const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
     }
 
     .role,
-    .lede,
-    .detail,
+    .pitch,
     .actions,
     .proof {
       animation: rise 600ms var(--ease-out) both;
     }
 
     .role {
-      animation-delay: 80ms;
+      animation-delay: 100ms;
     }
 
-    .lede {
-      animation-delay: 160ms;
-    }
-
-    .detail {
-      animation-delay: 240ms;
+    .pitch {
+      animation-delay: 200ms;
     }
 
     .actions {
-      animation-delay: 320ms;
+      animation-delay: 300ms;
     }
 
     .proof {
       animation-delay: 400ms;
     }
 
-    .bar {
+    .spark i {
       animation: grow 600ms var(--ease-out) both;
-      animation-delay: calc(500ms + var(--i) * 45ms);
+      animation-delay: calc(550ms + var(--i) * 45ms);
     }
   }
 
   @keyframes open {
     from {
-      clip-path: inset(7% 7% 7% 7% round 28px);
+      clip-path: inset(7% 7% 7% 7% round 40px);
       transform: scale(1.04);
     }
     to {
-      clip-path: inset(0 0 0 0 round 20px);
+      clip-path: inset(0 0 0 0 round var(--radius));
       transform: none;
     }
   }
@@ -283,7 +267,7 @@ const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
   @keyframes rise {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(12px);
     }
   }
 

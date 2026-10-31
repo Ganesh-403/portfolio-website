@@ -1,71 +1,41 @@
+@import '@fontsource-variable/bricolage-grotesque/opsz.css';
 @import '@fontsource-variable/atkinson-hyperlegible-next';
 @import '@fontsource-variable/atkinson-hyperlegible-mono';
 
-/* Tokens. Contrast (WCAG): ink 15.8:1, graphite 6.3:1, accent 5.3:1 on paper (light);
-   15.4:1, 7.3:1, 8.0:1 (dark). Signal is for graphics only (3.1:1 light, 6.8:1 dark).
-   Field is the form-control border, at least 3:1 on paper and raised in both themes. */
+/* Lamplight: the page is lit like the photo, a warm lamp against a night street.
+   Contrast (WCAG) on night: plaster 15:1, stone 7.8:1, lamp 11.2:1; field (form borders) 4.2:1.
+   Ember is for graphics only. */
 :root {
-  --paper: #f2f3ef;
-  --raised: #fafbf8;
-  --code: #e6e9e2;
-  --ink: #15191e;
-  --graphite: #525a64;
-  --rule: #d3d7cf;
-  --field: #81888f;
-  --accent: #b23e0b;
-  --on-accent: #ffffff;
-  --signal: #ee5a17;
+  --night: #0f1426;
+  --raised: #151c33;
+  --lift: #1b2440;
+  --line: #262f4d;
+  --field: #6b77a0;
+  --plaster: #efe8dd;
+  --stone: #a3a9b6;
+  --lamp: #f3c37c;
+  --ember: #e2603a;
+  --on-lamp: #0f1426;
 
+  --font-display: 'Bricolage Grotesque Variable', 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
   --font-sans: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
   --font-mono: 'Atkinson Hyperlegible Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
 
-  /* Major-third scale from an 18px body. */
+  /* Major-third scale from an 18px body; the display sizes jump harder. */
   --step--1: 0.9rem;
   --step-0: 1.125rem;
   --step-1: 1.406rem;
   --step-2: 1.758rem;
-  --step-3: 2.197rem;
-  --step-4: clamp(2.4rem, 1.6rem + 3.6vw, 3.9rem);
-  /* The hero name only: the largest thing on the page by a clear margin. */
-  --step-5: clamp(3.4rem, 1.2rem + 8.5vw, 7.25rem);
+  --step-3: clamp(2.2rem, 1.6rem + 2.4vw, 3.5rem);
+  --step-4: clamp(3rem, 2rem + 4vw, 5.5rem);
+  --step-5: clamp(4rem, 2rem + 7.6vw, 8.25rem);
 
-  /* One easing curve for everything that moves: quick out, soft landing. */
-  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
-
+  --page: 78rem;
   --measure: 42rem;
-  --page: 74rem;
-  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
-  --radius: 10px;
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --paper: #0d1424;
-    --raised: #131c2f;
-    --code: #111a2c;
-    --ink: #e8ebf1;
-    --graphite: #9aa4b5;
-    --rule: #26324c;
-    --field: #62708a;
-    --accent: #ff8c52;
-    --on-accent: #0d1424;
-    --signal: #ff7438;
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme='dark'] {
-  --paper: #0d1424;
-  --raised: #131c2f;
-  --code: #111a2c;
-  --ink: #e8ebf1;
-  --graphite: #9aa4b5;
-  --rule: #26324c;
-  --field: #62708a;
-  --accent: #ff8c52;
-  --on-accent: #0d1424;
-  --signal: #ff7438;
+  --gutter: clamp(1.125rem, 0.5rem + 2.5vw, 2.5rem);
+  --radius: 28px;
+  --radius-sm: 18px;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   color-scheme: dark;
 }
 
@@ -75,17 +45,11 @@
   box-sizing: border-box;
 }
 
-/* Anchors and focused elements stop below the sticky header (taller on phones, where the nav wraps). */
+/* Anchors and focused elements stop below the sticky header. */
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  scroll-padding-top: 7rem;
-}
-
-@media (min-width: 40.0625rem) {
-  html {
-    scroll-padding-top: 5rem;
-  }
+  scroll-padding-top: 6rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -94,22 +58,29 @@ html {
   }
 }
 
-/* The theme switch draws its own circle reveal (Header.astro), so the default crossfade is off. */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
 body {
   margin: 0;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--night);
+  color: var(--plaster);
   font-family: var(--font-sans);
   font-size: var(--step-0);
   line-height: 1.6;
-  font-feature-settings: 'tnum' 0;
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* The lamp: a warm pool of light that follows the pointer (Lamp.astro moves it). */
+.lamp-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(34rem circle at var(--lamp-x, 28%) var(--lamp-y, 32%), rgb(243 195 124 / 0.12), transparent 70%);
+}
+
+body > :not(.lamp-glow, .skip-link, script) {
+  position: relative;
+  z-index: 1;
 }
 
 h1,
@@ -134,9 +105,12 @@ ol {
 
 h1,
 h2,
-h3 {
-  line-height: 1.15;
-  letter-spacing: -0.015em;
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
@@ -151,7 +125,7 @@ svg {
 }
 
 a {
-  color: var(--accent);
+  color: var(--lamp);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
 }
@@ -161,14 +135,14 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 2px solid var(--signal);
+  outline: 2px solid var(--lamp);
   outline-offset: 3px;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 ::selection {
-  background: var(--signal);
-  color: var(--on-accent);
+  background: var(--lamp);
+  color: var(--on-lamp);
 }
 
 code,
@@ -195,9 +169,9 @@ code,
   top: -4rem;
   z-index: 10;
   padding: 0.5rem 0.9rem;
-  background: var(--ink);
-  color: var(--paper);
-  border-radius: var(--radius);
+  background: var(--lamp);
+  color: var(--on-lamp);
+  border-radius: 999px;
 }
 
 .skip-link:focus {
@@ -214,14 +188,15 @@ code,
 .button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  min-height: 2.75rem;
-  padding: 0.55rem 1.1rem;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  color: var(--ink);
+  min-height: 3.1rem;
+  padding: 0.55rem 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--plaster);
   font: inherit;
-  font-size: var(--step--1);
+  font-size: 1rem;
   font-weight: 650;
   text-decoration: none;
   background: transparent;
@@ -229,68 +204,55 @@ code,
 }
 
 .button:hover {
-  border-color: var(--ink);
+  border-color: var(--stone);
 }
 
 .button.primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent);
+  background: var(--lamp);
+  border-color: var(--lamp);
+  color: var(--on-lamp);
 }
 
 .button.primary:hover {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--paper);
+  background: var(--plaster);
+  border-color: var(--plaster);
 }
 
-/* A section is a term/definition pair: its name on the left, content on the right. */
+@media (prefers-reduced-motion: no-preference) {
+  .button {
+    transition:
+      background-color 200ms,
+      border-color 200ms;
+  }
+}
+
+/* A section: a short lamp-coloured heading, then its content. */
 .section {
-  display: grid;
-  gap: 1.25rem 3rem;
-  padding-block: clamp(3.5rem, 2.5rem + 4vw, 6rem);
-  border-top: 1px solid var(--rule);
+  padding-block: clamp(3.5rem, 2.5rem + 4vw, 7rem);
 }
 
 .section-name {
-  font-size: var(--step-1);
-  font-weight: 750;
+  margin-bottom: 1.5rem;
+  color: var(--lamp);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
-.section-body {
-  min-width: 0;
-  max-width: 46rem;
-}
-
-@media (min-width: 60rem) {
-  .section {
-    grid-template-columns: 15rem minmax(0, 1fr);
-  }
-
-  .section-name {
-    position: sticky;
-    top: 5rem;
-    align-self: start;
-  }
-}
-
-.lede {
-  max-width: var(--measure);
-  font-size: clamp(1.2rem, 1.05rem + 0.6vw, var(--step-1));
-  line-height: 1.5;
+/* A card: the raised surface everything substantial sits on. */
+.card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(160deg, var(--raised), var(--night));
 }
 
 .muted {
-  color: var(--graphite);
-}
-
-.stack {
-  color: var(--graphite);
-  font-size: var(--step--1);
+  color: var(--stone);
 }
 
 /* Disclosure: a native <details> whose summary is the line people scan and whose content is the
-   detail they ask for. Closed content stays in the page, so find-in-page opens it in Chromium. */
+   detail they ask for. Closed content stays in the page, so find-in-page opens it. */
 .disclosure > summary {
   display: flex;
   align-items: baseline;
@@ -311,7 +273,7 @@ code,
   width: 0.8rem;
   height: 0.8rem;
   margin-left: auto;
-  color: var(--graphite);
+  color: var(--stone);
   background:
     linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat,
     linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat;
@@ -324,7 +286,7 @@ code,
 }
 
 .disclosure > summary:hover::after {
-  color: var(--accent);
+  color: var(--lamp);
 }
 
 @media (prefers-reduced-motion: no-preference) {

@@ -1,5 +1,5 @@
 ---
-// LeapView's idea, applied to my own work: a metric defined in code, rendered as a chart you can explore.
+// My LeapView pull requests as a chart you can explore: point at or tap a week to read it.
 // Numbers come from the committed GitHub snapshot (npm run sync:github).
 import { leapview } from '../data/profile';
 import { dayMonth as short, dayMonthYear } from '../lib/format';
@@ -16,75 +16,70 @@ const height = 64;
 const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
 const range = firstMerged && lastMerged ? `${short(firstMerged)} to ${dayMonthYear(lastMerged)}` : '';
 const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)}` : '';
-
-const yaml: [string, string][] = [
-  ['metric', 'merged_pull_requests'],
-  ['source', 'github.com/flidai/leapview'],
-  ['author', 'Ganesh-403'],
-  ['grain', 'week'],
-];
 ---
 
 <figure class="metric" data-metric>
-  <div class="file">
-    <span class="path">metrics/contributions.yaml</span>
-    <pre><code>{yaml.map(([key, value]) => <span class="line"><span class="key">{key}:</span> <span class="value">{value}</span></span>)}</code></pre>
-  </div>
-  <div class="render">
-    <p class="figure"><span class="number">{mergedPRs}</span> merged pull requests</p>
-    {range && <p class="range muted">{range}</p>}
-    {
-      peak && (
-        <>
-          <p class="readout" aria-hidden="true" data-readout data-resting={resting}>
-            {resting}
-          </p>
-          <svg class="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true">
-            {weekly.map((w, i) => {
-              const h = Math.max(1.5, (w.merged / max) * height);
-              return (
-                <g class="week" data-label={`${w.merged} merged, week of ${short(w.week)}`}>
-                  {/* A full-height hit area makes short bars as easy to point at as tall ones. */}
-                  <rect class="hit" x={i * (barWidth + gap) - gap / 2} y="0" width={barWidth + gap} height={height} />
-                  <rect class="bar" x={i * (barWidth + gap)} y={height - h} width={barWidth} height={h} style={`--i:${i}`} />
-                </g>
-              );
-            })}
-          </svg>
-          <div class="axis muted" aria-hidden="true">
-            <span>Week of {short(weekly[0].week)}</span>
-            <span>Week of {short(weekly.at(-1)!.week)}</span>
-          </div>
-          {/* The same numbers as a table, on request: for screen readers, keyboards and anyone who prefers exact values. */}
-          <details class="disclosure numbers">
-            <summary>Weekly numbers</summary>
-            <table>
-              <caption class="visually-hidden">My merged pull requests in LeapView, by week</caption>
-              <thead>
+  <p class="figure">
+    <span class="number">{mergedPRs}</span>
+    <span class="unit">merged pull requests{range && <span class="range">, {range}</span>}</span>
+  </p>
+  {
+    peak && (
+      <>
+        <p class="readout" aria-hidden="true" data-readout data-resting={resting}>
+          {resting}
+        </p>
+        <svg class="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="bar-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" style="stop-color: var(--lamp)" />
+              <stop offset="1" style="stop-color: var(--ember)" />
+            </linearGradient>
+          </defs>
+          {weekly.map((w, i) => {
+            const h = Math.max(1.5, (w.merged / max) * height);
+            return (
+              <g class="week" data-label={`${w.merged} merged, week of ${short(w.week)}`}>
+                {/* A full-height hit area makes short bars as easy to point at as tall ones. */}
+                <rect class="hit" x={i * (barWidth + gap) - gap / 2} y="0" width={barWidth + gap} height={height} />
+                <rect class="bar" x={i * (barWidth + gap)} y={height - h} width={barWidth} height={h} rx="1.5" style={`--i:${i}`} />
+              </g>
+            );
+          })}
+        </svg>
+        <div class="axis" aria-hidden="true">
+          <span>Week of {short(weekly[0].week)}</span>
+          <span>Week of {short(weekly.at(-1)!.week)}</span>
+        </div>
+        {/* The same numbers as a table, on request: for screen readers, keyboards and anyone who prefers exact values. */}
+        <details class="disclosure numbers">
+          <summary>Weekly numbers</summary>
+          <table>
+            <caption class="visually-hidden">My merged pull requests in LeapView, by week</caption>
+            <thead>
+              <tr>
+                <th scope="col">Week of</th>
+                <th scope="col">Merged</th>
+              </tr>
+            </thead>
+            <tbody>
+              {weekly.map((w) => (
                 <tr>
-                  <th scope="col">Week of</th>
-                  <th scope="col">Merged</th>
+                  <th scope="row">{short(w.week)}</th>
+                  <td>{w.merged}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {weekly.map((w) => (
-                  <tr>
-                    <th scope="row">{short(w.week)}</th>
-                    <td>{w.merged}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </details>
-        </>
-      )
-    }
-  </div>
+              ))}
+            </tbody>
+          </table>
+        </details>
+      </>
+    )
+  }
 </figure>
 
 <script>
   // Pointing at (or tapping) a week shows its count in the readout; leaving the chart, tapping
-  // elsewhere or pressing Escape puts the busiest week back. The table below has the same numbers.
+  // elsewhere or pressing Escape puts the busiest week back. The table has the same numbers.
   document.querySelectorAll<HTMLElement>('[data-metric]').forEach((card) => {
     const readout = card.querySelector<HTMLElement>('[data-readout]');
     const chart = card.querySelector<SVGSVGElement>('.chart');
@@ -116,90 +111,47 @@ const yaml: [string, string][] = [
 
 <style>
   .metric {
-    margin: 0;
-    border: 1px solid var(--rule);
-    border-radius: calc(var(--radius) + 4px);
-    background: var(--raised);
-    overflow: hidden;
-  }
-
-  .file {
-    padding: 1rem 1.25rem 1.1rem;
-    background: var(--code);
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .path {
-    display: block;
-    margin-bottom: 0.6rem;
-    color: var(--graphite);
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-  }
-
-  pre {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: 0.86rem;
-    line-height: 1.7;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-  }
-
-  .line {
-    display: block;
-  }
-
-  .key {
-    color: var(--graphite);
-  }
-
-  .value {
-    color: var(--ink);
-  }
-
-  .render {
-    padding: 1.25rem 1.25rem 1rem;
-  }
-
-  .figure {
     display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 0 0.6rem;
-    font-weight: 650;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    margin: 0;
   }
 
   .number {
-    font-size: var(--step-3);
+    display: block;
+    font-family: var(--font-display);
+    font-size: var(--step-4);
     font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.03em;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
     font-variant-numeric: tabular-nums;
   }
 
-  .range {
-    margin-top: 0.35rem;
+  .unit {
+    display: block;
+    margin-top: 0.6rem;
+    color: var(--stone);
     font-size: var(--step--1);
   }
 
   .readout {
-    margin-top: 1.1rem;
     min-height: 1.6em;
-    color: var(--graphite);
+    margin-top: 1.75rem;
+    color: var(--stone);
     font-size: var(--step--1);
     font-variant-numeric: tabular-nums;
   }
 
   .readout.pointing {
-    color: var(--ink);
+    color: var(--lamp);
     font-weight: 650;
   }
 
   .chart {
     width: 100%;
-    height: 5rem;
-    margin-top: 0.4rem;
+    height: clamp(8rem, 6rem + 6vw, 11rem);
+    margin-top: 0.75rem;
     cursor: crosshair;
     touch-action: manipulation;
   }
@@ -209,9 +161,18 @@ const yaml: [string, string][] = [
   }
 
   .bar {
-    fill: var(--signal);
+    fill: url(#bar-fill);
     transform-box: fill-box;
     transform-origin: bottom;
+  }
+
+  /* While one week is pointed at, the others step back. */
+  .chart:has(.active) .bar {
+    opacity: 0.3;
+  }
+
+  .chart .active .bar {
+    opacity: 1;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -220,17 +181,8 @@ const yaml: [string, string][] = [
     }
   }
 
-  /* While one week is pointed at, the others step back. */
-  .chart:has(.active) .bar {
-    opacity: 0.35;
-  }
-
-  .chart .active .bar {
-    opacity: 1;
-  }
-
-  /* Bars grow as the chart scrolls into view, where scroll-driven animations exist. */
-  /* The timeline is the chart's own box; SVG shapes don't have one to track. */
+  /* Bars grow as the chart scrolls into view, where scroll-driven animations exist.
+     The timeline is the chart's own box; SVG shapes don't have one to track. */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
       .chart {
@@ -239,6 +191,11 @@ const yaml: [string, string][] = [
 
       .bar {
         animation: grow linear both;
+      }
+
+      /* A separate rule: the minifier would otherwise fold the timeline into the animation
+         shorthand, which browsers reject. */
+      .chart .bar {
         animation-timeline: --chart;
         animation-range: entry calc(var(--i) * 3%) cover 40%;
       }
@@ -256,22 +213,23 @@ const yaml: [string, string][] = [
     justify-content: space-between;
     gap: 1rem;
     margin-top: 0.5rem;
-    font-size: 0.78rem;
+    color: var(--stone);
+    font-size: 0.8rem;
   }
 
   .numbers {
-    margin-top: 0.75rem;
-    border-top: 1px solid var(--rule);
+    margin-top: 1rem;
+    border-top: 1px solid var(--line);
     font-size: var(--step--1);
   }
 
   .numbers > summary {
-    padding-block: 0.6rem 0.2rem;
-    color: var(--graphite);
+    padding-block: 0.75rem 0.25rem;
+    color: var(--stone);
   }
 
   .numbers > summary:hover {
-    color: var(--ink);
+    color: var(--plaster);
   }
 
   table {
@@ -284,19 +242,16 @@ const yaml: [string, string][] = [
   th,
   td {
     padding: 0.3rem 0;
-    border-bottom: 1px solid var(--rule);
+    border-bottom: 1px solid var(--line);
     font-weight: 400;
     text-align: left;
   }
 
   thead th {
-    color: var(--graphite);
+    color: var(--stone);
   }
 
-  td {
-    text-align: right;
-  }
-
+  td,
   thead th:last-child {
     text-align: right;
   }

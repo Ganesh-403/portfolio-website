@@ -1,6 +1,11 @@
 ---
 import { person } from '../data/profile';
 
+const initials = person.name
+  .split(' ')
+  .map((part) => part[0])
+  .join('');
+
 // Root-relative so the links also work from the 404 page.
 const nav = [
   { href: '/#work', label: 'Work' },
@@ -13,62 +18,16 @@ const nav = [
 
 <header class="site-header">
   <div class="page bar">
-    <a class="home" href="/">{person.name}</a>
+    <a class="home" href="/" aria-label={`${person.name}, home`}>{initials}</a>
     <nav aria-label="Sections">
       <ul>
         {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
       </ul>
     </nav>
-    <button class="theme" type="button" aria-label="Switch to dark theme" data-theme-toggle>
-      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
-        <circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
-        <path d="M10 2.75a7.25 7.25 0 0 1 0 14.5Z" fill="currentColor"></path>
-      </svg>
-    </button>
   </div>
 </header>
 
 <script>
-  const button = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
-  const root = document.documentElement;
-  const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
-  const current = () => root.dataset.theme ?? (systemDark.matches ? 'dark' : 'light');
-  const label = () => button?.setAttribute('aria-label', `Switch to ${current() === 'dark' ? 'light' : 'dark'} theme`);
-  // The theme-color metas follow the system scheme; once a theme is chosen, point both at it.
-  const syncBrowserChrome = () => {
-    if (!root.dataset.theme) return;
-    const paper = getComputedStyle(root).getPropertyValue('--paper').trim();
-    document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => meta.setAttribute('content', paper));
-  };
-
-  label();
-  syncBrowserChrome();
-  systemDark.addEventListener('change', label);
-  button?.addEventListener('click', (event) => {
-    const next = current() === 'dark' ? 'light' : 'dark';
-    const apply = () => {
-      root.dataset.theme = next;
-      try {
-        localStorage.setItem('theme', next);
-      } catch {}
-      label();
-      syncBrowserChrome();
-    };
-    // The new theme spreads out in a circle from the button where the browser can; reduced motion
-    // (or no View Transitions support) switches instantly.
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!document.startViewTransition || still) return apply();
-    const x = event.clientX || window.innerWidth;
-    const y = event.clientY || 0;
-    const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
-    document.startViewTransition(apply).ready.then(() => {
-      document.documentElement.animate(
-        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-        { duration: 450, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', pseudoElement: '::view-transition-new(root)' },
-      );
-    });
-  });
-
   // Marks the section being read in the nav, so the header doubles as a map of the page.
   const links = new Map(
     [...document.querySelectorAll<HTMLAnchorElement>('nav a[href^="/#"]')].map((a) => [a.hash.slice(1), a]),
@@ -96,24 +55,50 @@ const nav = [
     position: sticky;
     top: 0;
     z-index: 5;
-    background: color-mix(in srgb, var(--paper) 88%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--night) 82%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  /* At the top of the page the header is clear, so the lamp glow isn't cut by its edge; its
+     background fades in over the first stretch of scrolling. Elsewhere it is always tinted. */
+  @supports (animation-timeline: scroll()) {
+    .site-header {
+      animation: tint linear both;
+    }
+
+    /* A separate rule: the minifier would otherwise fold the timeline into the animation
+       shorthand, which browsers reject. */
+    header.site-header {
+      animation-timeline: scroll(root);
+      animation-range: 0 8rem;
+    }
+
+    @keyframes tint {
+      from {
+        background-color: transparent;
+      }
+    }
   }
 
   .bar {
     display: flex;
     align-items: center;
     gap: 1rem 2rem;
-    min-height: 3.75rem;
+    min-height: 4.5rem;
   }
 
   .home {
-    color: var(--ink);
-    font-weight: 750;
+    color: var(--plaster);
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
     text-decoration: none;
-    white-space: nowrap;
+  }
+
+  .home:hover {
+    color: var(--lamp);
   }
 
   nav {
@@ -126,32 +111,33 @@ const nav = [
   /* The padding leaves room for focus rings, which the scrolling nav would otherwise clip. */
   nav ul {
     display: flex;
-    gap: 1.5rem;
+    gap: 1.75rem;
     padding: 0.35rem;
   }
 
   nav a {
     position: relative;
     display: inline-block;
-    padding-block: 0.6rem;
-    color: var(--graphite);
-    font-size: var(--step--1);
+    padding-block: 0.5rem;
+    color: var(--stone);
+    font-size: 0.95rem;
     text-decoration: none;
     white-space: nowrap;
   }
 
   nav a:hover,
   nav a[aria-current] {
-    color: var(--ink);
+    color: var(--plaster);
   }
 
   /* The current section's link gets an underline that grows in from the left. */
   nav a::after {
     content: '';
     position: absolute;
-    inset: auto 0 0.3rem;
+    inset: auto 0 0.15rem;
     height: 2px;
-    background: var(--signal);
+    border-radius: 2px;
+    background: var(--lamp);
     transform: scaleX(0);
     transform-origin: left;
   }
@@ -166,48 +152,24 @@ const nav = [
     }
   }
 
-  .theme {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 1px solid var(--rule);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  .theme:hover {
-    border-color: var(--ink);
-  }
-
-  /* On phones the section links move to their own scrollable row under the name. */
+  /* On phones the section links sit beside the mark in one scrollable row. */
   @media (max-width: 40rem) {
     .bar {
-      flex-wrap: wrap;
-      padding-block: 0.5rem 0;
-      gap: 0 1rem;
-    }
-
-    .theme {
-      margin-left: auto;
+      gap: 0.75rem;
+      min-height: 3.75rem;
     }
 
     nav {
-      order: 3;
-      flex-basis: calc(100% + 2 * var(--gutter));
-      margin-inline: calc(var(--gutter) * -1);
-      padding-inline: calc(var(--gutter) - 0.35rem);
+      margin-right: calc(var(--gutter) * -1);
+      padding-right: calc(var(--gutter) - 0.35rem);
     }
 
     nav ul {
-      gap: 0.8rem;
+      gap: 1rem;
     }
 
     nav a {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
     }
   }
 </style>
