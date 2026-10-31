@@ -2,7 +2,7 @@
 
 Source for my personal site: what I work on at [Flid AI](https://flid.ai/), my projects, open-source work, research, and how to hire me for freelance work.
 
-Built with [Astro](https://astro.build) as a static site. Its only JavaScript is small inline scripts (theme toggle, contact form confirmation, chart readout, current-section marker and local time), and the page works without any of them.
+Built with [Astro](https://astro.build) as a static site. Its only JavaScript is small inline scripts (pointer glow, area tabs, chart readout, current-section marker, local time and the contact form's inline confirmation), and the page works without any of them.
 
 ## Updating content
 
@@ -34,17 +34,18 @@ npm run preview   # serves dist/
 | `src/data/profile.ts` | All site content |
 | `src/data/github.json` | GitHub snapshot, written by `scripts/sync-github.mjs` |
 | `src/components/` | One component per section, plus the Work chart (`MetricCard`) and the pull-request citation (`PR`) |
-| `src/styles/global.css` | Colour, type and spacing tokens for light and dark themes |
+| `src/styles/global.css` | Colour, type and spacing tokens, cards and the disclosure pattern |
 | `src/pages/og.jpg.ts` | Generates the social preview image (name, photo and chart) at build time |
 | `src/pages/robots.txt.ts` | robots.txt pointing at the generated sitemap |
 
 Design notes:
 
-- Two lenses decide what goes where. **Visual hierarchy:** each screen has one focal point, and the page runs in the order a visitor needs it: who I am and how to reach me, proof of work, what I offer, then background. **Progressive disclosure:** the line people scan is always visible; supporting detail (the pull requests behind each work area, how each project works, older projects, internship details, awards and certifications) opens on request in native `<details>` elements, which find-in-page also opens.
-- Every claim links to its evidence: pull requests, repositories, papers and live demos.
-- The Work section applies LeapView's idea, a metric defined in code and rendered as a chart, to my own contribution history. Point at or tap a week to read its count; the same numbers are in a table for screen readers.
-- Motion answers the visitor or happens once: the photo opens out and the hero sparkline draws in on load, chart bars grow as the chart scrolls into view, disclosures animate open, the nav marks the section being read, and the theme switch crossfades. All of it is off when reduced motion is on, and nothing depends on it.
-- Type is Atkinson Hyperlegible Next and Mono, self-hosted. Colours meet WCAG AA in both themes.
+- **Lamplight.** The page is lit like the photo: a night-blue background, a warm lamp-gold accent taken from the lamp behind me, and a soft glow that follows the pointer. Display type is Bricolage Grotesque; body text is Atkinson Hyperlegible Next. Dark only, and every text colour meets WCAG AA (most well beyond it).
+- **Visual hierarchy.** Each screen has one focal point, and the page runs in the order a visitor needs it: who I am and how to reach me, what I'm working on now, what I've built, what I offer, then background.
+- **Progressive disclosure.** The line people scan is always visible; detail opens on request: the six LeapView areas are tabs (all shown when JavaScript is off), each project's "How it works", older projects, internship details, and awards and certifications sit in native `<details>` elements, which find-in-page also opens.
+- **Evidence.** Every claim links to pull requests, repositories, papers or live demos. The LeapView chart can be explored by pointing at or tapping a week; the same numbers are in a "Weekly numbers" table.
+- **Motion.** One load sequence (the photo opens out, the hero lines rise in, the sparkline draws), chart bars that grow as the chart scrolls into view, a header that tints as you scroll, animated disclosures and tabs, and a nav marker for the section being read. All of it is off under reduced motion, and nothing depends on it.
+- **A build gotcha.** Astro's CSS minifier folds `animation-timeline` into the `animation` shorthand, which browsers reject. Scroll-driven animations therefore set their timeline in a separate rule.
 
 ## Deployment
 

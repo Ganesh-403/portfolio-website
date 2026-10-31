@@ -18,7 +18,7 @@ const nav = [
 
 <header class="site-header">
   <div class="page bar">
-    <a class="home" href="/" aria-label={`${person.name}, home`}>{initials}</a>
+    <a class="home" href="/">{initials}<span class="visually-hidden"> {person.name}, home</span></a>
     <nav aria-label="Sections">
       <ul>
         {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}

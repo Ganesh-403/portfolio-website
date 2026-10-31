@@ -19,7 +19,8 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
     <Image
       src={photo}
       alt={`${person.name} leaning on a balcony railing at night`}
-      widths={[400, 600, 800]}
+      widths={[400, 600, 700, 800]}
+      format="avif"
       sizes="(min-width: 60rem) 36rem, calc(100vw - 2.25rem)"
       loading="eager"
       fetchpriority="high"
