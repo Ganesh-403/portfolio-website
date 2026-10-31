@@ -1,0 +1,33 @@
+---
+// A citation: links a claim to the pull request that backs it.
+import type { PullRequest } from '../data/profile';
+
+interface Props {
+  pr: PullRequest;
+}
+
+const { pr } = Astro.props;
+const href = `https://github.com/${pr.repo}/pull/${pr.number}`;
+---
+
+<a class="pr" href={href} title={pr.title} aria-label={`Pull request ${pr.number}: ${pr.title}`}>#{pr.number}</a>
+
+<style>
+  .pr {
+    display: inline-block;
+    padding: 0.05rem 0.45rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    color: var(--graphite);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.6;
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pr:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>

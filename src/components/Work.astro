@@ -1,0 +1,121 @@
+---
+import PR from './PR.astro';
+import { leapview } from '../data/profile';
+---
+
+<section class="section" id="work" aria-labelledby="work-name">
+  <h2 class="section-name" id="work-name">Work at Flid AI</h2>
+  <div class="section-body">
+    <h3 class="title">
+      <a href={leapview.url}>{leapview.name}</a>
+    </h3>
+    <p class="tagline">{leapview.tagline}</p>
+    <p class="summary">{leapview.summary}</p>
+    <p class="joined muted">
+      I joined in {leapview.joined} and have merged {leapview.stats.mergedPRs} pull requests since. These are the areas I've
+      worked on most, each with a few of the changes behind it.
+    </p>
+
+    <dl class="areas">
+      {
+        leapview.areas.map((area) => (
+          <div class="area">
+            <dt>{area.title}</dt>
+            <dd>
+              <p>{area.body}</p>
+              <ul class="prs" aria-label={`Pull requests for ${area.title.toLowerCase()}`}>
+                {area.prs.map((pr) => (
+                  <li>
+                    <PR pr={pr} />
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <p class="links">
+      <a href={leapview.url}>LeapView on GitHub</a>
+      <a href={leapview.site}>leapview.dev</a>
+      <a href={`https://github.com/flidai/leapview/pulls?q=is%3Apr+is%3Amerged+author%3AGanesh-403`}>All my merged pull requests</a>
+    </p>
+
+    <p class="also">
+      I also work on <a href={leapview.alsoAt.url}>{leapview.alsoAt.name}</a>, {leapview.alsoAt.body}
+    </p>
+  </div>
+</section>
+
+<style>
+  .title {
+    font-size: var(--step-3);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .title a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .title a:hover {
+    text-decoration: underline;
+  }
+
+  .tagline {
+    margin-top: 0.4rem;
+    font-size: var(--step-1);
+    color: var(--graphite);
+  }
+
+  .summary {
+    margin-top: 1.5rem;
+  }
+
+  .joined {
+    margin-top: 1rem;
+  }
+
+  .areas {
+    margin-top: 2.25rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .area {
+    display: grid;
+    gap: 0.35rem 2rem;
+    padding-block: 1.25rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @media (min-width: 44rem) {
+    .area {
+      grid-template-columns: 12rem minmax(0, 1fr);
+    }
+  }
+
+  dt {
+    font-weight: 700;
+  }
+
+  .prs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 1.75rem;
+  }
+
+  .also {
+    margin-top: 1.75rem;
+    color: var(--graphite);
+  }
+</style>

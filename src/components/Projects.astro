@@ -1,0 +1,143 @@
+---
+import { person, projects, moreProjects } from '../data/profile';
+---
+
+<section class="section" id="projects" aria-labelledby="projects-name">
+  <h2 class="section-name" id="projects-name">Projects</h2>
+  <div class="section-body">
+    <ul class="projects">
+      {
+        projects.map((project) => (
+          <li class="project">
+            <div class="head">
+              <h3>
+                <a href={project.repo}>{project.name}</a>
+              </h3>
+              {project.stars ? (
+                <span class="stars muted" aria-label={`${project.stars} GitHub stars`}>
+                  ★ {project.stars}
+                </span>
+              ) : null}
+            </div>
+            <p class="summary">{project.summary}</p>
+            <p class="body">{project.body}</p>
+            <p class="stack">{project.stack.join(', ')}</p>
+            <p class="links">
+              <a href={project.repo}>Code</a>
+              {project.links?.map((link) => (
+                <a href={link.url}>{link.label}</a>
+              ))}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h3 class="more-title">Smaller and earlier projects</h3>
+    <ul class="more">
+      {
+        moreProjects.map((project) => (
+          <li>
+            <a href={project.url}>{project.name}</a>
+            <span class="muted">{project.body}</span>
+            {project.demo && (
+              <a class="demo" href={project.demo}>
+                Live demo
+              </a>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+    <p class="all">
+      <a href={`${person.links.github}?tab=repositories`}>Every repository on GitHub</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .projects {
+    display: grid;
+    gap: 2.75rem;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  h3 {
+    font-size: var(--step-2);
+    font-weight: 750;
+  }
+
+  h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  h3 a:hover {
+    text-decoration: underline;
+  }
+
+  .stars {
+    flex: none;
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .summary {
+    margin-top: 0.35rem;
+    font-size: var(--step-1);
+    line-height: 1.4;
+  }
+
+  .body {
+    margin-top: 0.75rem;
+    max-width: var(--measure);
+  }
+
+  .stack {
+    margin-top: 0.75rem;
+  }
+
+  .links {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+    font-size: var(--step--1);
+  }
+
+  .more-title {
+    margin-top: 4rem;
+    font-size: var(--step-1);
+  }
+
+  .more {
+    margin-top: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .more li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 1rem;
+    padding-block: 0.85rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .more li > a:first-child {
+    min-width: 11rem;
+    font-weight: 650;
+  }
+
+  .more .muted {
+    flex: 1 1 18rem;
+  }
+
+  .all {
+    margin-top: 1.5rem;
+  }
+</style>

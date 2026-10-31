@@ -1,0 +1,74 @@
+---
+import '../styles/global.css';
+import { person, experience } from '../data/profile';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const { title, description = person.description, noindex = false } = Astro.props;
+const pageTitle = title ? `${title} | ${person.name}` : `${person.name}, ${person.headline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
+const education = experience.find((role) => role.kind === 'Education');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: person.name,
+  url: Astro.site?.href,
+  image: ogImage.href,
+  jobTitle: person.role,
+  worksFor: { '@type': 'Organization', name: person.company, url: person.companyUrl },
+  homeLocation: { '@type': 'Place', name: person.location },
+  alumniOf: education && { '@type': 'CollegeOrUniversity', name: education.org },
+  knowsAbout: ['Go', 'DuckDB', 'Business intelligence', 'AI agents', 'Model Context Protocol', 'Release engineering'],
+  sameAs: [person.links.github, person.links.linkedin],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${person.name}, ${person.headline}`} />
+    <meta property="profile:first_name" content="Ganesh" />
+    <meta property="profile:last_name" content="Kambli" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#f2f3ef" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d1424" media="(prefers-color-scheme: dark)" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <!-- Apply a saved theme before first paint so the page never flashes the wrong one. -->
+    <script is:inline>
+      try {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot />
+  </body>
+</html>
