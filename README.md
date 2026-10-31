@@ -48,7 +48,7 @@ Design notes:
 
 The site is static (`dist/`), so any static host works.
 
-- **Cloudflare Pages (primary):** project `ganeshkambli`, served at https://ganeshkambli.pages.dev. It builds `main` with `npm run build` into `dist`; Node comes from [`.node-version`](.node-version) and response headers from [`public/_headers`](public/_headers). Cloudflare is primary because Jio, a major Indian ISP, blocks Vercel's (and GitHub Pages') IP addresses.
+- **Cloudflare Workers (primary):** Worker `portfolio-website`, served at https://portfolio-website.gkambli70.workers.dev. Cloudflare builds `main` with `npm run build` and deploys `dist/` as static assets via [`wrangler.jsonc`](wrangler.jsonc); Node comes from [`.node-version`](.node-version) and response headers from [`public/_headers`](public/_headers). To deploy by hand: `npx wrangler deploy`. Cloudflare is primary because Jio, a major Indian ISP, blocks Vercel's (and GitHub Pages') IP addresses.
 - **Vercel (secondary):** also builds `main`, using [`vercel.json`](vercel.json).
 
 Canonical URLs, the sitemap and Open Graph tags always point at the address in [`astro.config.mjs`](astro.config.mjs), whichever host serves the build. Set `SITE_URL` to override it, for example after moving to a custom domain.
