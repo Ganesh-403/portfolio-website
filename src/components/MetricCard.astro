@@ -1,5 +1,5 @@
 ---
-// LeapView's idea, applied to my own work: a metric defined in code, rendered as a chart.
+// LeapView's idea, applied to my own work: a metric defined in code, rendered as a chart you can explore.
 // Numbers come from the committed GitHub snapshot (npm run sync:github).
 import { leapview } from '../data/profile';
 import { dayMonth as short, dayMonthYear } from '../lib/format';
@@ -15,9 +15,7 @@ const gap = 4;
 const height = 64;
 const width = Math.max(weekly.length * (barWidth + gap) - gap, 1);
 const range = firstMerged && lastMerged ? `${short(firstMerged)} to ${dayMonthYear(lastMerged)}` : '';
-const summary = peak
-  ? `Bar chart of merged pull requests per week, ${weekly.length} weeks from ${short(weekly[0].week)} to ${short(weekly.at(-1)!.week)}, peaking at ${peak.merged} in the week of ${short(peak.week)}.`
-  : '';
+const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)}` : '';
 
 const yaml: [string, string][] = [
   ['metric', 'merged_pull_requests'],
@@ -27,7 +25,7 @@ const yaml: [string, string][] = [
 ];
 ---
 
-<figure class="metric">
+<figure class="metric" data-metric>
   <div class="file">
     <span class="path">metrics/contributions.yaml</span>
     <pre><code>{yaml.map(([key, value]) => <span class="line"><span class="key">{key}:</span> <span class="value">{value}</span></span>)}</code></pre>
@@ -38,13 +36,18 @@ const yaml: [string, string][] = [
     {
       peak && (
         <>
-          <svg class="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img" aria-label={summary}>
+          <p class="readout" aria-hidden="true" data-readout data-resting={resting}>
+            {resting}
+          </p>
+          <svg class="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true">
             {weekly.map((w, i) => {
               const h = Math.max(1.5, (w.merged / max) * height);
               return (
-                <rect class="bar" x={i * (barWidth + gap)} y={height - h} width={barWidth} height={h} style={`--i:${i}`}>
-                  <title>{`Week of ${short(w.week)}: ${w.merged}`}</title>
-                </rect>
+                <g class="week" data-label={`${w.merged} merged, week of ${short(w.week)}`}>
+                  {/* A full-height hit area makes short bars as easy to point at as tall ones. */}
+                  <rect class="hit" x={i * (barWidth + gap) - gap / 2} y="0" width={barWidth + gap} height={height} />
+                  <rect class="bar" x={i * (barWidth + gap)} y={height - h} width={barWidth} height={h} style={`--i:${i}`} />
+                </g>
               );
             })}
           </svg>
@@ -52,15 +55,61 @@ const yaml: [string, string][] = [
             <span>Week of {short(weekly[0].week)}</span>
             <span>Week of {short(weekly.at(-1)!.week)}</span>
           </div>
+          <table class="visually-hidden">
+            <caption>My merged pull requests in LeapView, by week</caption>
+            <thead>
+              <tr>
+                <th scope="col">Week of</th>
+                <th scope="col">Merged</th>
+              </tr>
+            </thead>
+            <tbody>
+              {weekly.map((w) => (
+                <tr>
+                  <th scope="row">{short(w.week)}</th>
+                  <td>{w.merged}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </>
       )
     }
   </div>
-  <figcaption class="visually-hidden">My merged pull requests in LeapView, by week.</figcaption>
 </figure>
+
+<script>
+  // Pointing at (or tapping) a week shows its count in the readout; leaving the chart or pressing
+  // Escape puts the busiest week back. Screen readers get the same numbers from the table.
+  document.querySelectorAll<HTMLElement>('[data-metric]').forEach((card) => {
+    const readout = card.querySelector<HTMLElement>('[data-readout]');
+    const chart = card.querySelector<SVGSVGElement>('.chart');
+    if (!readout || !chart) return;
+    const resting = readout.dataset.resting ?? '';
+    let active: Element | null = null;
+
+    const show = (week: Element | null) => {
+      active?.classList.remove('active');
+      active = week;
+      week?.classList.add('active');
+      readout.textContent = week?.getAttribute('data-label') ?? resting;
+      readout.classList.toggle('pointing', Boolean(week));
+    };
+
+    chart.addEventListener('pointerover', (event) => show((event.target as Element).closest('.week')));
+    chart.addEventListener('pointerdown', (event) => show((event.target as Element).closest('.week')));
+    chart.addEventListener('pointerleave', (event) => {
+      if (event.pointerType === 'mouse') show(null);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') show(null);
+    });
+  });
+</script>
 
 <style>
   .metric {
+    margin: 0;
     border: 1px solid var(--rule);
     border-radius: calc(var(--radius) + 4px);
     background: var(--raised);
@@ -127,23 +176,60 @@ const yaml: [string, string][] = [
     font-size: var(--step--1);
   }
 
+  .readout {
+    margin-top: 1.1rem;
+    min-height: 1.6em;
+    color: var(--graphite);
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .readout.pointing {
+    color: var(--ink);
+    font-weight: 650;
+  }
+
   .chart {
     width: 100%;
-    height: 4.5rem;
-    margin-top: 1.25rem;
+    height: 5rem;
+    margin-top: 0.4rem;
+    cursor: crosshair;
+    touch-action: manipulation;
+  }
+
+  .hit {
+    fill: transparent;
   }
 
   .bar {
     fill: var(--signal);
     transform-box: fill-box;
     transform-origin: bottom;
+    transition: opacity 150ms;
   }
 
-  /* The page's one orchestrated moment: the bars draw in once on load. */
-  @media (prefers-reduced-motion: no-preference) {
-    .bar {
-      animation: grow 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-      animation-delay: calc(250ms + var(--i) * 55ms);
+  /* While one week is pointed at, the others step back. */
+  .chart:has(.active) .bar {
+    opacity: 0.35;
+  }
+
+  .chart .active .bar {
+    opacity: 1;
+  }
+
+  /* Bars grow as the chart scrolls into view, where scroll-driven animations exist. */
+  /* The timeline is the chart's own box; SVG shapes don't have one to track. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .chart {
+        view-timeline: --chart block;
+      }
+
+      .bar {
+        animation: grow linear both;
+        animation-timeline: --chart;
+        animation-range: entry calc(var(--i) * 3%) cover 40%;
+      }
     }
   }
 

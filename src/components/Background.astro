@@ -1,0 +1,352 @@
+---
+import { experience, upstream, community, papers, awards, certifications, person } from '../data/profile';
+import { monthYear, plainTitle } from '../lib/format';
+
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+---
+
+<section class="section" id="background" aria-labelledby="background-name">
+  <h2 class="section-name" id="background-name">Background</h2>
+  <div class="section-body">
+    <h3 class="sub">Experience</h3>
+    <ol class="roles">
+      {
+        experience.map((role) =>
+          role.points ? (
+            <li>
+              <details class="disclosure role-details">
+                <summary>
+                  <span class="period">
+                    {role.start} to {role.end}
+                  </span>
+                  <span class="what">
+                    <strong class="title">{role.title}</strong>
+                    <span class="org">
+                      {role.place ? `${role.org}, ${role.place}` : role.org}
+                      <span class="kind">{role.kind}</span>
+                    </span>
+                  </span>
+                </summary>
+                <ul class="points">
+                  {role.points.map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              </details>
+            </li>
+          ) : (
+            <li class="role">
+              <span class="period">
+                {role.start} to {role.end}
+              </span>
+              <span class="what">
+                <strong class="title">{role.title}</strong>
+                <span class="org">
+                  {role.place ? `${role.org}, ${role.place}` : role.org}
+                  <span class="kind">{role.kind}</span>
+                </span>
+                {role.note && <span class="note">{role.note}</span>}
+              </span>
+            </li>
+          ),
+        )
+      }
+    </ol>
+
+    <h3 class="sub">Open source</h3>
+    <p class="intro">Outside LeapView, I send fixes upstream to projects I use and help run open-source programs for students.</p>
+    <ul class="list">
+      {
+        upstream.map((pr) => (
+          <li class="upstream">
+            <span class="repo">{pr.repo}</span>
+            <a href={pr.url}>{plainTitle(pr.title)}</a>
+            <span class="when">{monthYear(pr.merged)}</span>
+          </li>
+        ))
+      }
+      {
+        community.map((item) => (
+          <li class="program">
+            <span class="what-line">
+              <strong>{item.title}</strong>
+              <span class="when">{item.period}</span>
+            </span>
+            {item.body && <span class="body">{item.body}</span>}
+          </li>
+        ))
+      }
+    </ul>
+
+    <h3 class="sub">Research</h3>
+    <ul class="list">
+      {
+        papers.map((paper) => (
+          <li class="paper">
+            <span class="paper-title">{paper.url ? <a href={paper.url}>{paper.title}</a> : paper.title}</span>
+            {paper.authors && (
+              <span class="byline">
+                <strong class="me">{paper.authors[0]}</strong>{paper.authors.length > 1 && `, ${paper.authors.slice(1).join(', ')}`}
+              </span>
+            )}
+            <span class="byline">{[paper.venue, paper.year].filter(Boolean).join(', ')}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <details class="disclosure recognition">
+      <summary>
+        <span>Awards and certifications</span>
+        <span class="count">
+          {plural(awards.length, 'award', 'awards')}, {plural(certifications.length, 'certification', 'certifications')}
+        </span>
+      </summary>
+      <div class="columns">
+        <ul class="plain" aria-label="Awards">
+          {
+            awards.map((award) => (
+              <li>
+                {award.title}
+                <span class="by">
+                  {award.by}, {award.year}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="plain" aria-label="Certifications">
+          {
+            certifications.map((cert) => (
+              <li>
+                {cert.title}
+                {(cert.by || cert.year) && <span class="by">{[cert.by, cert.year].filter(Boolean).join(', ')}</span>}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </details>
+
+    <p class="languages">I speak {person.languages.slice(0, -1).join(', ')} and {person.languages.at(-1)}.</p>
+  </div>
+</section>
+
+<style>
+  .sub {
+    margin-bottom: 0.75rem;
+    font-size: var(--step-1);
+  }
+
+  .sub:not(:first-child) {
+    margin-top: 3rem;
+  }
+
+  .roles,
+  .list {
+    border-top: 1px solid var(--rule);
+  }
+
+  .roles > li,
+  .list > li {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* A role is a period beside what and where; the same grid works in a row or a summary. */
+  .role,
+  .role-details > summary {
+    display: grid;
+    gap: 0.15rem 2rem;
+    padding-block: 1.1rem;
+  }
+
+  .role-details > summary {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .role-details > summary::after {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  @media (min-width: 44rem) {
+    .role,
+    .role-details > summary {
+      grid-template-columns: 9rem minmax(0, 1fr) auto;
+    }
+
+    .role-details > summary::after {
+      grid-column: 3;
+    }
+  }
+
+  .period {
+    padding-top: 0.15rem;
+    color: var(--graphite);
+    font-size: var(--step--1);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .what {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .title {
+    font-weight: 700;
+  }
+
+  .role-details > summary:hover .title {
+    color: var(--accent);
+  }
+
+  .org,
+  .note {
+    color: var(--graphite);
+  }
+
+  .kind {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0 0.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    vertical-align: 0.1em;
+  }
+
+  .points {
+    padding: 0 0 1.25rem 1.1rem;
+    list-style: disc;
+    max-width: var(--measure);
+  }
+
+  @media (min-width: 44rem) {
+    .points {
+      margin-left: 11rem;
+    }
+  }
+
+  .points li + li {
+    margin-top: 0.35rem;
+  }
+
+  .points li::marker {
+    color: var(--graphite);
+  }
+
+  .intro {
+    max-width: var(--measure);
+    margin-bottom: 1rem;
+    color: var(--graphite);
+  }
+
+  .list > li {
+    display: grid;
+    gap: 0.15rem 1rem;
+    padding-block: 0.9rem;
+  }
+
+  @media (min-width: 44rem) {
+    .upstream {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .upstream .repo {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .repo {
+    color: var(--graphite);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+
+  .when {
+    color: var(--graphite);
+    font-size: var(--step--1);
+    white-space: nowrap;
+  }
+
+  .what-line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 1rem;
+  }
+
+  .what-line strong {
+    font-weight: 650;
+  }
+
+  .body,
+  .byline {
+    color: var(--graphite);
+  }
+
+  .byline {
+    font-size: var(--step--1);
+  }
+
+  .paper-title {
+    font-weight: 650;
+    line-height: 1.4;
+  }
+
+  .paper-title a {
+    color: var(--ink);
+  }
+
+  .me {
+    color: var(--ink);
+    font-weight: 650;
+  }
+
+  .recognition {
+    margin-top: 2rem;
+  }
+
+  .recognition > summary {
+    flex-wrap: wrap;
+    padding-block: 0.75rem;
+    font-weight: 700;
+  }
+
+  .recognition > summary:hover > span:first-child {
+    color: var(--accent);
+  }
+
+  .count {
+    color: var(--graphite);
+    font-size: var(--step--1);
+    font-weight: 400;
+  }
+
+  .columns {
+    display: grid;
+    gap: 1.5rem 2.5rem;
+    padding-block: 0.75rem 0.5rem;
+  }
+
+  @media (min-width: 44rem) {
+    .columns {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .plain li + li {
+    margin-top: 0.6rem;
+  }
+
+  .by {
+    display: block;
+    color: var(--graphite);
+    font-size: var(--step--1);
+  }
+
+  .languages {
+    margin-top: 2.5rem;
+    color: var(--graphite);
+  }
+</style>

@@ -5,8 +5,8 @@ import { person } from '../data/profile';
 const nav = [
   { href: '/#work', label: 'Work' },
   { href: '/#projects', label: 'Projects' },
-  { href: '/#open-source', label: 'Open source' },
   { href: '/#freelance', label: 'Freelance' },
+  { href: '/#background', label: 'Background' },
   { href: '/#contact', label: 'Contact' },
 ];
 ---
@@ -46,13 +46,39 @@ const nav = [
   systemDark.addEventListener('change', label);
   button?.addEventListener('click', () => {
     const next = current() === 'dark' ? 'light' : 'dark';
-    root.dataset.theme = next;
-    try {
-      localStorage.setItem('theme', next);
-    } catch {}
-    label();
-    syncBrowserChrome();
+    const apply = () => {
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem('theme', next);
+      } catch {}
+      label();
+      syncBrowserChrome();
+    };
+    // Crossfade between themes where the browser can; reduced motion switches instantly.
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (document.startViewTransition && !still) document.startViewTransition(apply);
+    else apply();
   });
+
+  // Marks the section being read in the nav, so the header doubles as a map of the page.
+  const links = new Map(
+    [...document.querySelectorAll<HTMLAnchorElement>('nav a[href^="/#"]')].map((a) => [a.hash.slice(1), a]),
+  );
+  const sections = [...links.keys()].map((id) => document.getElementById(id)).filter((el) => el !== null);
+  if (sections.length && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          links.forEach((a) => a.removeAttribute('aria-current'));
+          links.get(entry.target.id)?.setAttribute('aria-current', 'true');
+        }
+      },
+      // A thin band across the middle of the viewport decides which section is current.
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    sections.forEach((section) => observer.observe(section));
+  }
 </script>
 
 <style>
@@ -93,6 +119,7 @@ const nav = [
   }
 
   nav a {
+    position: relative;
     display: inline-block;
     padding-block: 0.6rem;
     color: var(--graphite);
@@ -101,8 +128,30 @@ const nav = [
     white-space: nowrap;
   }
 
-  nav a:hover {
+  nav a:hover,
+  nav a[aria-current] {
     color: var(--ink);
+  }
+
+  /* The current section's link gets an underline that grows in from the left. */
+  nav a::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0.3rem;
+    height: 2px;
+    background: var(--signal);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  nav a[aria-current]::after {
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    nav a::after {
+      transition: transform 300ms var(--ease-out);
+    }
   }
 
   .theme {
