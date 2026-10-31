@@ -1,0 +1,12 @@
+// Cloudflare Workers config: serve the built static site from dist/ with no Worker script.
+// Without this file, `wrangler deploy` auto-configures an SSR adapter and the build fails.
+// "name" must match the Worker's name in the Cloudflare dashboard.
+// Response headers come from public/_headers.
+{
+  "name": "portfolio-website",
+  "compatibility_date": "2026-10-31",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
