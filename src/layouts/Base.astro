@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { person, experience, leapview } from '../data/profile';
+import { person, experience } from '../data/profile';
 
 interface Props {
   title?: string;
@@ -93,7 +93,6 @@ const jsonLd = {
       <span class="intro-count"></span>
     </div>
     <a class="skip-link" href="#main">Skip to content</a>
-    <canvas class="sky" aria-hidden="true" data-weeks={JSON.stringify(leapview.stats.weekly.map((w) => w.merged))}></canvas>
     <slot />
     <script>
       import { tilt, magnet } from '../scripts/tilt';
@@ -102,16 +101,6 @@ const jsonLd = {
       magnet();
       pointer();
       scramble();
-
-      // The field of points loads once the page is idle; on Save-Data it stays off.
-      const sky = document.querySelector<HTMLCanvasElement>('canvas.sky');
-      const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-      if (sky && !saveData) {
-        const weeks: number[] = JSON.parse(sky.dataset.weeks ?? '[]');
-        const load = () => import('../scripts/sky').then(({ mountSky }) => mountSky(sky, weeks));
-        if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 1500 });
-        else setTimeout(load, 300);
-      }
     </script>
   </body>
 </html>

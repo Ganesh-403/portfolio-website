@@ -4,9 +4,9 @@ import photo from '../assets/ganesh.jpg';
 import { person, hero, leapview } from '../data/profile';
 import { monthYear } from '../lib/format';
 
-// Scanning order: the name, who and where, the one-line offer, the actions. The galaxy of pull
-// requests fills the right of the screen (scripts/sky.ts); the legend under the actions says
-// what it is. The photo is a small glass card beside it.
+// Scanning order: the name, who and where, the one-line offer, the actions. Beside them, the photo,
+// large, with a ring of my merged pull requests turning slowly around it (scripts/galaxy.ts);
+// the legend under the actions says what the points are.
 const [first, ...rest] = person.name.split(' ');
 const last = rest.join(' ');
 const { mergedPRs, firstMerged } = leapview.stats;
@@ -43,28 +43,33 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
     </div>
   </div>
 
-  <figure class="id card" data-tilt>
-    <Image
-      src={photo}
-      alt={`${person.name} leaning on a balcony railing at night`}
-      widths={[240, 360, 480]}
-      format="avif"
-      sizes="15rem"
-      loading="eager"
-      fetchpriority="high"
-    />
-    <figcaption>
-      <span>{person.name}</span>
-      <span class="muted">{person.role}, {person.company}</span>
-    </figcaption>
-  </figure>
+  <div class="visual">
+    <canvas class="galaxy back" aria-hidden="true" data-weeks={JSON.stringify(leapview.stats.weekly.map((w) => w.merged))}></canvas>
+    <figure class="portrait card" data-tilt>
+      <Image
+        src={photo}
+        alt={`${person.name} leaning on a balcony railing at night`}
+        widths={[480, 640, 800]}
+        format="webp"
+        quality={92}
+        sizes="(min-width: 64rem) 30rem, calc(100vw - 2.5rem)"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <figcaption>
+        <span>{person.name}</span>
+        <span class="muted">{person.role}, {person.company}</span>
+      </figcaption>
+    </figure>
+    <canvas class="galaxy front" aria-hidden="true"></canvas>
+  </div>
 
   <p class="legend">
     <span class="swatch" aria-hidden="true"></span>
     <span>
-      Each point of light behind this page is one of my <strong>{mergedPRs}</strong> merged pull requests in
-      <a href={leapview.url}>LeapView</a> since {since}, coloured from my first week to my latest. Scroll, and they
-      rearrange for every section.
+      The ring of light around my photo is my <strong>{mergedPRs}</strong> merged pull requests in
+      <a href={leapview.url}>LeapView</a> since {since}: one point each, in the order they landed, from my first week
+      (violet) to my latest (lime).
     </span>
   </p>
 </section>
@@ -78,6 +83,17 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
     tick();
     setInterval(tick, 30_000);
   }
+
+  // The galaxy loads once the page is idle, so the photo paints first; on Save-Data it stays off.
+  const back = document.querySelector<HTMLCanvasElement>('canvas.galaxy.back');
+  const front = document.querySelector<HTMLCanvasElement>('canvas.galaxy.front');
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+  if (back && front && !saveData) {
+    const weeks: number[] = JSON.parse(back.dataset.weeks ?? '[]');
+    const load = () => import('../scripts/galaxy').then(({ mountGalaxy }) => mountGalaxy(back, front, weeks));
+    if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 1500 });
+    else setTimeout(load, 300);
+  }
 </script>
 
 <style>
@@ -89,12 +105,12 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
     padding-block: clamp(2rem, 1rem + 4vw, 4rem) clamp(2.5rem, 2rem + 3vw, 4rem);
   }
 
-  /* Wide screens: the text on the left, the galaxy behind the right half, the card below it. */
+  /* Wide screens: the text on the left, the photo and its galaxy on the right. */
   @media (min-width: 64rem) {
     .hero {
-      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
       grid-template-rows: 1fr auto;
-      column-gap: 3rem;
+      column-gap: 4rem;
     }
 
     .text {
@@ -102,11 +118,10 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
       align-self: center;
     }
 
-    .id {
+    .visual {
       grid-column: 2;
       grid-row: 1 / 3;
-      align-self: end;
-      justify-self: end;
+      align-self: center;
     }
 
     .legend {
@@ -264,21 +279,58 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
     }
   }
 
-  /* The photo, as a glass ID card. */
-  .id {
-    width: min(100%, 17rem);
-    padding: 0.75rem 0.75rem 1rem;
+  /* The photo, large, in a glass frame. The galaxy's ring is drawn on two canvases over the same box,
+     one behind the photo and one in front, so the ring passes behind it and comes round in front. */
+  .visual {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding-block: clamp(2rem, 1rem + 5vw, 5rem);
   }
 
-  .id img {
+  .galaxy {
+    position: absolute;
+    top: -14%;
+    left: -24%;
+    width: 148%;
+    height: 128%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1200ms var(--ease-out);
+  }
+
+  .galaxy:global(.is-ready) {
+    opacity: 1;
+  }
+
+  .galaxy.front {
+    z-index: 2;
+  }
+
+  /* Where the photo fills the width, the ring's near half would cross the caption; only the far
+     half is drawn, peeking out around the card. */
+  @media (max-width: 63.99rem) {
+    .galaxy.front {
+      display: none;
+    }
+  }
+
+  .portrait {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 30rem);
+    padding: 0.7rem 0.7rem 0.9rem;
+  }
+
+  .portrait img {
     width: 100%;
     height: auto;
     aspect-ratio: 1;
-    border-radius: calc(var(--radius) - 0.5rem);
+    border-radius: calc(var(--radius) - 0.45rem);
     object-fit: cover;
   }
 
-  .id figcaption {
+  .portrait figcaption {
     display: grid;
     gap: 0.1rem;
     padding: 0.85rem 0.35rem 0;
@@ -315,7 +367,7 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
     .role,
     .pitch,
     .actions,
-    .id,
+    .portrait,
     .legend {
       animation: rise 900ms var(--ease-out) backwards;
     }
@@ -332,8 +384,8 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
       animation-delay: 550ms;
     }
 
-    .id {
-      animation-delay: 700ms;
+    .portrait {
+      animation-delay: 300ms;
     }
 
     .legend {
@@ -360,8 +412,8 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
       animation-delay: 1650ms;
     }
 
-    :global(.intro) .id {
-      animation-delay: 1800ms;
+    :global(.intro) .portrait {
+      animation-delay: 1400ms;
     }
 
     :global(.intro) .legend {
