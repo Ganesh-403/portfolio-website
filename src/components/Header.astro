@@ -24,11 +24,6 @@ const nav = [
         {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
       </ul>
     </nav>
-    <button class="find" type="button" data-palette-open aria-haspopup="dialog">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>
-      <span class="visually-hidden">Search and commands</span>
-      <kbd data-keys>Ctrl K</kbd>
-    </button>
     <button class="theme-switch" type="button" data-theme-switch aria-pressed="false">
       <span class="visually-hidden">Dark mode</span>
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -48,11 +43,6 @@ const nav = [
 <script>
   import { themeSwitch } from '../scripts/theme';
   themeSwitch();
-
-  // The palette's shortcut, written the way this keyboard says it.
-  if (/Mac|iPhone|iPad/.test(navigator.platform)) {
-    document.querySelectorAll('[data-keys]').forEach((kbd) => (kbd.textContent = '⌘K'));
-  }
 
   // On phones the nav scrolls sideways; keep a focused link fully in view.
   document.querySelector('nav')?.addEventListener('focusin', (event) => {
@@ -159,51 +149,9 @@ const nav = [
     cursor: pointer;
   }
 
-  .theme-switch:hover,
-  .find:hover {
+  .theme-switch:hover {
     border-color: var(--accent);
     color: var(--accent);
-  }
-
-  /* Opens the command palette; the keys are shown where there is room for them. */
-  .find {
-    display: inline-flex;
-    flex: none;
-    align-items: center;
-    gap: 0.5rem;
-    height: 2.75rem;
-    padding: 0 0.9rem;
-    border: 1px solid var(--glass-line);
-    border-radius: 999px;
-    background: var(--glass);
-    color: var(--fg);
-    font: inherit;
-    font-size: 0.85rem;
-    cursor: pointer;
-  }
-
-  .find svg {
-    width: 1.05rem;
-    height: 1.05rem;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-  }
-
-  .find kbd {
-    padding: 0.05rem 0.4rem;
-    border: 1px solid var(--line);
-    border-radius: 0.35rem;
-    color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-  }
-
-  @media (max-width: 48rem) {
-    .find kbd {
-      display: none;
-    }
   }
 
   .theme-switch svg {

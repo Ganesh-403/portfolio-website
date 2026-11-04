@@ -16,43 +16,6 @@ const font = (family: string, weight: number, style = 'normal') =>
 type Node = { type: string; props: { style?: Record<string, unknown>; children?: unknown } };
 const h = (type: string, style: Record<string, unknown>, children?: unknown): Node => ({ type, props: { style, children } });
 
-// The same ring as the site's hero: one dot per merged pull request, round the photo in the order
-// they landed, coloured from the first week (violet) to the latest (lime).
-function ring(weeks: number[], cx: number, cy: number, rx: number, ry: number) {
-  let seed = 390;
-  const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
-  const gauss = () => (rand() + rand() + rand() - 1.5) / 1.5;
-  const total = weeks.reduce((sum, count) => sum + count, 0) || 1;
-  const last = Math.max(weeks.length - 1, 1);
-  const mix = (t: number) => {
-    const a = [139, 123, 255];
-    const b = [200, 255, 77];
-    return `rgb(${a.map((v, k) => Math.round(v + (b[k] - v) * t)).join(' ')})`;
-  };
-  const dots: Node[] = [];
-  let order = 0;
-  weeks.forEach((count, week) => {
-    for (let n = 0; n < count; n++, order++) {
-      const a = (order / total) * Math.PI * 2 - 0.3;
-      const spread = 1 + gauss() * 0.025;
-      const size = 3 + Math.round(rand() * 3);
-      dots.push(
-        h('div', {
-          position: 'absolute',
-          left: Math.round(cx + Math.cos(a) * rx * spread),
-          top: Math.round(cy + Math.sin(a) * ry * spread),
-          width: size,
-          height: size,
-          borderRadius: size,
-          backgroundColor: mix(week / last),
-          boxShadow: `0 0 ${size * 3}px ${mix(week / last)}`,
-        }),
-      );
-    }
-  });
-  return dots;
-}
-
 export const GET: APIRoute = async () => {
   const [regular, display, displayItalic, photo] = await Promise.all([
     font('atkinson-hyperlegible-next', 400),
@@ -72,16 +35,54 @@ export const GET: APIRoute = async () => {
       h('div', { color: '#c8ff4d', fontStyle: 'italic' }, rest.join(' ')),
     ]),
     h('div', { marginTop: 34, fontSize: 30, color: '#eeeef6', lineHeight: 1.3 }, 'I build software end to end, from first sketch to production.'),
-    h('div', { marginTop: 28, fontSize: 22, color: '#a2a6c0' }, `The ring: my ${mergedPRs} merged pull requests in LeapView, one point each.`),
   ]);
   const portrait = h(
     'div',
-    { position: 'absolute', left: 790, top: 145, display: 'flex', padding: 10, borderRadius: 26, backgroundColor: '#0c0e17', border: '1px solid rgba(255,255,255,0.14)' },
+    { position: 'absolute', left: 760, top: 95, display: 'flex', padding: 10, borderRadius: 26, backgroundColor: '#0c0e17', border: '1px solid rgba(255,255,255,0.14)' },
     [
       {
         type: 'img',
-        props: { src: `data:image/jpeg;base64,${photo.toString('base64')}`, width: 300, height: 300, style: { borderRadius: 18 } },
+        props: { src: `data:image/jpeg;base64,${photo.toString('base64')}`, width: 360, height: 360, style: { borderRadius: 18 } },
       },
+    ],
+  );
+
+  // The hero's LeapView note: the count, then a bar per week with the busiest lit.
+  const busiest = Math.max(...weeks, 1);
+  const note = h(
+    'div',
+    {
+      position: 'absolute',
+      left: 690,
+      top: 360,
+      display: 'flex',
+      flexDirection: 'column',
+      width: 250,
+      padding: '18px 20px',
+      borderRadius: 20,
+      backgroundColor: 'rgba(17,19,30,0.92)',
+      border: '1px solid rgba(255,255,255,0.14)',
+    },
+    [
+      h('div', { fontSize: 16, color: '#a2a6c0' }, 'LeapView'),
+      h('div', { display: 'flex', alignItems: 'baseline', marginTop: 4 }, [
+        h('div', { fontFamily: 'Instrument Serif', fontStyle: 'italic', fontSize: 52, color: '#c8ff4d', lineHeight: 1 }, String(mergedPRs)),
+        h('div', { fontSize: 18, marginLeft: 10 }, 'merged PRs'),
+      ]),
+      h(
+        'div',
+        { display: 'flex', alignItems: 'flex-end', height: 44, marginTop: 10 },
+        weeks.map((w, i) =>
+          h('div', {
+            display: 'flex',
+            flex: 1,
+            height: Math.max(4, Math.round((w / busiest) * 44)),
+            marginLeft: i ? 4 : 0,
+            borderRadius: 2,
+            backgroundColor: w === busiest ? '#c8ff4d' : 'rgba(238,238,246,0.3)',
+          }),
+        ),
+      ),
     ],
   );
 
@@ -97,7 +98,7 @@ export const GET: APIRoute = async () => {
       color: '#eeeef6',
       fontFamily: 'Atkinson',
     },
-    [...ring(weeks, 950, 305, 222, 222), text, portrait],
+    [text, portrait, note],
   );
   const svg = await satori(canvas as Parameters<typeof satori>[0], {
     width: 1200,

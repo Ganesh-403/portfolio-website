@@ -1,16 +1,23 @@
 ---
 import { Image } from 'astro:assets';
 import photo from '../assets/ganesh.jpg';
-import { person, hero, leapview } from '../data/profile';
-import { monthYear } from '../lib/format';
+import { person, hero, leapview, projects } from '../data/profile';
+import { dayMonth, monthYear } from '../lib/format';
 
 // Scanning order: the name, who and where, the one-line offer, the actions. Beside them, the photo,
-// large, with a ring of my merged pull requests turning slowly around it (scripts/galaxy.ts);
-// the legend under the actions says what the points are.
+// large, with three glass notes pinned around it, each something a visitor wants to know: how much
+// I ship at LeapView, what I build with, and what time it is for me right now.
 const [first, ...rest] = person.name.split(' ');
 const last = rest.join(' ');
-const { mergedPRs, firstMerged } = leapview.stats;
+const { mergedPRs, firstMerged, weekly } = leapview.stats;
 const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
+const busiest = weekly.reduce((top, w) => (w.merged > top.merged ? w : top), weekly[0]);
+const max = Math.max(busiest?.merged ?? 1, 1);
+
+// LeapView is Go on DuckDB; then the tools my own projects use most often.
+const counts = new Map<string, number>();
+for (const tool of projects.flatMap((p) => p.stack)) counts.set(tool, (counts.get(tool) ?? 0) + 1);
+const toolkit = ['Go', 'DuckDB', ...[...counts].sort((a, b) => b[1] - a[1]).map(([tool]) => tool)].slice(0, 6);
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-name">
@@ -31,8 +38,6 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
       <strong>{person.role}</strong> at <a href={person.companyUrl}>{person.company}</a>
       <span class="sep" aria-hidden="true">·</span>
       {person.location}
-      <span class="sep" aria-hidden="true">·</span>
-      <span class="time" data-local-time>{person.timezone}</span>
     </p>
     <p class="pitch">{hero.lede}</p>
     <div class="actions">
@@ -43,8 +48,7 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
     </div>
   </div>
 
-  <div class="visual">
-    <canvas class="galaxy back" aria-hidden="true" data-weeks={JSON.stringify(leapview.stats.weekly.map((w) => w.merged))}></canvas>
+  <div class="visual" data-parallax>
     <figure class="portrait card" data-tilt>
       <Image
         src={photo}
@@ -61,17 +65,32 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
         <span class="muted">{person.role}, {person.company}</span>
       </figcaption>
     </figure>
-    <canvas class="galaxy front" aria-hidden="true"></canvas>
-  </div>
 
-  <p class="legend">
-    <span class="swatch" aria-hidden="true"></span>
-    <span>
-      The ring of light around my photo is my <strong>{mergedPRs}</strong> merged pull requests in
-      <a href={leapview.url}>LeapView</a> since {since}: one point each, in the order they landed, from my first week
-      (violet) to my latest (lime).
-    </span>
-  </p>
+    <a class="note pace" href="#work" style="--depth: 1.6">
+      <span class="label">LeapView, since {since}</span>
+      <span class="figure"><strong>{mergedPRs}</strong> merged pull requests</span>
+      <span class="bars" aria-hidden="true">
+        {weekly.map((w) => <i class:list={{ peak: w === busiest }} style={`--h:${Math.max(6, (w.merged / max) * 100)}%`} />)}
+      </span>
+      {busiest && <span class="label">Busiest week: {busiest.merged}, week of {dayMonth(busiest.week)}</span>}
+    </a>
+
+    <div class="note kit" style="--depth: 1">
+      <span class="label">What I build with</span>
+      <ul>
+        {toolkit.map((tool) => <li>{tool}</li>)}
+      </ul>
+    </div>
+
+    <a class="note clock" href={`mailto:${person.email}`} style="--depth: 2.2">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+      <span>
+        <span class="label">My time, {person.location.split(',')[0]}</span>
+        <strong class="time" data-local-time>{person.timezone}</strong>
+        <span class="label link">Email me</span>
+      </span>
+    </a>
+  </div>
 </section>
 
 <script>
@@ -79,20 +98,19 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
   const el = document.querySelector<HTMLElement>('[data-local-time]');
   if (el) {
     const format = new Intl.DateTimeFormat('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
-    const tick = () => (el.textContent = `${format.format(new Date())} here`);
+    const tick = () => (el.textContent = format.format(new Date()));
     tick();
     setInterval(tick, 30_000);
   }
 
-  // The galaxy loads once the page is idle, so the photo paints first; on Save-Data it stays off.
-  const back = document.querySelector<HTMLCanvasElement>('canvas.galaxy.back');
-  const front = document.querySelector<HTMLCanvasElement>('canvas.galaxy.front');
-  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-  if (back && front && !saveData) {
-    const weeks: number[] = JSON.parse(back.dataset.weeks ?? '[]');
-    const load = () => import('../scripts/galaxy').then(({ mountGalaxy }) => mountGalaxy(back, front, weeks));
-    if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 1500 });
-    else setTimeout(load, 300);
+  // The notes sit at different depths: with a mouse they shift a few pixels against the pointer,
+  // nearer notes more. Nothing moves on its own.
+  const visual = document.querySelector<HTMLElement>('[data-parallax]');
+  if (visual && matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+    visual.closest('section')?.addEventListener('pointermove', (event) => {
+      visual.style.setProperty('--px', (event.clientX / innerWidth - 0.5).toFixed(3));
+      visual.style.setProperty('--py', (event.clientY / innerHeight - 0.5).toFixed(3));
+    });
   }
 </script>
 
@@ -105,7 +123,7 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
     padding-block: clamp(2rem, 1rem + 4vw, 4rem) clamp(2.5rem, 2rem + 3vw, 4rem);
   }
 
-  /* Wide screens: the text on the left, the photo and its galaxy on the right. */
+  /* Wide screens: the text on the left, the photo and its notes on the right. */
   @media (min-width: 64rem) {
     .hero {
       grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
@@ -122,11 +140,6 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
       grid-column: 2;
       grid-row: 1 / 3;
       align-self: center;
-    }
-
-    .legend {
-      grid-column: 1;
-      grid-row: 2;
     }
   }
 
@@ -248,10 +261,6 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
     opacity: 0.6;
   }
 
-  .time {
-    color: var(--accent);
-  }
-
   .pitch {
     max-width: 30ch;
     margin-top: 1.25rem;
@@ -279,40 +288,12 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
     }
   }
 
-  /* The photo, large, in a glass frame. The galaxy's ring is drawn on two canvases over the same box,
-     one behind the photo and one in front, so the ring passes behind it and comes round in front. */
+  /* The photo, large, in a glass frame, with the notes pinned over its edges. */
   .visual {
     position: relative;
     display: grid;
     place-items: center;
     padding-block: clamp(2rem, 1rem + 5vw, 5rem);
-  }
-
-  .galaxy {
-    position: absolute;
-    top: -14%;
-    left: -24%;
-    width: 148%;
-    height: 128%;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 1200ms var(--ease-out);
-  }
-
-  .galaxy:global(.is-ready) {
-    opacity: 1;
-  }
-
-  .galaxy.front {
-    z-index: 2;
-  }
-
-  /* Where the photo fills the width, the ring's near half would cross the caption; only the far
-     half is drawn, peeking out around the card. */
-  @media (max-width: 63.99rem) {
-    .galaxy.front {
-      display: none;
-    }
   }
 
   .portrait {
@@ -339,27 +320,171 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
     letter-spacing: 0.04em;
   }
 
-  .legend {
-    display: flex;
-    gap: 0.9rem;
-    max-width: 40rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--line);
-    color: var(--muted);
-    font-size: var(--step--1);
-  }
-
-  .legend strong {
+  /* A note: a small glass card pinned over the photo's edge. */
+  .note {
+    position: absolute;
+    z-index: 2;
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--glass-line);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--surface) 72%, transparent);
     color: var(--fg);
+    text-decoration: none;
+    box-shadow: 0 1.5rem 3rem -1rem var(--haze);
+    backdrop-filter: blur(16px) saturate(150%);
+    translate: calc(var(--px, 0) * var(--depth) * -14px) calc(var(--py, 0) * var(--depth) * -14px);
   }
 
-  /* A swatch of the colour scale the points use, oldest to newest. */
-  .swatch {
-    flex: none;
-    width: 0.6rem;
-    margin-block: 0.3rem;
+  a.note:hover {
+    border-color: var(--accent);
+  }
+
+  .label {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+
+  .note strong {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  /* How much I ship: the weekly counts as bars, the busiest in the signal colour. */
+  .pace {
+    top: 9%;
+    left: -2.5rem;
+    width: 14.5rem;
+  }
+
+  .figure {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .figure strong {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 2.25rem;
+    margin-block: 0.2rem;
+  }
+
+  .bars i {
+    flex: 1;
+    height: var(--h);
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--fg) 30%, transparent);
+  }
+
+  .bars i.peak {
+    background: var(--accent);
+    box-shadow: 0 0 0.6rem color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+
+  /* What I build with. */
+  .kit {
+    top: 44%;
+    right: -1.25rem;
+    width: 12rem;
+  }
+
+  .kit ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .kit li {
+    padding: 0.15rem 0.55rem;
+    border: 1px solid var(--glass-line);
     border-radius: 999px;
-    background: linear-gradient(var(--accent-2), var(--accent));
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+
+  /* My time now, for anyone deciding whether to write. */
+  .clock {
+    bottom: 24%;
+    left: -3rem;
+    grid-auto-flow: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .clock > span {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .clock svg {
+    width: 2rem;
+    height: 2rem;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+
+  .clock strong {
+    font-size: 1.6rem;
+  }
+
+  .link {
+    color: var(--accent);
+  }
+
+  /* Narrow screens: the photo keeps its whole width clear and the notes sit below it, the LeapView
+     note across the full width and the other two side by side. */
+  @media (max-width: 63.99rem) {
+    .visual {
+      justify-self: center;
+      width: min(100%, 30rem);
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      place-items: stretch;
+      padding-block: 0;
+    }
+
+    .portrait {
+      grid-column: 1 / -1;
+      justify-self: center;
+    }
+
+    .note {
+      position: static;
+      width: auto;
+      padding: 0.8rem 0.9rem;
+      translate: none;
+    }
+
+    .pace {
+      grid-column: 1 / -1;
+    }
+
+    .clock {
+      align-content: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .note {
+      transition:
+        translate 500ms var(--ease-out),
+        border-color 200ms;
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -368,7 +493,7 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
     .pitch,
     .actions,
     .portrait,
-    .legend {
+    .note {
       animation: rise 900ms var(--ease-out) backwards;
     }
 
@@ -388,8 +513,16 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
       animation-delay: 300ms;
     }
 
-    .legend {
-      animation-delay: 850ms;
+    .pace {
+      animation-delay: 650ms;
+    }
+
+    .kit {
+      animation-delay: 800ms;
+    }
+
+    .clock {
+      animation-delay: 950ms;
     }
 
     :global(.intro) .char {
@@ -416,8 +549,8 @@ const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
       animation-delay: 1400ms;
     }
 
-    :global(.intro) .legend {
-      animation-delay: 1950ms;
+    :global(.intro) .note {
+      animation-delay: 1800ms;
     }
   }
 

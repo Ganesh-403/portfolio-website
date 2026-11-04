@@ -12,8 +12,6 @@ function apply(theme: Theme) {
   try {
     localStorage.setItem(KEY, theme);
   } catch {}
-  // The 3D scenes read the palette from CSS; they repaint on this.
-  window.dispatchEvent(new CustomEvent('themechange', { detail: theme }));
 }
 
 export function themeSwitch() {

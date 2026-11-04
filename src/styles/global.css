@@ -3,9 +3,8 @@
 @import '@fontsource-variable/atkinson-hyperlegible-next';
 @import '@fontsource-variable/atkinson-hyperlegible-mono';
 
-/* Constellation. A deep field with two soft auroras; in the hero, a galaxy of points turns behind the
-   photo, one for each merged LeapView pull request (scripts/galaxy.ts). Content sits on glass. Display type is Instrument Serif,
-   body text Atkinson Hyperlegible, data and labels Atkinson Mono.
+/* Constellation. A deep field with two soft auroras, and content on glass above it. Display type is
+   Instrument Serif, body text Atkinson Hyperlegible, data and labels Atkinson Mono.
    Deep field (dark, the default): fg 17.5:1, muted 8.4:1, signal lime 17.2:1, field 4.3:1.
    Daylight: fg 17.9:1, muted 7.6:1, indigo 6.5:1, field 3.6:1. Accent 2 is for graphics only.
    --glass and --glass-line make the panels; --depth is their shadow; --glow the light that
@@ -118,7 +117,7 @@ body::before {
     radial-gradient(48rem 34rem at -8% 38%, var(--aurora-2), transparent 60%);
 }
 
-body > :not(.skip-link, script, .intro-curtain, .cursor-ring, dialog) {
+body > :not(.skip-link, script, .intro-curtain, .cursor-ring) {
   position: relative;
   z-index: 1;
 }
