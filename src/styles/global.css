@@ -228,12 +228,34 @@ code,
   color: var(--paper);
 }
 
+/* Buttons are blocks of type standing on an ink base: they lift toward the pointer and press flat
+   when clicked. */
+.button {
+  box-shadow: 0.2rem 0.2rem 0 var(--ink);
+}
+
+.button:hover {
+  box-shadow: 0.35rem 0.35rem 0 var(--ink);
+  transform: translate(-0.15rem, -0.15rem);
+}
+
+.button.primary:hover {
+  box-shadow: 0.35rem 0.35rem 0 var(--accent);
+}
+
+.button:active {
+  box-shadow: 0 0 0 var(--ink);
+  transform: translate(0.2rem, 0.2rem);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .button {
     transition:
       background-color 200ms,
       border-color 200ms,
-      color 200ms;
+      color 200ms,
+      box-shadow 200ms var(--ease-out),
+      transform 200ms var(--ease-out);
   }
 }
 
@@ -268,6 +290,72 @@ code,
   border: 1px solid var(--ink);
   border-radius: var(--radius);
   background: var(--paper-deep);
+  /* Every card sits on a thin ink block, so the page has layers even at rest. */
+  box-shadow: 0.3rem 0.3rem 0 var(--ink);
+}
+
+/* A card that tilts toward the pointer (see scripts/tilt.ts). At rest it lies flat; lifted, its
+   ink block shows and a soft light follows the pointer across the paper. */
+[data-tilt] {
+  position: relative;
+  transform: perspective(60rem) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+}
+
+[data-tilt]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Under the text: the light falls on the paper, never over the words. The card's transform makes
+     it a stacking context, so -1 still paints above the card's own background. */
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgb(255 252 244 / 0.8), transparent 55%);
+}
+
+[data-tilt]:hover {
+  box-shadow: 0.55rem 0.55rem 0 var(--ink);
+}
+
+[data-tilt]:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-tilt] {
+    transition:
+      transform 180ms var(--ease-out),
+      box-shadow 250ms var(--ease-out);
+  }
+
+  [data-tilt]::after {
+    transition: opacity 250ms;
+  }
+}
+
+/* Sections fold up off the page as they scroll in, where the browser can tie motion to scrolling. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .section > * {
+      transform-origin: 50% 0;
+      animation: unfold linear both;
+    }
+
+    /* A separate rule: the minifier would otherwise fold the timeline into the animation
+       shorthand, which browsers reject. */
+    .page .section > * {
+      animation-timeline: view();
+      animation-range: entry 0% entry 80%;
+    }
+  }
+}
+
+@keyframes unfold {
+  from {
+    opacity: 0;
+    transform: perspective(70rem) rotateX(22deg) translateY(2.5rem);
+  }
 }
 
 .muted {

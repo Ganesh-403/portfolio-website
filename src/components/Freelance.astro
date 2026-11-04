@@ -14,7 +14,7 @@ import { person, offers } from '../data/profile';
   <ul class="offers">
     {
       offers.map((offer) => (
-        <li class="card">
+        <li class="card" data-tilt>
           <h3>{offer.title}</h3>
           <p>{offer.body}</p>
           <p class="proof">
@@ -49,6 +49,12 @@ import { person, offers } from '../data/profile';
     line-height: 0.95;
     letter-spacing: -0.03em;
     text-wrap: balance;
+    /* Ink type standing on a vermilion block, a quieter echo of the name in the hero. */
+    text-shadow:
+      1px 1px 0 var(--accent),
+      2px 2px 0 var(--accent),
+      3px 3px 0 var(--accent),
+      4px 4px 0 var(--accent);
   }
 
   .lede {

@@ -68,5 +68,9 @@ const jsonLd = {
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <slot />
+    <script>
+      import { tilt } from '../scripts/tilt';
+      tilt();
+    </script>
   </body>
 </html>

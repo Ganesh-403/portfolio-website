@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import photo from '../assets/ganesh.jpg';
 import { person, hero, leapview } from '../data/profile';
 import { monthYear } from '../lib/format';
@@ -12,19 +12,25 @@ const { mergedPRs, firstMerged } = leapview.stats;
 // A sparkline of the same weeks the Work chart shows; the full, explorable chart lives there.
 const weekly = leapview.stats.weekly.slice(-12);
 const max = Math.max(...weekly.map((w) => w.merged), 1);
+
+// The 3D stage prints the photo onto a card, so it needs one plain texture of it.
+const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-name">
-  <figure class="portrait">
-    <Image
-      src={photo}
-      alt={`${person.name} leaning on a balcony railing at night`}
-      widths={[400, 600, 700, 800]}
-      format="avif"
-      sizes="(min-width: 60rem) 36rem, calc(100vw - 2.25rem)"
-      loading="eager"
+  <figure class="portrait" data-stage data-texture={texture.src} data-weeks={JSON.stringify(leapview.stats.weekly.map((w) => w.merged))}>
+    <div class="frame">
+      <Image
+        src={photo}
+        alt={`${person.name} leaning on a balcony railing at night`}
+        widths={[400, 600, 700, 800]}
+        format="avif"
+        sizes="(min-width: 60rem) 36rem, calc(100vw - 2.25rem)"
+        loading="eager"
       fetchpriority="high"
-    />
+      />
+      <canvas aria-hidden="true"></canvas>
+    </div>
     <figcaption>
       <span>{person.location}</span>
       <span class="time" data-local-time>{person.timezone}</span>
@@ -61,6 +67,16 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
     const tick = () => (el.textContent = `${format.format(new Date())} here`);
     tick();
     setInterval(tick, 30_000);
+  }
+
+  // The 3D stage loads after the page is idle, so the photo is the first paint and Three.js never
+  // delays it. On a phone saving data, or without WebGL, the flat photo stays.
+  const stage = document.querySelector<HTMLElement>('[data-stage]');
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+  if (stage && !saveData) {
+    const load = () => import('../scripts/stage').then(({ mountStage }) => mountStage(stage));
+    if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 2000 });
+    else setTimeout(load, 300);
   }
 </script>
 
@@ -102,6 +118,47 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
     box-shadow: 0.75rem 0.75rem 0 var(--ink);
   }
 
+  /* The 3D stage draws over the photo and bleeds past it, so the blocks and shadows have room.
+     The photo stays underneath for screen readers and as the fallback. */
+  .frame {
+    position: relative;
+  }
+
+  canvas {
+    position: absolute;
+    inset: -8% -5% -6%;
+    width: 110%;
+    height: 114%;
+    pointer-events: none;
+    opacity: 0;
+    /* Shadows fade out before the canvas edge instead of stopping at it. */
+    mask-image: linear-gradient(to right, #000 82%, transparent), linear-gradient(to bottom, #000 88%, transparent);
+    mask-composite: intersect;
+  }
+
+  @media (min-width: 60rem) {
+    canvas {
+      inset: -12% -14% -8% -10%;
+      width: 124%;
+      height: 120%;
+    }
+  }
+
+  .is-3d canvas {
+    opacity: 1;
+  }
+
+  .is-3d img {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    canvas,
+    .portrait img {
+      transition: opacity 600ms var(--ease-out);
+    }
+  }
+
   figcaption {
     display: flex;
     justify-content: space-between;
@@ -131,11 +188,20 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
     display: block;
   }
 
-  /* The surname in italic vermilion, the one flourish on the page. */
+  /* The surname in italic vermilion, the one flourish on the page, set like metal type: it stands
+     off the page on a block of ink, one pixel per layer. */
   .last {
     color: var(--accent);
     font-style: italic;
     font-weight: 600;
+    text-shadow:
+      1px 1px 0 var(--ink),
+      2px 2px 0 var(--ink),
+      3px 3px 0 var(--ink),
+      4px 4px 0 var(--ink),
+      5px 5px 0 var(--ink),
+      6px 6px 0 var(--ink),
+      7px 7px 14px rgb(27 25 22 / 0.25);
   }
 
   .role {

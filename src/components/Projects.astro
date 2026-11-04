@@ -10,7 +10,7 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
   <ul class="grid">
     {
       projects.map((project) => (
-        <li class="project card">
+        <li class="project card" data-tilt>
           <div class="head">
             <h3>
               <a href={project.repo}>{project.name}</a>
@@ -95,16 +95,6 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
     min-height: 15rem;
     padding: 1.75rem;
     border-radius: var(--radius-sm);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .project {
-      transition: box-shadow 250ms var(--ease-out);
-    }
-  }
-
-  .project:hover {
-    box-shadow: 0.4rem 0.4rem 0 var(--ink);
   }
 
   .head {
