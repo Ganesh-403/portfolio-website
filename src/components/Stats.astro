@@ -1,0 +1,187 @@
+---
+import github from '../data/github.json';
+import { leapview, projects, moreProjects, papers, person } from '../data/profile';
+
+// The numbers behind the page, each set on a solid block. All of them come from the data files.
+const ownStars = Object.entries(github.stars)
+  .filter(([repo]) => repo.startsWith(`${person.links.github.split('/').at(-1)}/`))
+  .reduce((sum, [, stars]) => sum + stars, 0);
+
+const stats = [
+  { value: leapview.stats.mergedPRs, label: 'merged pull requests in LeapView', href: '#work' },
+  { value: projects.length + moreProjects.length, label: 'projects built and shipped', href: '#projects' },
+  { value: ownStars, label: 'GitHub stars on my own projects', href: '#projects' },
+  { value: papers.length, label: 'research papers', href: '#background' },
+];
+---
+
+<section class="stats" aria-label="In numbers">
+  <ul>
+    {
+      stats.map((stat, i) => (
+        <li style={`--i:${i}`}>
+          <a class="block" href={stat.href} data-block>
+            <span class="face">
+              <strong data-count={stat.value}>{stat.value}</strong>
+              <span>{stat.label}</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script>
+  // Numbers count up the first time they come into view. The real value is in the HTML already.
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const numbers = document.querySelectorAll<HTMLElement>('[data-count]');
+  if (!still && 'IntersectionObserver' in window) {
+    const seen = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        seen.unobserve(entry.target);
+        const el = entry.target as HTMLElement;
+        const to = Number(el.dataset.count);
+        const start = performance.now();
+        const step = (now: number) => {
+          const t = Math.min((now - start) / 1400, 1);
+          el.textContent = String(Math.round(to * (1 - Math.pow(1 - t, 4))));
+          if (t < 1) requestAnimationFrame(step);
+        };
+        el.textContent = '0';
+        requestAnimationFrame(step);
+      }
+    });
+    numbers.forEach((el) => seen.observe(el));
+  }
+
+  // The blocks turn together toward the pointer, like a row of type blocks on a table.
+  const row = document.querySelector<HTMLElement>('.stats ul');
+  if (row && !still && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    addEventListener('pointermove', (event) => {
+      const x = event.clientX / innerWidth - 0.5;
+      const y = event.clientY / innerHeight - 0.5;
+      row.style.setProperty('--turn-y', `${(-18 + x * 16).toFixed(1)}deg`);
+      row.style.setProperty('--turn-x', `${(-16 + y * 10).toFixed(1)}deg`);
+    });
+  }
+</script>
+
+<style>
+  .stats {
+    padding-block: 1rem clamp(3rem, 2rem + 4vw, 5rem);
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.25rem 1.75rem;
+    perspective: 70rem;
+  }
+
+  @media (min-width: 52rem) {
+    ul {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  li {
+    transform-style: preserve-3d;
+  }
+
+  /* A real box: the front face carries the number; the top and right side are its depth. */
+  .block {
+    --d: 1.6rem;
+    position: relative;
+    display: block;
+    height: 100%;
+    color: var(--ink);
+    text-decoration: none;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--turn-x, -16deg)) rotateY(var(--turn-y, -18deg));
+  }
+
+  .block::before,
+  .block::after {
+    content: '';
+    position: absolute;
+    border: 1px solid var(--ink);
+  }
+
+  .block::before {
+    inset: 0 0 auto;
+    height: var(--d);
+    background: var(--paper-shade);
+    transform-origin: top;
+    transform: rotateX(-90deg);
+  }
+
+  .block::after {
+    inset: 0 auto 0 100%;
+    width: var(--d);
+    background: var(--ink);
+    transform-origin: left;
+    transform: rotateY(90deg);
+  }
+
+  /* The number block for the busiest stat is cut in vermilion. */
+  li:first-child .block::after {
+    background: var(--accent);
+  }
+
+  .face {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    height: 100%;
+    padding: 1.25rem 1.25rem 1.1rem;
+    border: 1px solid var(--ink);
+    background: var(--paper-deep);
+  }
+
+  strong {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 1.8rem + 2.6vw, 4.25rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+
+  li:first-child strong {
+    color: var(--accent);
+  }
+
+  .face span {
+    color: var(--graphite);
+    font-size: var(--step--1);
+    line-height: 1.35;
+  }
+
+  .block:hover .face span {
+    color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .block {
+      transition: transform 500ms var(--ease-out);
+    }
+
+    .block:hover {
+      transform: rotateX(-6deg) rotateY(-6deg) translateZ(1.5rem);
+    }
+
+    li {
+      animation: drop 900ms var(--ease-out) both;
+      animation-delay: calc(500ms + var(--i) * 110ms);
+    }
+  }
+
+  @keyframes drop {
+    from {
+      opacity: 0;
+      transform: translateY(-3rem) rotateX(-50deg);
+    }
+  }
+</style>

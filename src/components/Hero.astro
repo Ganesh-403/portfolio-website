@@ -7,6 +7,7 @@ import { monthYear } from '../lib/format';
 // Scanning order: the name, the one-line offer, the actions, then the proof. The photo sits beside
 // them on wide screens and after the actions on phones, so "Work with me" is on the first screen.
 const [first, ...rest] = person.name.split(' ');
+const last = rest.join(' ');
 const { mergedPRs, firstMerged } = leapview.stats;
 
 // A sparkline of the same weeks the Work chart shows; the full, explorable chart lives there.
@@ -38,14 +39,22 @@ const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
   </figure>
 
   <div class="text">
-    <h1 id="hero-name"><span>{first}</span> <span class="last">{rest.join(' ')}</span></h1>
+    <h1 id="hero-name">
+      <span class="visually-hidden">{person.name}</span>
+      <span class="word" aria-hidden="true">
+        {[...first].map((char, i) => <span class="char" style={`--i:${i}`}>{char}</span>)}
+      </span>
+      <span class="word last" aria-hidden="true">
+        {[...last].map((char, i) => <span class="char" style={`--i:${i + first.length}`}>{char}</span>)}
+      </span>
+    </h1>
     <p class="role"><strong>{person.role}</strong> at <a href={person.companyUrl}>{person.company}</a></p>
     <p class="pitch">{hero.lede}</p>
     <div class="actions">
-      <a class="button primary" href="#contact">Work with me</a>
-      <a class="button" href={`mailto:${person.email}`}>Email</a>
-      <a class="button" href={person.links.github}>GitHub</a>
-      <a class="button" href={person.links.linkedin}>LinkedIn</a>
+      <a class="button primary" href="#contact" data-magnet>Work with me</a>
+      <a class="button" href={`mailto:${person.email}`} data-magnet>Email</a>
+      <a class="button" href={person.links.github} data-magnet>GitHub</a>
+      <a class="button" href={person.links.linkedin} data-magnet>LinkedIn</a>
     </div>
     <a class="proof" href="#work">
       <span class="spark" aria-hidden="true">
@@ -184,8 +193,35 @@ const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
     letter-spacing: -0.035em;
   }
 
-  h1 span {
+  /* Each letter is its own block of type: they flip up into place on load, and lift when the
+     pointer passes over them. */
+  .word {
     display: block;
+    perspective: 40rem;
+  }
+
+  .char {
+    display: inline-block;
+    transform-origin: 50% 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .char {
+      animation: flip 700ms var(--ease-out) backwards;
+      animation-delay: calc(var(--i) * 40ms);
+      transition: transform 350ms var(--ease-out);
+    }
+
+    .char:hover {
+      transform: translateY(-0.1em) rotate(-5deg) scale(1.06);
+    }
+  }
+
+  @keyframes flip {
+    from {
+      opacity: 0;
+      transform: translateY(0.25em) rotateX(-100deg);
+    }
   }
 
   /* The surname in italic vermilion, the one flourish on the page, set like metal type: it stands

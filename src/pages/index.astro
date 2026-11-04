@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
+import Stats from '../components/Stats.astro';
+import Ribbon from '../components/Ribbon.astro';
 import Work from '../components/Work.astro';
 import Projects from '../components/Projects.astro';
 import Freelance from '../components/Freelance.astro';
@@ -15,10 +17,13 @@ import Footer from '../components/Footer.astro';
   <main id="main" class="page">
     {/* Ordered by what a visitor needs first: who, proof of work, the offer, then the details. */}
     <Hero />
+    <Stats />
     <Work />
+    <Ribbon />
     <Projects />
     <Freelance />
     <Background />
+    <Ribbon flip />
     <Contact />
   </main>
   <Footer />

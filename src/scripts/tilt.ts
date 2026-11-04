@@ -18,3 +18,18 @@ export function tilt() {
     });
   }
 }
+
+// Buttons marked data-magnet lean toward a nearby pointer, then spring back when it leaves.
+export function magnet() {
+  if (!matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) return;
+
+  for (const button of document.querySelectorAll<HTMLElement>('[data-magnet]')) {
+    button.addEventListener('pointermove', (event) => {
+      const box = button.getBoundingClientRect();
+      const x = event.clientX - (box.left + box.width / 2);
+      const y = event.clientY - (box.top + box.height / 2);
+      button.style.translate = `${(x * 0.22).toFixed(1)}px ${(y * 0.32).toFixed(1)}px`;
+    });
+    button.addEventListener('pointerleave', () => button.style.removeProperty('translate'));
+  }
+}

@@ -83,9 +83,32 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.3 0 0 0 0 0.22 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-body > :not(.skip-link, script) {
+body > :not(.skip-link, script, .ambient) {
   position: relative;
   z-index: 1;
+}
+
+/* The ambient 3D layer (scripts/ambient.ts) sits between the paper and the page. */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1200ms var(--ease-out);
+}
+
+.ambient.is-ready {
+  opacity: 1;
+}
+
+/* On a phone the shapes pass behind the text itself, so they stay faint there. */
+@media (max-width: 48rem) {
+  .ambient.is-ready {
+    opacity: 0.45;
+  }
 }
 
 h1,
@@ -255,7 +278,8 @@ code,
       border-color 200ms,
       color 200ms,
       box-shadow 200ms var(--ease-out),
-      transform 200ms var(--ease-out);
+      transform 200ms var(--ease-out),
+      translate 300ms var(--ease-out);
   }
 }
 
@@ -276,6 +300,32 @@ code,
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+/* Each section's number stands above its rule, outlined in ink over a vermilion offset, like a
+   two-colour print slightly out of register. */
+main {
+  counter-reset: section;
+}
+
+.section-name {
+  counter-increment: section;
+}
+
+.section-name::after {
+  content: counter(section, decimal-leading-zero);
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.6rem);
+  color: transparent;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 2rem + 4vw, 6.5rem);
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.8;
+  -webkit-text-stroke: 1.5px var(--ink);
+  text-shadow: 0.07em 0.07em 0 var(--accent);
 }
 
 .section-name::before {
@@ -316,6 +366,26 @@ code,
 
 [data-tilt]:hover {
   box-shadow: 0.55rem 0.55rem 0 var(--ink);
+}
+
+/* Inside a lifted card the heading floats highest, then the links: three layers of paper. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  [data-tilt] {
+    transform-style: preserve-3d;
+  }
+
+  [data-tilt]:hover > :first-child {
+    transform: translateZ(2.5rem);
+  }
+
+  [data-tilt]:hover > :last-child {
+    transform: translateZ(1.2rem);
+  }
+
+  [data-tilt] > :first-child,
+  [data-tilt] > :last-child {
+    transition: transform 350ms var(--ease-out);
+  }
 }
 
 [data-tilt]:hover::after {

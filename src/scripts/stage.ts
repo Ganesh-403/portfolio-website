@@ -158,8 +158,11 @@ export async function mountStage(figure: HTMLElement) {
     look.x += (target.x - look.x) * 0.06;
     look.y += (target.y - look.y) * 0.06;
 
-    world.rotation.y = -0.32 + look.x * 0.28 + Math.sin(t * 0.35) * 0.05;
-    world.rotation.x = look.y * 0.06;
+    // Scrolling away swings the stage round and tips the card back, so it leaves in depth.
+    const hero = figure.closest('section');
+    const away = hero ? Math.min(Math.max(scrollY / hero.offsetHeight, 0), 1) : 0;
+    world.rotation.y = -0.32 + look.x * 0.28 + Math.sin(t * 0.35) * 0.05 + away * 0.8;
+    world.rotation.x = look.y * 0.06 + away * 0.25;
 
     // The card settles in, then floats; the weeks rise one after another.
     const settle = easeOut(t / 1.2);

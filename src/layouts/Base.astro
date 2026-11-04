@@ -67,10 +67,22 @@ const jsonLd = {
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
+    <canvas class="ambient" aria-hidden="true"></canvas>
     <slot />
     <script>
-      import { tilt } from '../scripts/tilt';
+      import { tilt, magnet } from '../scripts/tilt';
       tilt();
+      magnet();
+
+      // The ambient 3D layer is decoration: it loads once the page is idle, and not at all under
+      // reduced motion or Save-Data.
+      const ambient = document.querySelector<HTMLCanvasElement>('canvas.ambient');
+      const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+      if (ambient && !saveData && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+        const load = () => import('../scripts/ambient').then(({ mountAmbient }) => mountAmbient(ambient));
+        if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 2500 });
+        else setTimeout(load, 500);
+      }
     </script>
   </body>
 </html>
