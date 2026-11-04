@@ -14,7 +14,7 @@ import { person, offers } from '../data/profile';
   <ul class="offers">
     {
       offers.map((offer) => (
-        <li class="card">
+        <li class="card" data-tilt>
           <h3>{offer.title}</h3>
           <p>{offer.body}</p>
           <p class="proof">
@@ -36,7 +36,7 @@ import { person, offers } from '../data/profile';
       I work from Mumbai ({person.timezone}). Tell me what you're building and when you need it, and I'll tell you
       honestly whether I'm the right fit.
     </p>
-    <a class="button primary" href="#contact">Work with me</a>
+    <a class="button primary" href="#contact" data-magnet>Work with me</a>
   </div>
 </section>
 
@@ -45,16 +45,19 @@ import { person, offers } from '../data/profile';
     max-width: 18ch;
     font-family: var(--font-display);
     font-size: var(--step-4);
-    font-weight: 800;
     line-height: 0.95;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.03em;
     text-wrap: balance;
+    /* The type fades from the text colour into the signal colour, like light along a beam. */
+    background: linear-gradient(100deg, var(--fg) 30%, var(--accent));
+    background-clip: text;
+    color: transparent;
   }
 
   .lede {
     max-width: var(--measure);
     margin-top: 1.5rem;
-    color: var(--stone);
+    color: var(--muted);
     font-size: var(--step-1);
     line-height: 1.45;
   }
@@ -85,7 +88,7 @@ import { person, offers } from '../data/profile';
   }
 
   .offers li > p:not(.proof) {
-    color: var(--stone);
+    color: var(--muted);
     font-size: var(--step--1);
     line-height: 1.6;
   }
@@ -97,7 +100,7 @@ import { person, offers } from '../data/profile';
     gap: 0.4rem 0.6rem;
     margin-top: auto;
     padding-top: 0.75rem;
-    color: var(--stone);
+    color: var(--muted);
     font-size: 0.82rem;
   }
 
@@ -112,6 +115,6 @@ import { person, offers } from '../data/profile';
   .next p {
     flex: 1 1 22rem;
     max-width: var(--measure);
-    color: var(--stone);
+    color: var(--muted);
   }
 </style>

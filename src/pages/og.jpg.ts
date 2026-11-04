@@ -10,104 +10,103 @@ import sharp from 'sharp';
 import { person, leapview } from '../data/profile';
 
 const require = createRequire(import.meta.url);
-const font = (family: string, weight: number) =>
-  readFile(require.resolve(`@fontsource/${family}/files/${family}-latin-${weight}-normal.woff`));
+const font = (family: string, weight: number, style = 'normal') =>
+  readFile(require.resolve(`@fontsource/${family}/files/${family}-latin-${weight}-${style}.woff`));
 
 type Node = { type: string; props: { style?: Record<string, unknown>; children?: unknown } };
 const h = (type: string, style: Record<string, unknown>, children?: unknown): Node => ({ type, props: { style, children } });
 
 export const GET: APIRoute = async () => {
-  const [regular, display, photo] = await Promise.all([
+  const [regular, display, displayItalic, photo] = await Promise.all([
     font('atkinson-hyperlegible-next', 400),
-    font('bricolage-grotesque', 800),
+    font('instrument-serif', 400),
+    font('instrument-serif', 400, 'italic'),
     // Builds run from the project root; import.meta.url points into the build output.
     readFile(join(process.cwd(), 'src/assets/ganesh.jpg')),
   ]);
   const { mergedPRs } = leapview.stats;
-  // Same 12-week window as the site's charts.
-  const weekly = leapview.stats.weekly.slice(-12);
-  const max = Math.max(...weekly.map((w) => w.merged), 1);
-
-  const barWidth = 14;
-  const gap = 6;
-  const barHeight = 56;
-  const bars = h(
-    'div',
-    { display: 'flex', flexDirection: 'row', alignItems: 'flex-end', height: barHeight },
-    weekly.map((w, i) =>
-      h('div', {
-        display: 'flex',
-        flexShrink: 0,
-        width: barWidth,
-        height: Math.round(Math.max(3, (w.merged / max) * barHeight)),
-        marginLeft: i === 0 ? 0 : gap,
-        backgroundImage: 'linear-gradient(#f3c37c, #e2603a)',
-        borderRadius: 2,
-      }),
-    ),
-  );
-
+  const weeks = leapview.stats.weekly.map((w) => w.merged);
   const [first, ...rest] = person.name.split(' ');
-  const side = 430;
-  const text = h(
+
+  const text = h('div', { position: 'absolute', left: 80, top: 90, display: 'flex', flexDirection: 'column', width: 620 }, [
+    h('div', { fontFamily: 'Atkinson', fontSize: 22, color: '#a2a6c0', letterSpacing: 2 }, `${person.role.toUpperCase()} · ${person.company.toUpperCase()} · ${person.location.toUpperCase()}`),
+    h('div', { display: 'flex', flexDirection: 'column', marginTop: 26, fontFamily: 'Instrument Serif', fontSize: 150, lineHeight: 0.86, letterSpacing: -4 }, [
+      h('div', {}, first),
+      h('div', { color: '#c8ff4d', fontStyle: 'italic' }, rest.join(' ')),
+    ]),
+    h('div', { marginTop: 34, fontSize: 30, color: '#eeeef6', lineHeight: 1.3 }, 'I build software end to end, from first sketch to production.'),
+  ]);
+  const portrait = h(
     'div',
-    { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: 1040 - side - 64, height: side },
+    { position: 'absolute', left: 760, top: 95, display: 'flex', padding: 10, borderRadius: 26, backgroundColor: '#0c0e17', border: '1px solid rgba(255,255,255,0.14)' },
     [
-      h('div', { display: 'flex', flexDirection: 'column', gap: 22 }, [
-        h('div', { display: 'flex', flexDirection: 'column', fontFamily: 'Bricolage', fontSize: 104, fontWeight: 800, letterSpacing: -5, lineHeight: 0.9 }, [
-          h('div', {}, first),
-          h('div', { color: '#f3c37c' }, rest.join(' ')),
-        ]),
-        h('div', { fontSize: 32, color: '#a3a9b6', lineHeight: 1.3 }, `${person.role} at ${person.company}. I build software end to end, from first sketch to production.`),
-      ]),
-      h('div', { display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 20 }, [
-        bars,
-        h('div', { display: 'flex', flexDirection: 'column' }, [
-          h('div', { fontFamily: 'Bricolage', fontSize: 48, fontWeight: 800, lineHeight: 1 }, String(mergedPRs)),
-          h('div', { fontSize: 22, color: '#a3a9b6' }, 'merged pull requests in LeapView'),
-        ]),
-      ]),
+      {
+        type: 'img',
+        props: { src: `data:image/jpeg;base64,${photo.toString('base64')}`, width: 360, height: 360, style: { borderRadius: 18 } },
+      },
     ],
   );
-  const portrait = {
-    type: 'img',
-    props: {
-      src: `data:image/jpeg;base64,${photo.toString('base64')}`,
-      width: side,
-      height: side,
-      style: { borderRadius: 28 },
-    },
-  };
 
-  const tree = h(
+  // The hero's LeapView note: the count, then a bar per week with the busiest lit.
+  const busiest = Math.max(...weeks, 1);
+  const note = h(
     'div',
     {
-      // Satori sizes boxes as content-box, so the frame is sized explicitly rather than padded.
-      width: 1200 - 160,
-      height: 630 - 200,
-      margin: '100px 80px',
+      position: 'absolute',
+      left: 690,
+      top: 360,
       display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      color: '#efe8dd',
-      fontFamily: 'Atkinson',
+      flexDirection: 'column',
+      width: 250,
+      padding: '18px 20px',
+      borderRadius: 20,
+      backgroundColor: 'rgba(17,19,30,0.92)',
+      border: '1px solid rgba(255,255,255,0.14)',
     },
-    [text, portrait],
+    [
+      h('div', { fontSize: 16, color: '#a2a6c0' }, 'LeapView'),
+      h('div', { display: 'flex', alignItems: 'baseline', marginTop: 4 }, [
+        h('div', { fontFamily: 'Instrument Serif', fontStyle: 'italic', fontSize: 52, color: '#c8ff4d', lineHeight: 1 }, String(mergedPRs)),
+        h('div', { fontSize: 18, marginLeft: 10 }, 'merged PRs'),
+      ]),
+      h(
+        'div',
+        { display: 'flex', alignItems: 'flex-end', height: 44, marginTop: 10 },
+        weeks.map((w, i) =>
+          h('div', {
+            display: 'flex',
+            flex: 1,
+            height: Math.max(4, Math.round((w / busiest) * 44)),
+            marginLeft: i ? 4 : 0,
+            borderRadius: 2,
+            backgroundColor: w === busiest ? '#c8ff4d' : 'rgba(238,238,246,0.3)',
+          }),
+        ),
+      ),
+    ],
   );
 
-  // The lamp glow sits behind the photo, as on the page.
   const canvas = h(
     'div',
-    { width: '100%', height: '100%', display: 'flex', backgroundColor: '#0f1426', backgroundImage: 'radial-gradient(circle at 76% 50%, rgba(243, 195, 124, 0.16), rgba(15, 20, 38, 0) 55%)' },
-    tree,
+    {
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      position: 'relative',
+      backgroundColor: '#05060b',
+      backgroundImage: 'radial-gradient(circle at 85% 0%, rgba(139,123,255,0.35), rgba(5,6,11,0) 55%)',
+      color: '#eeeef6',
+      fontFamily: 'Atkinson',
+    },
+    [text, portrait, note],
   );
   const svg = await satori(canvas as Parameters<typeof satori>[0], {
     width: 1200,
     height: 630,
     fonts: [
       { name: 'Atkinson', data: regular, weight: 400, style: 'normal' },
-      { name: 'Bricolage', data: display, weight: 800, style: 'normal' },
+      { name: 'Instrument Serif', data: display, weight: 400, style: 'normal' },
+      { name: 'Instrument Serif', data: displayItalic, weight: 400, style: 'italic' },
     ],
   });
   const png = new Resvg(svg).render().asPng();

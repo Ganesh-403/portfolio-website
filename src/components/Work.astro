@@ -136,30 +136,30 @@ const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
   .title {
     font-size: var(--step-4);
-    font-weight: 800;
+    font-style: italic;
     line-height: 0.95;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.03em;
   }
 
   .title a {
-    color: var(--plaster);
+    color: var(--fg);
     text-decoration: none;
   }
 
   .title a:hover {
-    color: var(--lamp);
+    color: var(--accent);
   }
 
   .tagline {
     margin-top: 0.75rem;
-    color: var(--stone);
+    color: var(--muted);
     font-size: var(--step-1);
   }
 
   .summary {
     max-width: var(--measure);
     margin-top: 1.5rem;
-    color: var(--stone);
+    color: var(--muted);
   }
 
   .focus {
@@ -184,23 +184,23 @@ const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   [role='tab'] {
     min-height: 2.5rem;
     padding: 0.4rem 0.95rem;
-    border: 1px solid var(--line);
+    border: 1px solid var(--glass-line);
     border-radius: 999px;
-    background: transparent;
-    color: var(--plaster);
+    background: var(--glass);
+    color: var(--fg);
     font: inherit;
     font-size: 0.9rem;
     cursor: pointer;
   }
 
   [role='tab']:hover {
-    border-color: var(--stone);
+    border-color: var(--accent);
   }
 
   [role='tab'][aria-selected='true'] {
-    border-color: var(--lamp);
-    background: var(--lamp);
-    color: var(--on-lamp);
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
     font-weight: 650;
   }
 
@@ -234,7 +234,7 @@ const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
   .panel p {
     max-width: var(--measure);
-    color: var(--stone);
+    color: var(--muted);
   }
 
   /* A newly selected panel fades in. */
@@ -263,6 +263,6 @@ const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
   .also {
     margin-top: 1rem;
-    color: var(--stone);
+    color: var(--muted);
   }
 </style>

@@ -10,7 +10,7 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
   <ul class="grid">
     {
       projects.map((project) => (
-        <li class="project card">
+        <li class="project card" data-tilt>
           <div class="head">
             <h3>
               <a href={project.repo}>{project.name}</a>
@@ -22,13 +22,15 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
             ) : null}
           </div>
           <p class="summary">{project.summary}</p>
+          <ul class="chips" aria-label="Built with">
+            {project.stack.map((tool) => <li>{tool}</li>)}
+          </ul>
           <details class="disclosure how">
             <summary>
               How it works<span class="visually-hidden">: {project.name}</span>
             </summary>
             <div class="how-body">
               <p>{project.body}</p>
-              <p class="stack">{project.stack.join(', ')}</p>
             </div>
           </details>
           <p class="links">
@@ -83,10 +85,36 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
     }
   }
 
+  /* A bento: the first, fourth and sixth projects take two columns, so every row is full. */
   @media (min-width: 66rem) {
     .grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+
+    .project:is(:nth-child(1), :nth-child(4), :nth-child(6)) {
+      grid-column: span 2;
+    }
+
+    .project:nth-child(1) h3 {
+      font-size: var(--step-3);
+    }
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+
+  .chips li {
+    padding: 0.2rem 0.65rem;
+    border: 1px solid var(--glass-line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
   }
 
   .project {
@@ -95,16 +123,6 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
     min-height: 15rem;
     padding: 1.75rem;
     border-radius: var(--radius-sm);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .project {
-      transition: border-color 250ms;
-    }
-  }
-
-  .project:hover {
-    border-color: color-mix(in srgb, var(--lamp) 45%, var(--line));
   }
 
   .head {
@@ -116,28 +134,28 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
 
   h3 {
     font-size: var(--step-2);
-    font-weight: 750;
+    font-weight: 650;
   }
 
   h3 a {
-    color: var(--plaster);
+    color: var(--fg);
     text-decoration: none;
   }
 
   h3 a:hover {
-    color: var(--lamp);
+    color: var(--accent);
   }
 
   .stars {
     flex: none;
-    color: var(--lamp);
+    color: var(--accent);
     font-size: var(--step--1);
     font-variant-numeric: tabular-nums;
   }
 
   .summary {
     margin-top: 0.6rem;
-    color: var(--stone);
+    color: var(--muted);
   }
 
   .how {
@@ -149,7 +167,7 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
     align-items: center;
     gap: 0.6rem;
     min-height: 24px;
-    color: var(--stone);
+    color: var(--muted);
     font-size: var(--step--1);
   }
 
@@ -160,7 +178,7 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
   }
 
   .how > summary:hover {
-    color: var(--plaster);
+    color: var(--fg);
   }
 
   .how-body {
@@ -168,10 +186,6 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
     font-size: var(--step--1);
   }
 
-  .stack {
-    margin-top: 0.6rem;
-    color: var(--stone);
-  }
 
   /* Links sit at the bottom of the card, whatever the summary's length. */
   .links {
@@ -196,7 +210,7 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
   }
 
   .earlier > summary:hover {
-    color: var(--lamp);
+    color: var(--accent);
   }
 
   .more {

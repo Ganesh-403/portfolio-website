@@ -32,8 +32,8 @@ const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)
         <svg class="chart" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="bar-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" style="stop-color: var(--lamp)" />
-              <stop offset="1" style="stop-color: var(--ember)" />
+              <stop offset="0" style="stop-color: var(--accent)" />
+              <stop offset="1" style="stop-color: var(--accent-2)" />
             </linearGradient>
           </defs>
           {weekly.map((w, i) => {
@@ -122,29 +122,29 @@ const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)
     display: block;
     font-family: var(--font-display);
     font-size: var(--step-4);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 0.9;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.03em;
     font-variant-numeric: tabular-nums;
   }
 
   .unit {
     display: block;
     margin-top: 0.6rem;
-    color: var(--stone);
+    color: var(--muted);
     font-size: var(--step--1);
   }
 
   .readout {
     min-height: 1.6em;
     margin-top: 1.75rem;
-    color: var(--stone);
+    color: var(--muted);
     font-size: var(--step--1);
     font-variant-numeric: tabular-nums;
   }
 
   .readout.pointing {
-    color: var(--lamp);
+    color: var(--accent);
     font-weight: 650;
   }
 
@@ -213,7 +213,7 @@ const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)
     justify-content: space-between;
     gap: 1rem;
     margin-top: 0.5rem;
-    color: var(--stone);
+    color: var(--muted);
     font-size: 0.8rem;
   }
 
@@ -225,11 +225,11 @@ const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)
 
   .numbers > summary {
     padding-block: 0.75rem 0.25rem;
-    color: var(--stone);
+    color: var(--muted);
   }
 
   .numbers > summary:hover {
-    color: var(--plaster);
+    color: var(--fg);
   }
 
   /* No bottom margin: it would escape the animating panel and make it jump when it finishes. */
@@ -249,7 +249,7 @@ const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)
   }
 
   thead th {
-    color: var(--stone);
+    color: var(--muted);
   }
 
   td,

@@ -1,53 +1,93 @@
 ---
 import { Image } from 'astro:assets';
 import photo from '../assets/ganesh.jpg';
-import { person, hero, leapview } from '../data/profile';
-import { monthYear } from '../lib/format';
+import { person, hero, leapview, projects } from '../data/profile';
+import { dayMonth, monthYear } from '../lib/format';
 
-// Scanning order: the name, the one-line offer, the actions, then the proof. The photo sits beside
-// them on wide screens and after the actions on phones, so "Work with me" is on the first screen.
+// Scanning order: the name, who and where, the one-line offer, the actions. Beside them, the photo,
+// large, with three glass notes pinned around it, each something a visitor wants to know: how much
+// I ship at LeapView, what I build with, and what time it is for me right now.
 const [first, ...rest] = person.name.split(' ');
-const { mergedPRs, firstMerged } = leapview.stats;
+const last = rest.join(' ');
+const { mergedPRs, firstMerged, weekly } = leapview.stats;
+const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
+const busiest = weekly.reduce((top, w) => (w.merged > top.merged ? w : top), weekly[0]);
+const max = Math.max(busiest?.merged ?? 1, 1);
 
-// A sparkline of the same weeks the Work chart shows; the full, explorable chart lives there.
-const weekly = leapview.stats.weekly.slice(-12);
-const max = Math.max(...weekly.map((w) => w.merged), 1);
+// LeapView is Go on DuckDB; then the tools my own projects use most often.
+const counts = new Map<string, number>();
+for (const tool of projects.flatMap((p) => p.stack)) counts.set(tool, (counts.get(tool) ?? 0) + 1);
+const toolkit = ['Go', 'DuckDB', ...[...counts].sort((a, b) => b[1] - a[1]).map(([tool]) => tool)].slice(0, 6);
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-name">
-  <figure class="portrait">
-    <Image
-      src={photo}
-      alt={`${person.name} leaning on a balcony railing at night`}
-      widths={[400, 600, 700, 800]}
-      format="avif"
-      sizes="(min-width: 60rem) 36rem, calc(100vw - 2.25rem)"
-      loading="eager"
-      fetchpriority="high"
-    />
-    <figcaption>
-      <span>{person.location}</span>
-      <span class="time" data-local-time>{person.timezone}</span>
-    </figcaption>
-  </figure>
-
   <div class="text">
-    <h1 id="hero-name"><span>{first}</span> <span class="last">{rest.join(' ')}</span></h1>
-    <p class="role"><strong>{person.role}</strong> at <a href={person.companyUrl}>{person.company}</a></p>
+    <a class="status" href="#freelance"><span class="pulse" aria-hidden="true"></span>Taking on freelance projects</a>
+
+    <h1 id="hero-name">
+      <span class="visually-hidden">{person.name}</span>
+      <span class="word" aria-hidden="true">
+        {[...first].map((char, i) => <span class="char" style={`--i:${i}`}>{char}</span>)}
+      </span>
+      <span class="word last" aria-hidden="true">
+        {[...last].map((char, i) => <span class="char" style={`--i:${i + first.length}`}>{char}</span>)}
+      </span>
+    </h1>
+
+    <p class="role">
+      <strong>{person.role}</strong> at <a href={person.companyUrl}>{person.company}</a>
+      <span class="sep" aria-hidden="true">·</span>
+      {person.location}
+    </p>
     <p class="pitch">{hero.lede}</p>
     <div class="actions">
-      <a class="button primary" href="#contact">Work with me</a>
-      <a class="button" href={`mailto:${person.email}`}>Email</a>
-      <a class="button" href={person.links.github}>GitHub</a>
-      <a class="button" href={person.links.linkedin}>LinkedIn</a>
+      <a class="button primary" href="#contact" data-magnet>Work with me</a>
+      <a class="button" href={`mailto:${person.email}`} data-magnet>Email</a>
+      <a class="button" href={person.links.github} data-magnet>GitHub</a>
+      <a class="button" href={person.links.linkedin} data-magnet>LinkedIn</a>
     </div>
-    <a class="proof" href="#work">
-      <span class="spark" aria-hidden="true">
-        {weekly.map((w, i) => <i style={`--h:${Math.max(4, (w.merged / max) * 100)}%;--i:${i}`} />)}
+  </div>
+
+  <div class="visual" data-parallax>
+    <figure class="portrait card" data-tilt>
+      <Image
+        src={photo}
+        alt={`${person.name} leaning on a balcony railing at night`}
+        widths={[480, 640, 800]}
+        format="webp"
+        quality={92}
+        sizes="(min-width: 64rem) 30rem, calc(100vw - 2.5rem)"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <figcaption>
+        <span>{person.name}</span>
+        <span class="muted">{person.role}, {person.company}</span>
+      </figcaption>
+    </figure>
+
+    <a class="note pace" href="#work" style="--depth: 1.6">
+      <span class="label">LeapView, since {since}</span>
+      <span class="figure"><strong>{mergedPRs}</strong> merged pull requests</span>
+      <span class="bars" aria-hidden="true">
+        {weekly.map((w) => <i class:list={{ peak: w === busiest }} style={`--h:${Math.max(6, (w.merged / max) * 100)}%`} />)}
       </span>
-      <span class="proof-text">
-        <strong>{mergedPRs}</strong>
-        merged pull requests in LeapView since {firstMerged ? monthYear(firstMerged) : leapview.joined}
+      {busiest && <span class="label">Busiest week: {busiest.merged}, week of {dayMonth(busiest.week)}</span>}
+    </a>
+
+    <div class="note kit" style="--depth: 1">
+      <span class="label">What I build with</span>
+      <ul>
+        {toolkit.map((tool) => <li>{tool}</li>)}
+      </ul>
+    </div>
+
+    <a class="note clock" href={`mailto:${person.email}`} style="--depth: 2.2">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+      <span>
+        <span class="label">My time, {person.location.split(',')[0]}</span>
+        <strong class="time" data-local-time>{person.timezone}</strong>
+        <span class="label link">Email me</span>
       </span>
     </a>
   </div>
@@ -58,9 +98,19 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
   const el = document.querySelector<HTMLElement>('[data-local-time]');
   if (el) {
     const format = new Intl.DateTimeFormat('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
-    const tick = () => (el.textContent = `${format.format(new Date())} here`);
+    const tick = () => (el.textContent = format.format(new Date()));
     tick();
     setInterval(tick, 30_000);
+  }
+
+  // The notes sit at different depths: with a mouse they shift a few pixels against the pointer,
+  // nearer notes more. Nothing moves on its own.
+  const visual = document.querySelector<HTMLElement>('[data-parallax]');
+  if (visual && matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+    visual.closest('section')?.addEventListener('pointermove', (event) => {
+      visual.style.setProperty('--px', (event.clientX / innerWidth - 0.5).toFixed(3));
+      visual.style.setProperty('--py', (event.clientY / innerHeight - 0.5).toFixed(3));
+    });
   }
 </script>
 
@@ -68,93 +118,155 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
   .hero {
     display: grid;
     gap: 2.5rem;
-    padding-block: clamp(1.5rem, 1rem + 2vw, 2.5rem) clamp(3rem, 2rem + 4vw, 5.5rem);
+    align-content: center;
+    min-height: calc(100svh - 4.5rem);
+    padding-block: clamp(2rem, 1rem + 4vw, 4rem) clamp(2.5rem, 2rem + 3vw, 4rem);
   }
 
-  @media (min-width: 60rem) {
+  /* Wide screens: the text on the left, the photo and its notes on the right. */
+  @media (min-width: 64rem) {
     .hero {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
-      gap: clamp(3rem, 1rem + 4vw, 5rem);
-      align-items: center;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      grid-template-rows: 1fr auto;
+      column-gap: 4rem;
+    }
+
+    .text {
+      grid-row: 1;
+      align-self: center;
+    }
+
+    .visual {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      align-self: center;
     }
   }
 
-  /* Phones read the text first; the photo follows the actions. */
-  .portrait {
-    order: 1;
-    max-width: 36rem;
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.4rem 0.95rem 0.4rem 0.75rem;
+    border: 1px solid var(--glass-line);
+    border-radius: 999px;
+    background: var(--glass);
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    backdrop-filter: blur(12px);
   }
 
-  @media (min-width: 60rem) {
-    .portrait {
-      order: 0;
+  .status:hover {
+    border-color: var(--accent);
+  }
+
+  .pulse {
+    position: relative;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0.75rem var(--accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pulse::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: ping 2s var(--ease-out) infinite;
     }
   }
 
-  .portrait img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1;
-    border-radius: var(--radius);
-    background: var(--raised);
-    box-shadow: 0 2.5rem 7.5rem -2rem rgb(243 195 124 / 0.32);
-  }
-
-  figcaption {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 0.9rem;
-    color: var(--stone);
-    font-size: var(--step--1);
-  }
-
-  .time {
-    color: var(--lamp);
+  @keyframes ping {
+    to {
+      opacity: 0;
+      scale: 3;
+    }
   }
 
   h1 {
+    margin-top: 1.75rem;
     font-size: var(--step-5);
-    font-weight: 800;
     line-height: 0.86;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.035em;
   }
 
-  h1 span {
-    display: block;
-  }
-
+  /* The surname in italic, lit in the signal colour. */
   .last {
-    color: var(--lamp);
+    color: var(--accent);
+    font-style: italic;
+    text-shadow: 0 0 0.35em color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+
+  :global([data-theme='light']) .last {
+    text-shadow: none;
+  }
+
+  /* Each letter is its own piece of type: they flip up into place on load and lift when the
+     pointer passes over them. */
+  .word {
+    display: block;
+    perspective: 40rem;
+  }
+
+  .char {
+    display: inline-block;
+    transform-origin: 50% 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .char {
+      animation: flip 800ms var(--ease-out) backwards;
+      animation-delay: calc(var(--i) * 45ms);
+      transition: transform 350ms var(--ease-out);
+    }
+
+    .char:hover {
+      transform: translateY(-0.08em) rotate(-4deg);
+    }
+  }
+
+  @keyframes flip {
+    from {
+      opacity: 0;
+      filter: blur(12px);
+      transform: translateY(0.3em) rotateX(-90deg);
+    }
   }
 
   .role {
-    margin-top: 1.4rem;
-    color: var(--stone);
-    font-size: var(--step-1);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.6rem;
+    margin-top: 1.75rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
   }
 
   .role strong {
-    color: var(--plaster);
-    font-weight: 650;
+    color: var(--fg);
+    font-weight: 600;
   }
 
-  .role a {
-    color: var(--stone);
-  }
-
-  .role a:hover {
-    color: var(--lamp);
+  .sep {
+    opacity: 0.6;
   }
 
   .pitch {
-    max-width: 26ch;
-    margin-top: 1.75rem;
+    max-width: 30ch;
+    margin-top: 1.25rem;
     font-family: var(--font-display);
-    font-size: clamp(1.45rem, 1.1rem + 1.2vw, 2rem);
-    font-weight: 650;
-    line-height: 1.22;
-    letter-spacing: -0.015em;
+    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.4rem);
+    line-height: 1.15;
   }
 
   .actions {
@@ -162,17 +274,6 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
     flex-wrap: wrap;
     gap: 0.75rem;
     margin-top: 2.25rem;
-  }
-
-  /* Where the text column is narrowest, tighter buttons keep all four on one row. */
-  @media (min-width: 60rem) and (max-width: 72rem) {
-    .actions {
-      gap: 0.5rem;
-    }
-
-    .actions .button {
-      padding-inline: 1rem;
-    }
   }
 
   /* On phones the primary action takes its own row so the other three fit on one line. */
@@ -187,106 +288,277 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
     }
   }
 
-  .proof {
-    display: flex;
-    align-items: flex-end;
-    gap: 1rem;
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--line);
-    color: var(--stone);
-    font-size: var(--step--1);
+  /* The photo, large, in a glass frame, with the notes pinned over its edges. */
+  .visual {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding-block: clamp(2rem, 1rem + 5vw, 5rem);
+  }
+
+  .portrait {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 30rem);
+    padding: 0.7rem 0.7rem 0.9rem;
+  }
+
+  .portrait img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: calc(var(--radius) - 0.45rem);
+    object-fit: cover;
+  }
+
+  .portrait figcaption {
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.85rem 0.35rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* A note: a small glass card pinned over the photo's edge. */
+  .note {
+    position: absolute;
+    z-index: 2;
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--glass-line);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    color: var(--fg);
     text-decoration: none;
+    box-shadow: 0 1.5rem 3rem -1rem var(--haze);
+    backdrop-filter: blur(16px) saturate(150%);
+    translate: calc(var(--px, 0) * var(--depth) * -14px) calc(var(--py, 0) * var(--depth) * -14px);
   }
 
-  .proof:hover .proof-text {
-    color: var(--plaster);
+  a.note:hover {
+    border-color: var(--accent);
   }
 
-  .spark {
+  .label {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+
+  .note strong {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  /* How much I ship: the weekly counts as bars, the busiest in the signal colour. */
+  .pace {
+    top: 9%;
+    left: -2.5rem;
+    width: 14.5rem;
+  }
+
+  .figure {
     display: flex;
-    flex: none;
-    align-items: flex-end;
-    gap: 4px;
-    height: 2.75rem;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.85rem;
   }
 
-  .spark i {
-    width: 8px;
+  .figure strong {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 2.25rem;
+    margin-block: 0.2rem;
+  }
+
+  .bars i {
+    flex: 1;
     height: var(--h);
     border-radius: 2px;
-    background: var(--lamp);
-    transform-origin: bottom;
+    background: color-mix(in srgb, var(--fg) 30%, transparent);
   }
 
-  .proof-text strong {
-    display: block;
-    color: var(--plaster);
-    font-family: var(--font-display);
-    font-size: var(--step-2);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.03em;
+  .bars i.peak {
+    background: var(--accent);
+    box-shadow: 0 0 0.6rem color-mix(in srgb, var(--accent) 60%, transparent);
   }
 
-  /* The page's one orchestrated moment: the photo opens out, the lines under the name rise in
-     one after another, and the sparkline draws in. The name itself never waits. */
-  @media (prefers-reduced-motion: no-preference) {
-    /* backwards, not both: holding the last frame's clip-path would also clip the glow's shadow. */
-    .portrait img {
-      animation: open 1000ms var(--ease-out) backwards;
+  /* What I build with. */
+  .kit {
+    top: 44%;
+    right: -1.25rem;
+    width: 12rem;
+  }
+
+  .kit ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .kit li {
+    padding: 0.15rem 0.55rem;
+    border: 1px solid var(--glass-line);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+
+  /* My time now, for anyone deciding whether to write. */
+  .clock {
+    bottom: 24%;
+    left: -3rem;
+    grid-auto-flow: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .clock > span {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .clock svg {
+    width: 2rem;
+    height: 2rem;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+
+  .clock strong {
+    font-size: 1.6rem;
+  }
+
+  .link {
+    color: var(--accent);
+  }
+
+  /* Narrow screens: the photo keeps its whole width clear and the notes sit below it, the LeapView
+     note across the full width and the other two side by side. */
+  @media (max-width: 63.99rem) {
+    .visual {
+      justify-self: center;
+      width: min(100%, 30rem);
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      place-items: stretch;
+      padding-block: 0;
     }
 
+    .portrait {
+      grid-column: 1 / -1;
+      justify-self: center;
+    }
+
+    .note {
+      position: static;
+      width: auto;
+      padding: 0.8rem 0.9rem;
+      translate: none;
+    }
+
+    .pace {
+      grid-column: 1 / -1;
+    }
+
+    .clock {
+      align-content: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .note {
+      transition:
+        translate 500ms var(--ease-out),
+        border-color 200ms;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .status,
     .role,
     .pitch,
     .actions,
-    .proof {
-      animation: rise 600ms var(--ease-out) both;
+    .portrait,
+    .note {
+      animation: rise 900ms var(--ease-out) backwards;
     }
 
     .role {
-      animation-delay: 100ms;
+      animation-delay: 350ms;
     }
 
     .pitch {
-      animation-delay: 200ms;
+      animation-delay: 450ms;
     }
 
     .actions {
+      animation-delay: 550ms;
+    }
+
+    .portrait {
       animation-delay: 300ms;
     }
 
-    .proof {
-      animation-delay: 400ms;
+    .pace {
+      animation-delay: 650ms;
     }
 
-    .spark i {
-      animation: grow 600ms var(--ease-out) both;
-      animation-delay: calc(550ms + var(--i) * 45ms);
+    .kit {
+      animation-delay: 800ms;
     }
-  }
 
-  @keyframes open {
-    from {
-      clip-path: inset(7% 7% 7% 7% round 40px);
-      transform: scale(1.04);
+    .clock {
+      animation-delay: 950ms;
     }
-    to {
-      clip-path: inset(0 0 0 0 round var(--radius));
-      transform: none;
+
+    :global(.intro) .char {
+      animation-delay: calc(1100ms + var(--i) * 45ms);
+    }
+
+    :global(.intro) .status {
+      animation-delay: 1100ms;
+    }
+
+    :global(.intro) .role {
+      animation-delay: 1450ms;
+    }
+
+    :global(.intro) .pitch {
+      animation-delay: 1550ms;
+    }
+
+    :global(.intro) .actions {
+      animation-delay: 1650ms;
+    }
+
+    :global(.intro) .portrait {
+      animation-delay: 1400ms;
+    }
+
+    :global(.intro) .note {
+      animation-delay: 1800ms;
     }
   }
 
   @keyframes rise {
     from {
       opacity: 0;
-      transform: translateY(12px);
-    }
-  }
-
-  @keyframes grow {
-    from {
-      transform: scaleY(0);
+      filter: blur(8px);
+      transform: translateY(1.25rem);
     }
   }
 </style>

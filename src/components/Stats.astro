@@ -1,0 +1,164 @@
+---
+import github from '../data/github.json';
+import { leapview, projects, moreProjects, papers, person } from '../data/profile';
+
+// The numbers behind the page, as a row of glass readouts. All of them come from the data files.
+const ownStars = Object.entries(github.stars)
+  .filter(([repo]) => repo.startsWith(`${person.links.github.split('/').at(-1)}/`))
+  .reduce((sum, [, stars]) => sum + stars, 0);
+
+const stats = [
+  { value: leapview.stats.mergedPRs, label: 'merged pull requests in LeapView', href: '#work' },
+  { value: projects.length + moreProjects.length, label: 'projects built and shipped', href: '#projects' },
+  { value: ownStars, label: 'GitHub stars on my own projects', href: '#projects' },
+  { value: papers.length, label: 'research papers', href: '#background' },
+];
+---
+
+<section class="stats" aria-label="In numbers">
+  <ul>
+    {
+      stats.map((stat, i) => (
+        <li style={`--i:${i}`}>
+          <a class="block" href={stat.href} data-block>
+            <span class="face">
+              <strong data-count={stat.value}>{stat.value}</strong>
+              <span>{stat.label}</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script>
+  // Numbers count up the first time they come into view. The real value is in the HTML already.
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const numbers = document.querySelectorAll<HTMLElement>('[data-count]');
+  if (!still && 'IntersectionObserver' in window) {
+    const seen = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        seen.unobserve(entry.target);
+        const el = entry.target as HTMLElement;
+        const to = Number(el.dataset.count);
+        const start = performance.now();
+        const step = (now: number) => {
+          const t = Math.min((now - start) / 1400, 1);
+          el.textContent = String(Math.round(to * (1 - Math.pow(1 - t, 4))));
+          if (t < 1) requestAnimationFrame(step);
+        };
+        el.textContent = '0';
+        requestAnimationFrame(step);
+      }
+    });
+    numbers.forEach((el) => seen.observe(el));
+  }
+
+  // The readouts lean together toward the pointer.
+  const row = document.querySelector<HTMLElement>('.stats ul');
+  if (row && !still && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    addEventListener('pointermove', (event) => {
+      const x = event.clientX / innerWidth - 0.5;
+      const y = event.clientY / innerHeight - 0.5;
+      row.style.setProperty('--turn-y', `${(x * 10).toFixed(1)}deg`);
+      row.style.setProperty('--turn-x', `${(-y * 8).toFixed(1)}deg`);
+    });
+  }
+</script>
+
+<style>
+  .stats {
+    padding-block: 0 clamp(2rem, 1rem + 3vw, 4rem);
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    perspective: 70rem;
+  }
+
+  @media (min-width: 52rem) {
+    ul {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  li {
+    transform-style: preserve-3d;
+  }
+
+  /* A row of glass readouts; together they lean a few degrees toward the pointer. */
+  .block {
+    display: block;
+    height: 100%;
+    border: 1px solid var(--glass-line);
+    border-radius: var(--radius);
+    background: var(--glass);
+    color: var(--fg);
+    text-decoration: none;
+    backdrop-filter: blur(18px) saturate(140%);
+    transform: rotateX(var(--turn-x, 0deg)) rotateY(var(--turn-y, 0deg));
+  }
+
+  .block:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  }
+
+  .face {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: 100%;
+    padding: 1.4rem 1.4rem 1.25rem;
+  }
+
+  strong {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 2rem + 3vw, 5rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+
+  li:first-child strong {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .face span {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .block {
+      transition:
+        transform 600ms var(--ease-out),
+        border-color 300ms;
+    }
+
+    li {
+      animation: rise 900ms var(--ease-out) backwards;
+      animation-delay: calc(900ms + var(--i) * 110ms);
+    }
+
+    :global(.intro) li {
+      animation-delay: calc(2000ms + var(--i) * 110ms);
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      filter: blur(8px);
+      transform: translateY(1.5rem);
+    }
+  }
+</style>

@@ -201,7 +201,7 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
 
   .period {
     padding-top: 0.15rem;
-    color: var(--stone);
+    color: var(--muted);
     font-size: var(--step--1);
     font-variant-numeric: tabular-nums;
   }
@@ -216,12 +216,12 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
   }
 
   .role-details > summary:hover .title {
-    color: var(--lamp);
+    color: var(--accent);
   }
 
   .org,
   .note {
-    color: var(--stone);
+    color: var(--muted);
   }
 
   .kind {
@@ -229,7 +229,7 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
     margin-left: 0.5rem;
     padding: 0 0.55rem;
     border: 1px solid var(--line);
-    border-radius: 999px;
+    border-radius: var(--radius-sm);
     font-size: 0.78rem;
     vertical-align: 0.1em;
   }
@@ -238,7 +238,7 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
     padding: 0 0 1.25rem 1.1rem;
     list-style: disc;
     max-width: var(--measure);
-    color: var(--stone);
+    color: var(--muted);
   }
 
   @media (min-width: 44rem) {
@@ -253,7 +253,7 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
 
   .intro {
     margin-bottom: 1rem;
-    color: var(--stone);
+    color: var(--muted);
   }
 
   .list > li {
@@ -263,7 +263,7 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
   }
 
   .repo {
-    color: var(--stone);
+    color: var(--muted);
     font-size: 0.85rem;
   }
 
@@ -273,7 +273,7 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
 
   .body,
   .byline {
-    color: var(--stone);
+    color: var(--muted);
   }
 
   .byline {
@@ -286,15 +286,15 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
   }
 
   .paper-title a {
-    color: var(--plaster);
+    color: var(--fg);
   }
 
   .paper-title a:hover {
-    color: var(--lamp);
+    color: var(--accent);
   }
 
   .me {
-    color: var(--plaster);
+    color: var(--fg);
   }
 
   .recognition {
@@ -311,11 +311,11 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
   }
 
   .recognition > summary:hover .rec-title {
-    color: var(--lamp);
+    color: var(--accent);
   }
 
   .count {
-    color: var(--stone);
+    color: var(--muted);
     font-size: var(--step--1);
   }
 
@@ -337,13 +337,13 @@ const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one :
 
   .by {
     display: block;
-    color: var(--stone);
+    color: var(--muted);
     font-size: var(--step--1);
   }
 
   .languages {
     padding-top: 1rem;
     border-top: 1px solid var(--line);
-    color: var(--stone);
+    color: var(--muted);
   }
 </style>
