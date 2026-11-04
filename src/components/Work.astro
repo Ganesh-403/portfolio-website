@@ -124,25 +124,25 @@ const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   }
 
   .numbers-side {
-    border-top: 1px solid var(--ink);
+    border-top: 1px solid var(--line);
   }
 
   @media (min-width: 60rem) {
     .numbers-side {
       border-top: 0;
-      border-left: 1px solid var(--ink);
+      border-left: 1px solid var(--line);
     }
   }
 
   .title {
     font-size: var(--step-4);
-    font-weight: 700;
+    font-style: italic;
     line-height: 0.95;
     letter-spacing: -0.03em;
   }
 
   .title a {
-    color: var(--ink);
+    color: var(--fg);
     text-decoration: none;
   }
 
@@ -152,14 +152,14 @@ const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
   .tagline {
     margin-top: 0.75rem;
-    color: var(--graphite);
+    color: var(--muted);
     font-size: var(--step-1);
   }
 
   .summary {
     max-width: var(--measure);
     margin-top: 1.5rem;
-    color: var(--graphite);
+    color: var(--muted);
   }
 
   .focus {
@@ -184,17 +184,17 @@ const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   [role='tab'] {
     min-height: 2.5rem;
     padding: 0.4rem 0.95rem;
-    border: 1px solid var(--ink);
-    border-radius: var(--radius-sm);
-    background: transparent;
-    color: var(--ink);
+    border: 1px solid var(--glass-line);
+    border-radius: 999px;
+    background: var(--glass);
+    color: var(--fg);
     font: inherit;
     font-size: 0.9rem;
     cursor: pointer;
   }
 
   [role='tab']:hover {
-    background: var(--paper-shade);
+    border-color: var(--accent);
   }
 
   [role='tab'][aria-selected='true'] {
@@ -234,7 +234,7 @@ const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
   .panel p {
     max-width: var(--measure);
-    color: var(--graphite);
+    color: var(--muted);
   }
 
   /* A newly selected panel fades in. */
@@ -263,6 +263,6 @@ const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
   .also {
     margin-top: 1rem;
-    color: var(--graphite);
+    color: var(--muted);
   }
 </style>

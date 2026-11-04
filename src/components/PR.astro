@@ -30,9 +30,9 @@ const href = `https://github.com/${pr.repo}/pull/${pr.number}`;
     display: inline-block;
     min-height: 24px; /* WCAG 2.5.8 minimum target size */
     padding: 0.1rem 0.5rem;
-    border: 1px solid var(--rule);
+    border: 1px solid var(--line);
     border-radius: var(--radius-sm);
-    color: var(--graphite);
+    color: var(--muted);
     font-family: var(--font-mono);
     font-size: 0.8rem;
     line-height: 1.6;
@@ -50,7 +50,7 @@ const href = `https://github.com/${pr.repo}/pull/${pr.number}`;
     display: inline-flex;
     align-items: baseline;
     gap: 0.75rem;
-    color: var(--graphite);
+    color: var(--muted);
     font-size: var(--step--1);
     text-decoration: none;
   }
@@ -60,7 +60,7 @@ const href = `https://github.com/${pr.repo}/pull/${pr.number}`;
   }
 
   .line:hover .title {
-    color: var(--ink);
+    color: var(--fg);
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }

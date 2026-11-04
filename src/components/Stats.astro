@@ -2,7 +2,7 @@
 import github from '../data/github.json';
 import { leapview, projects, moreProjects, papers, person } from '../data/profile';
 
-// The numbers behind the page, each set on a solid block. All of them come from the data files.
+// The numbers behind the page, as a row of glass readouts. All of them come from the data files.
 const ownStars = Object.entries(github.stars)
   .filter(([repo]) => repo.startsWith(`${person.links.github.split('/').at(-1)}/`))
   .reduce((sum, [, stars]) => sum + stars, 0);
@@ -56,27 +56,27 @@ const stats = [
     numbers.forEach((el) => seen.observe(el));
   }
 
-  // The blocks turn together toward the pointer, like a row of type blocks on a table.
+  // The readouts lean together toward the pointer.
   const row = document.querySelector<HTMLElement>('.stats ul');
   if (row && !still && matchMedia('(hover: hover) and (pointer: fine)').matches) {
     addEventListener('pointermove', (event) => {
       const x = event.clientX / innerWidth - 0.5;
       const y = event.clientY / innerHeight - 0.5;
-      row.style.setProperty('--turn-y', `${(-18 + x * 16).toFixed(1)}deg`);
-      row.style.setProperty('--turn-x', `${(-16 + y * 10).toFixed(1)}deg`);
+      row.style.setProperty('--turn-y', `${(x * 10).toFixed(1)}deg`);
+      row.style.setProperty('--turn-x', `${(-y * 8).toFixed(1)}deg`);
     });
   }
 </script>
 
 <style>
   .stats {
-    padding-block: 1rem clamp(3rem, 2rem + 4vw, 5rem);
+    padding-block: 0 clamp(2rem, 1rem + 3vw, 4rem);
   }
 
   ul {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2.25rem 1.75rem;
+    gap: 1rem;
     perspective: 70rem;
   }
 
@@ -90,98 +90,75 @@ const stats = [
     transform-style: preserve-3d;
   }
 
-  /* A real box: the front face carries the number; the top and right side are its depth. */
+  /* A row of glass readouts; together they lean a few degrees toward the pointer. */
   .block {
-    --d: 1.6rem;
-    position: relative;
     display: block;
     height: 100%;
-    color: var(--ink);
+    border: 1px solid var(--glass-line);
+    border-radius: var(--radius);
+    background: var(--glass);
+    color: var(--fg);
     text-decoration: none;
-    transform-style: preserve-3d;
-    transform: rotateX(var(--turn-x, -16deg)) rotateY(var(--turn-y, -18deg));
+    backdrop-filter: blur(18px) saturate(140%);
+    transform: rotateX(var(--turn-x, 0deg)) rotateY(var(--turn-y, 0deg));
   }
 
-  .block::before,
-  .block::after {
-    content: '';
-    position: absolute;
-    border: 1px solid var(--ink);
-  }
-
-  .block::before {
-    inset: 0 0 auto;
-    height: var(--d);
-    background: var(--paper-shade);
-    transform-origin: top;
-    transform: rotateX(-90deg);
-  }
-
-  .block::after {
-    inset: 0 auto 0 100%;
-    width: var(--d);
-    background: var(--block);
-    transform-origin: left;
-    transform: rotateY(90deg);
-  }
-
-  /* The number block for the busiest stat is cut in vermilion. */
-  li:first-child .block::after {
-    background: var(--accent);
+  .block:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
   }
 
   .face {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.5rem;
     height: 100%;
-    padding: 1.25rem 1.25rem 1.1rem;
-    border: 1px solid var(--ink);
-    background: var(--paper-deep);
+    padding: 1.4rem 1.4rem 1.25rem;
   }
 
   strong {
     font-family: var(--font-display);
-    font-size: clamp(2.6rem, 1.8rem + 2.6vw, 4.25rem);
+    font-size: clamp(3rem, 2rem + 3vw, 5rem);
     font-variant-numeric: tabular-nums;
-    font-weight: 700;
-    line-height: 0.95;
+    font-weight: 400;
+    line-height: 0.9;
     letter-spacing: -0.03em;
   }
 
   li:first-child strong {
     color: var(--accent);
+    font-style: italic;
   }
 
   .face span {
-    color: var(--graphite);
-    font-size: var(--step--1);
-    line-height: 1.35;
-  }
-
-  .block:hover .face span {
-    color: var(--ink);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .block {
-      transition: transform 500ms var(--ease-out);
-    }
-
-    .block:hover {
-      transform: rotateX(-6deg) rotateY(-6deg) translateZ(1.5rem);
+      transition:
+        transform 600ms var(--ease-out),
+        border-color 300ms;
     }
 
     li {
-      animation: drop 900ms var(--ease-out) both;
-      animation-delay: calc(500ms + var(--i) * 110ms);
+      animation: rise 900ms var(--ease-out) backwards;
+      animation-delay: calc(900ms + var(--i) * 110ms);
+    }
+
+    :global(.intro) li {
+      animation-delay: calc(2000ms + var(--i) * 110ms);
     }
   }
 
-  @keyframes drop {
+  @keyframes rise {
     from {
       opacity: 0;
-      transform: translateY(-3rem) rotateX(-50deg);
+      filter: blur(8px);
+      transform: translateY(1.5rem);
     }
   }
 </style>

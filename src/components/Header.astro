@@ -24,6 +24,11 @@ const nav = [
         {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
       </ul>
     </nav>
+    <button class="find" type="button" data-palette-open aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5"></path></svg>
+      <span class="visually-hidden">Search and commands</span>
+      <kbd data-keys>Ctrl K</kbd>
+    </button>
     <button class="theme-switch" type="button" data-theme-switch aria-pressed="false">
       <span class="visually-hidden">Dark mode</span>
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -43,6 +48,11 @@ const nav = [
 <script>
   import { themeSwitch } from '../scripts/theme';
   themeSwitch();
+
+  // The palette's shortcut, written the way this keyboard says it.
+  if (/Mac|iPhone|iPad/.test(navigator.platform)) {
+    document.querySelectorAll('[data-keys]').forEach((kbd) => (kbd.textContent = '⌘K'));
+  }
 
   // On phones the nav scrolls sideways; keep a focused link fully in view.
   document.querySelector('nav')?.addEventListener('focusin', (event) => {
@@ -85,8 +95,8 @@ const nav = [
     position: absolute;
     inset: 0;
     z-index: -1;
-    border-bottom: 1px solid var(--ink);
-    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
     /* Unprefixed only: given both, the minifier keeps just the -webkit- copy, which Chromium
        ignores. Current Safari supports the unprefixed property. */
     backdrop-filter: blur(14px);
@@ -121,7 +131,7 @@ const nav = [
   }
 
   .home {
-    color: var(--ink);
+    color: var(--fg);
     font-family: var(--font-display);
     font-size: 1.45rem;
     font-style: italic;
@@ -142,16 +152,58 @@ const nav = [
     width: 2.75rem;
     height: 2.75rem;
     padding: 0;
-    border: 1px solid var(--ink);
+    border: 1px solid var(--glass-line);
     border-radius: 50%;
-    background: var(--paper);
-    color: var(--ink);
+    background: var(--glass);
+    color: var(--fg);
     cursor: pointer;
-    box-shadow: 0.15rem 0.15rem 0 var(--block);
   }
 
-  .theme-switch:hover {
+  .theme-switch:hover,
+  .find:hover {
+    border-color: var(--accent);
     color: var(--accent);
+  }
+
+  /* Opens the command palette; the keys are shown where there is room for them. */
+  .find {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding: 0 0.9rem;
+    border: 1px solid var(--glass-line);
+    border-radius: 999px;
+    background: var(--glass);
+    color: var(--fg);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .find svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .find kbd {
+    padding: 0.05rem 0.4rem;
+    border: 1px solid var(--line);
+    border-radius: 0.35rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+  }
+
+  @media (max-width: 48rem) {
+    .find kbd {
+      display: none;
+    }
   }
 
   .theme-switch svg {
@@ -219,7 +271,7 @@ const nav = [
     position: relative;
     display: inline-block;
     padding-block: 0.5rem;
-    color: var(--graphite);
+    color: var(--muted);
     font-size: 0.95rem;
     text-decoration: none;
     white-space: nowrap;
@@ -227,7 +279,7 @@ const nav = [
 
   nav a:hover,
   nav a[aria-current] {
-    color: var(--ink);
+    color: var(--fg);
   }
 
   /* The current section's link gets an underline that grows in from the left. */

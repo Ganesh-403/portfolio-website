@@ -33,7 +33,7 @@ const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)
           <defs>
             <linearGradient id="bar-fill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" style="stop-color: var(--accent)" />
-              <stop offset="1" style="stop-color: var(--ochre)" />
+              <stop offset="1" style="stop-color: var(--accent-2)" />
             </linearGradient>
           </defs>
           {weekly.map((w, i) => {
@@ -131,14 +131,14 @@ const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)
   .unit {
     display: block;
     margin-top: 0.6rem;
-    color: var(--graphite);
+    color: var(--muted);
     font-size: var(--step--1);
   }
 
   .readout {
     min-height: 1.6em;
     margin-top: 1.75rem;
-    color: var(--graphite);
+    color: var(--muted);
     font-size: var(--step--1);
     font-variant-numeric: tabular-nums;
   }
@@ -213,23 +213,23 @@ const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)
     justify-content: space-between;
     gap: 1rem;
     margin-top: 0.5rem;
-    color: var(--graphite);
+    color: var(--muted);
     font-size: 0.8rem;
   }
 
   .numbers {
     margin-top: 1rem;
-    border-top: 1px solid var(--rule);
+    border-top: 1px solid var(--line);
     font-size: var(--step--1);
   }
 
   .numbers > summary {
     padding-block: 0.75rem 0.25rem;
-    color: var(--graphite);
+    color: var(--muted);
   }
 
   .numbers > summary:hover {
-    color: var(--ink);
+    color: var(--fg);
   }
 
   /* No bottom margin: it would escape the animating panel and make it jump when it finishes. */
@@ -243,13 +243,13 @@ const resting = peak ? `Busiest week: ${peak.merged}, week of ${short(peak.week)
   th,
   td {
     padding: 0.3rem 0;
-    border-bottom: 1px solid var(--rule);
+    border-bottom: 1px solid var(--line);
     font-weight: 400;
     text-align: left;
   }
 
   thead th {
-    color: var(--graphite);
+    color: var(--muted);
   }
 
   td,

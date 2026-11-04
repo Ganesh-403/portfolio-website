@@ -76,9 +76,10 @@ import { person, contact } from '../data/profile';
     display: grid;
     gap: 2.5rem;
     padding: clamp(1.25rem, 1rem + 1.5vw, 2rem);
-    border: 1px solid var(--ink);
+    border: 1px solid var(--glass-line);
     border-radius: var(--radius);
-    background: var(--paper-deep);
+    background: var(--glass);
+    backdrop-filter: blur(18px) saturate(140%);
   }
 
   @media (min-width: 52rem) {
@@ -120,8 +121,8 @@ import { person, contact } from '../data/profile';
     padding: 0.7rem 0.85rem;
     border: 1px solid var(--field);
     border-radius: var(--radius-sm);
-    background: var(--paper);
-    color: var(--ink);
+    background: var(--bg);
+    color: var(--fg);
     font: inherit;
     font-weight: 400;
     font-size: var(--step-0);
@@ -129,7 +130,7 @@ import { person, contact } from '../data/profile';
 
   input:hover,
   textarea:hover {
-    border-color: var(--ink);
+    border-color: var(--fg);
   }
 
   input:focus-visible,
@@ -163,11 +164,11 @@ import { person, contact } from '../data/profile';
   .status {
     min-height: 1.6em;
     font-size: var(--step--1);
-    color: var(--graphite);
+    color: var(--muted);
   }
 
   .status[data-state='sent'] {
-    color: var(--ink);
+    color: var(--fg);
     font-weight: 650;
   }
 

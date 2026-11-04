@@ -1,31 +1,35 @@
-@import '@fontsource-variable/fraunces/full.css';
-@import '@fontsource-variable/fraunces/full-italic.css';
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
 @import '@fontsource-variable/atkinson-hyperlegible-next';
 @import '@fontsource-variable/atkinson-hyperlegible-mono';
 
-/* Broadsheet: the page reads like a well-set newspaper. Warm newsprint, ink-black type, hairline
-   rules between columns, and one vermilion for links and the things to act on.
-   Contrast (WCAG) on paper: ink 15.3:1, graphite 7:1, accent 5.4:1; field (form borders) 3.7:1.
-   Ochre is for graphics only.
-   Night press is the dark edition: the same page printed in cream on near-black, with a warmer
-   vermilion. On its paper: ink 16.3:1, graphite 8.4:1, accent 6.8:1, field 4.7:1.
-   --block is the solid under cards and buttons; --lamp the light that follows the pointer. */
+/* Constellation. The page floats in a deep field of points, one for each merged LeapView pull
+   request (scripts/sky.ts); the content sits on glass above it. Display type is Instrument Serif,
+   body text Atkinson Hyperlegible, data and labels Atkinson Mono.
+   Deep field (dark, the default): fg 17.5:1, muted 8.4:1, signal lime 17.2:1, field 4.3:1.
+   Daylight: fg 17.9:1, muted 7.6:1, indigo 6.5:1, field 3.6:1. Accent 2 is for graphics only.
+   --glass and --glass-line make the panels; --depth is their shadow; --glow the light that
+   follows the pointer. */
 :root {
-  --paper: #f4efe4;
-  --paper-deep: #ebe4d5;
-  --paper-shade: #e2d9c5;
-  --rule: #cdc3ae;
-  --field: #857a68;
-  --ink: #1b1916;
-  --graphite: #565048;
-  --accent: #b3311b;
-  --ochre: #d4891f;
-  --on-accent: #fffaf0;
-  --block: var(--ink);
-  --lamp: rgb(255 253 247 / 0.75);
-  --haze: rgb(27 25 22 / 0.28);
+  --bg: #05060b;
+  --surface: #0c0e17;
+  --surface-2: #151826;
+  --line: rgb(255 255 255 / 0.12);
+  --field: #6d7290;
+  --fg: #eeeef6;
+  --muted: #a2a6c0;
+  --accent: #c8ff4d;
+  --accent-2: #8b7bff;
+  --on-accent: #0b0d05;
+  --glass: rgb(255 255 255 / 0.035);
+  --glass-line: rgb(255 255 255 / 0.1);
+  --depth: rgb(0 0 0 / 0.55);
+  --glow: rgb(200 255 77 / 0.07);
+  --haze: rgb(0 0 0 / 0.6);
+  --aurora-1: rgb(139 123 255 / 0.2);
+  --aurora-2: rgb(200 255 77 / 0.07);
 
-  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-display: 'Instrument Serif', 'Times New Roman', serif;
   --font-sans: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
   --font-mono: 'Atkinson Hyperlegible Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
 
@@ -36,33 +40,36 @@
   --step-2: 1.758rem;
   --step-3: clamp(2.2rem, 1.6rem + 2.4vw, 3.5rem);
   --step-4: clamp(3rem, 2rem + 4vw, 5.5rem);
-  --step-5: clamp(4rem, 2rem + 7.6vw, 8.25rem);
+  --step-5: clamp(4.25rem, 2rem + 9vw, 10.5rem);
 
-  --page: 78rem;
+  --page: 80rem;
   --measure: 42rem;
   --gutter: clamp(1.125rem, 0.5rem + 2.5vw, 2.5rem);
-  /* Print has corners: just enough rounding to keep edges from looking sharp on screen. */
-  --radius: 3px;
-  --radius-sm: 2px;
+  --radius: 1.25rem;
+  --radius-sm: 0.6rem;
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
-  color-scheme: light;
+  color-scheme: dark;
 }
 
-:root[data-theme='dark'] {
-  --paper: #0f0e0c;
-  --paper-deep: #191714;
-  --paper-shade: #24211d;
-  --rule: #3a362f;
-  --field: #857c6e;
-  --ink: #f2ebdc;
-  --graphite: #b3aa99;
-  --accent: #ff6a45;
-  --ochre: #f0a640;
-  --on-accent: #170d09;
-  --block: #a8361d;
-  --lamp: rgb(255 106 69 / 0.13);
-  --haze: rgb(0 0 0 / 0.6);
-  color-scheme: dark;
+:root[data-theme='light'] {
+  --bg: #f4f4f8;
+  --surface: #ffffff;
+  --surface-2: #ebebf3;
+  --line: rgb(10 12 30 / 0.12);
+  --field: #7a7e96;
+  --fg: #0a0b14;
+  --muted: #4a4d63;
+  --accent: #4a35e8;
+  --accent-2: #0e9f8f;
+  --on-accent: #ffffff;
+  --glass: rgb(255 255 255 / 0.62);
+  --glass-line: rgb(10 12 30 / 0.1);
+  --depth: rgb(30 30 80 / 0.14);
+  --glow: rgb(74 53 232 / 0.07);
+  --haze: rgb(30 30 80 / 0.2);
+  --aurora-1: rgb(74 53 232 / 0.12);
+  --aurora-2: rgb(14 159 143 / 0.08);
+  color-scheme: light;
 }
 
 *,
@@ -86,8 +93,10 @@ html {
 
 body {
   margin: 0;
-  background: var(--paper);
-  color: var(--ink);
+  /* Instrument Serif has no bold; never let the browser fake one. */
+  font-synthesis-weight: none;
+  background: var(--bg);
+  color: var(--fg);
   font-family: var(--font-sans);
   font-size: var(--step-0);
   line-height: 1.6;
@@ -95,30 +104,25 @@ body {
   overflow-x: clip;
 }
 
-/* Newsprint: a faint grain over the paper, drawn once as an inline SVG. */
+/* Two soft auroras fixed behind everything, under the points. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.35;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.3 0 0 0 0 0.22 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background:
+    radial-gradient(60rem 40rem at 78% -12%, var(--aurora-1), transparent 62%),
+    radial-gradient(48rem 34rem at -8% 38%, var(--aurora-2), transparent 60%);
 }
 
-/* On the dark edition the grain is lighter specks instead of darker ones. */
-:root[data-theme='dark'] body::before {
-  opacity: 0.22;
-  filter: invert(1);
-}
-
-body > :not(.skip-link, script, .ambient, .intro-curtain, .cursor-ring) {
+body > :not(.skip-link, script, .sky, .intro-curtain, .cursor-ring, dialog) {
   position: relative;
   z-index: 1;
 }
 
-/* The ambient 3D layer (scripts/ambient.ts) sits between the paper and the page. */
-.ambient {
+/* The field of points (scripts/sky.ts), fixed behind the page. */
+.sky {
   position: fixed;
   inset: 0;
   z-index: 0;
@@ -126,18 +130,11 @@ body > :not(.skip-link, script, .ambient, .intro-curtain, .cursor-ring) {
   height: 100%;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 1200ms var(--ease-out);
+  transition: opacity 1400ms var(--ease-out);
 }
 
-.ambient.is-ready {
+.sky.is-ready {
   opacity: 1;
-}
-
-/* On a phone the shapes pass behind the text itself, so they stay faint there. */
-@media (max-width: 48rem) {
-  .ambient.is-ready {
-    opacity: 0.45;
-  }
 }
 
 h1,
@@ -160,17 +157,15 @@ ol {
   list-style: none;
 }
 
+/* Instrument Serif has one weight; size and italics carry the hierarchy. */
 h1,
 h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  font-optical-sizing: auto;
-  /* Fraunces' softness axis turned off, for a crisper, more bookish cut. */
-  font-variation-settings: 'SOFT' 0, 'WONK' 0;
-  font-weight: 600;
-  line-height: 1.08;
-  letter-spacing: -0.015em;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
@@ -197,7 +192,7 @@ a:hover {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 ::selection {
@@ -244,140 +239,102 @@ code,
   padding-inline: var(--gutter);
 }
 
-/* Buttons are links styled as actions; there is one primary per view. */
+/* Buttons are pills of glass; the one primary per view is lit in the signal colour. */
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   min-height: 3.1rem;
-  padding: 0.55rem 1.35rem;
-  border: 1px solid var(--ink);
-  border-radius: var(--radius-sm);
-  color: var(--ink);
+  padding: 0.55rem 1.4rem;
+  border: 1px solid var(--glass-line);
+  border-radius: 999px;
+  background: var(--glass);
+  color: var(--fg);
   font: inherit;
   font-size: 1rem;
   font-weight: 650;
   text-decoration: none;
-  background: transparent;
   cursor: pointer;
+  backdrop-filter: blur(12px);
 }
 
 .button:hover {
-  background: var(--ink);
-  color: var(--paper);
+  border-color: var(--accent);
+  color: var(--fg);
 }
 
 .button.primary {
-  background: var(--accent);
   border-color: var(--accent);
+  background: var(--accent);
   color: var(--on-accent);
+  box-shadow: 0 0.75rem 2.25rem -0.75rem var(--accent);
 }
 
 .button.primary:hover {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--paper);
-}
-
-/* Buttons are blocks of type standing on an ink base: they lift toward the pointer and press flat
-   when clicked. */
-.button {
-  box-shadow: 0.2rem 0.2rem 0 var(--block);
-}
-
-.button:hover {
-  box-shadow: 0.35rem 0.35rem 0 var(--block);
-  transform: translate(-0.15rem, -0.15rem);
-}
-
-.button.primary:hover {
-  box-shadow: 0.35rem 0.35rem 0 var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 1rem 3rem -0.5rem var(--accent);
 }
 
 .button:active {
-  box-shadow: 0 0 0 var(--block);
-  transform: translate(0.2rem, 0.2rem);
+  scale: 0.96;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .button {
     transition:
-      background-color 200ms,
       border-color 200ms,
-      color 200ms,
-      box-shadow 200ms var(--ease-out),
-      transform 200ms var(--ease-out),
+      box-shadow 300ms var(--ease-out),
+      scale 200ms var(--ease-out),
       translate 300ms var(--ease-out);
   }
 }
 
-/* A section: a heavy ink rule across the page with a hairline under it, like a newspaper
-   section, then its name in small capitals. */
+/* A section opens with its name set large in the serif, numbered in mono above it. */
 .section {
-  padding-block: clamp(3.5rem, 2.5rem + 4vw, 7rem);
+  padding-block: clamp(4rem, 3rem + 5vw, 8.5rem);
 }
 
-.section-name {
-  position: relative;
-  margin-bottom: 2rem;
-  padding-top: 0.85rem;
-  border-top: 3px solid var(--ink);
-  color: var(--ink);
-  font-family: var(--font-mono);
-  font-size: var(--step--1);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-/* Each section's number stands above its rule, outlined in ink over a vermilion offset, like a
-   two-colour print slightly out of register. */
 main {
   counter-reset: section;
 }
 
 .section-name {
   counter-increment: section;
-}
-
-.section-name::after {
-  content: counter(section, decimal-leading-zero);
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 0.6rem);
-  color: transparent;
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 2rem + 4vw, 6.5rem);
-  font-style: italic;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 0.8;
-  -webkit-text-stroke: 1.5px var(--ink);
-  text-shadow: 0.07em 0.07em 0 var(--accent);
+  margin-bottom: clamp(2rem, 1.5rem + 2vw, 3.25rem);
+  color: var(--fg);
+  font-size: var(--step-4);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
 }
 
 .section-name::before {
-  content: '';
-  position: absolute;
-  inset: 4px 0 auto;
-  border-top: 1px solid var(--ink);
+  content: counter(section, decimal-leading-zero) ' /';
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.16em;
 }
 
-/* A card: a ruled box on slightly deeper paper, where everything substantial sits. */
+/* A card is a pane of glass over the field: the points show through, blurred. */
 .card {
-  border: 1px solid var(--ink);
+  border: 1px solid var(--glass-line);
   border-radius: var(--radius);
   /* A pool of light follows the pointer across every card at once (scripts/pointer.ts). */
   background:
-    radial-gradient(32rem circle at var(--mx, -50rem) var(--my, -50rem), var(--lamp), transparent 45%),
-    var(--paper-deep);
-  /* Every card sits on a thin ink block, so the page has layers even at rest. */
-  box-shadow: 0.3rem 0.3rem 0 var(--block);
+    radial-gradient(30rem circle at var(--mx, -50rem) var(--my, -50rem), var(--glow), transparent 45%),
+    var(--glass);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 2rem 4rem -2rem var(--depth);
+  backdrop-filter: blur(18px) saturate(140%);
 }
 
-/* A card that tilts toward the pointer (see scripts/tilt.ts). At rest it lies flat; lifted, its
-   ink block shows and a soft light follows the pointer across the paper. */
+/* A card that tilts toward the pointer (see scripts/tilt.ts), with a sheen that follows it. */
 [data-tilt] {
   position: relative;
   transform: perspective(60rem) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
@@ -387,20 +344,20 @@ main {
   content: '';
   position: absolute;
   inset: 0;
-  /* Under the text: the light falls on the paper, never over the words. The card's transform makes
-     it a stacking context, so -1 still paints above the card's own background. */
+  /* Under the text: the card's transform makes it a stacking context, so -1 still paints above
+     the card's own background. */
   z-index: -1;
   border-radius: inherit;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), var(--lamp), transparent 55%);
+  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), var(--glow), transparent 60%);
 }
 
 [data-tilt]:hover {
-  box-shadow: 0.55rem 0.55rem 0 var(--block);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
-/* Inside a lifted card the heading floats highest, then the links: three layers of paper. */
+/* Inside a lifted card the heading floats highest, then the links. */
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   [data-tilt] {
     transform-style: preserve-3d;
@@ -428,7 +385,7 @@ main {
   [data-tilt] {
     transition:
       transform 180ms var(--ease-out),
-      box-shadow 250ms var(--ease-out);
+      border-color 300ms;
   }
 
   [data-tilt]::after {
@@ -436,32 +393,32 @@ main {
   }
 }
 
-/* Sections fold up off the page as they scroll in, where the browser can tie motion to scrolling. */
+/* Sections come into focus as they scroll in: they rise out of a blur. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .section > * {
-      transform-origin: 50% 0;
-      animation: unfold linear both;
+      animation: focus linear both;
     }
 
     /* A separate rule: the minifier would otherwise fold the timeline into the animation
        shorthand, which browsers reject. */
     .page .section > * {
       animation-timeline: view();
-      animation-range: entry 0% entry 80%;
+      animation-range: entry 0% entry 70%;
     }
   }
 }
 
-@keyframes unfold {
+@keyframes focus {
   from {
     opacity: 0;
-    transform: perspective(70rem) rotateX(22deg) translateY(2.5rem);
+    filter: blur(10px);
+    transform: translateY(3rem) scale(0.97);
   }
 }
 
 .muted {
-  color: var(--graphite);
+  color: var(--muted);
 }
 
 /* Disclosure: a native <details> whose summary is the line people scan and whose content is the
@@ -486,7 +443,7 @@ main {
   width: 0.8rem;
   height: 0.8rem;
   margin-left: auto;
-  color: var(--graphite);
+  color: var(--muted);
   background:
     linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat,
     linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat;
@@ -571,8 +528,8 @@ main {
   opacity: 0;
 }
 
-/* The masthead intro, once per session: the monogram and a count to 100 on the page colour, then
-   the sheet lifts away. It exists only when the head script adds .intro, so without JavaScript
+/* The intro, once per session: the monogram and a count to 100 in the dark, then it parts like
+   a shutter. It exists only when the head script adds .intro, so without JavaScript
    or with reduced motion there is nothing to wait for. */
 .intro-curtain {
   display: none;
@@ -592,8 +549,8 @@ main {
   place-content: center;
   justify-items: center;
   gap: 1rem;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--bg);
+  color: var(--fg);
   pointer-events: none;
   animation: lift 800ms 1000ms cubic-bezier(0.7, 0, 0.2, 1) forwards;
 }
@@ -602,9 +559,8 @@ main {
   font-family: var(--font-display);
   font-size: clamp(4rem, 3rem + 6vw, 9rem);
   font-style: italic;
-  font-weight: 700;
   line-height: 1;
-  text-shadow: 0.05em 0.05em 0 var(--accent);
+  text-shadow: 0 0 0.5em color-mix(in srgb, var(--accent) 50%, transparent);
   animation: rise 700ms var(--ease-out) both;
 }
 
@@ -628,7 +584,7 @@ main {
 
 @keyframes lift {
   to {
-    clip-path: inset(0 0 100% 0);
+    clip-path: inset(50% 0 50% 0);
     visibility: hidden;
   }
 }

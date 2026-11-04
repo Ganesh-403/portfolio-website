@@ -1,44 +1,22 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 import photo from '../assets/ganesh.jpg';
 import { person, hero, leapview } from '../data/profile';
 import { monthYear } from '../lib/format';
 
-// Scanning order: the name, the one-line offer, the actions, then the proof. The photo sits beside
-// them on wide screens and after the actions on phones, so "Work with me" is on the first screen.
+// Scanning order: the name, who and where, the one-line offer, the actions. The galaxy of pull
+// requests fills the right of the screen (scripts/sky.ts); the legend under the actions says
+// what it is. The photo is a small glass card beside it.
 const [first, ...rest] = person.name.split(' ');
 const last = rest.join(' ');
 const { mergedPRs, firstMerged } = leapview.stats;
-
-// A sparkline of the same weeks the Work chart shows; the full, explorable chart lives there.
-const weekly = leapview.stats.weekly.slice(-12);
-const max = Math.max(...weekly.map((w) => w.merged), 1);
-
-// The 3D stage prints the photo onto a card, so it needs one plain texture of it.
-const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
+const since = firstMerged ? monthYear(firstMerged) : leapview.joined;
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-name">
-  <figure class="portrait" data-stage data-texture={texture.src} data-weeks={JSON.stringify(leapview.stats.weekly.map((w) => w.merged))}>
-    <div class="frame">
-      <Image
-        src={photo}
-        alt={`${person.name} leaning on a balcony railing at night`}
-        widths={[400, 600, 700, 800]}
-        format="avif"
-        sizes="(min-width: 60rem) 36rem, calc(100vw - 2.25rem)"
-        loading="eager"
-      fetchpriority="high"
-      />
-      <canvas aria-hidden="true"></canvas>
-    </div>
-    <figcaption>
-      <span>{person.location}</span>
-      <span class="time" data-local-time>{person.timezone}</span>
-    </figcaption>
-  </figure>
-
   <div class="text">
+    <a class="status" href="#freelance"><span class="pulse" aria-hidden="true"></span>Taking on freelance projects</a>
+
     <h1 id="hero-name">
       <span class="visually-hidden">{person.name}</span>
       <span class="word" aria-hidden="true">
@@ -48,7 +26,14 @@ const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
         {[...last].map((char, i) => <span class="char" style={`--i:${i + first.length}`}>{char}</span>)}
       </span>
     </h1>
-    <p class="role"><strong>{person.role}</strong> at <a href={person.companyUrl}>{person.company}</a></p>
+
+    <p class="role">
+      <strong>{person.role}</strong> at <a href={person.companyUrl}>{person.company}</a>
+      <span class="sep" aria-hidden="true">·</span>
+      {person.location}
+      <span class="sep" aria-hidden="true">·</span>
+      <span class="time" data-local-time>{person.timezone}</span>
+    </p>
     <p class="pitch">{hero.lede}</p>
     <div class="actions">
       <a class="button primary" href="#contact" data-magnet>Work with me</a>
@@ -56,16 +41,32 @@ const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
       <a class="button" href={person.links.github} data-magnet>GitHub</a>
       <a class="button" href={person.links.linkedin} data-magnet>LinkedIn</a>
     </div>
-    <a class="proof" href="#work">
-      <span class="spark" aria-hidden="true">
-        {weekly.map((w, i) => <i style={`--h:${Math.max(4, (w.merged / max) * 100)}%;--i:${i}`} />)}
-      </span>
-      <span class="proof-text">
-        <strong>{mergedPRs}</strong>
-        merged pull requests in LeapView since {firstMerged ? monthYear(firstMerged) : leapview.joined}
-      </span>
-    </a>
   </div>
+
+  <figure class="id card" data-tilt>
+    <Image
+      src={photo}
+      alt={`${person.name} leaning on a balcony railing at night`}
+      widths={[240, 360, 480]}
+      format="avif"
+      sizes="15rem"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <figcaption>
+      <span>{person.name}</span>
+      <span class="muted">{person.role}, {person.company}</span>
+    </figcaption>
+  </figure>
+
+  <p class="legend">
+    <span class="swatch" aria-hidden="true"></span>
+    <span>
+      Each point of light behind this page is one of my <strong>{mergedPRs}</strong> merged pull requests in
+      <a href={leapview.url}>LeapView</a> since {since}, coloured from my first week to my latest. Scroll, and they
+      rearrange for every section.
+    </span>
+  </p>
 </section>
 
 <script>
@@ -77,123 +78,109 @@ const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
     tick();
     setInterval(tick, 30_000);
   }
-
-  // The 3D stage loads after the page is idle, so the photo is the first paint and Three.js never
-  // delays it. On a phone saving data, or without WebGL, the flat photo stays.
-  const stage = document.querySelector<HTMLElement>('[data-stage]');
-  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-  if (stage && !saveData) {
-    const load = () => import('../scripts/stage').then(({ mountStage }) => mountStage(stage));
-    if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 2000 });
-    else setTimeout(load, 300);
-  }
 </script>
 
 <style>
   .hero {
     display: grid;
     gap: 2.5rem;
-    padding-block: clamp(1.5rem, 1rem + 2vw, 2.5rem) clamp(3rem, 2rem + 4vw, 5.5rem);
+    align-content: center;
+    min-height: calc(100svh - 4.5rem);
+    padding-block: clamp(2rem, 1rem + 4vw, 4rem) clamp(2.5rem, 2rem + 3vw, 4rem);
   }
 
-  @media (min-width: 60rem) {
+  /* Wide screens: the text on the left, the galaxy behind the right half, the card below it. */
+  @media (min-width: 64rem) {
     .hero {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
-      gap: clamp(3rem, 1rem + 4vw, 5rem);
-      align-items: center;
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      grid-template-rows: 1fr auto;
+      column-gap: 3rem;
+    }
+
+    .text {
+      grid-row: 1;
+      align-self: center;
+    }
+
+    .id {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      align-self: end;
+      justify-self: end;
+    }
+
+    .legend {
+      grid-column: 1;
+      grid-row: 2;
     }
   }
 
-  /* Phones read the text first; the photo follows the actions. */
-  .portrait {
-    order: 1;
-    max-width: 36rem;
-  }
-
-  @media (min-width: 60rem) {
-    .portrait {
-      order: 0;
-    }
-  }
-
-  /* A printed photograph: a hairline frame and a solid ink block offset behind it. */
-  .portrait img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1;
-    border: 1px solid var(--ink);
-    border-radius: var(--radius);
-    background: var(--paper-deep);
-    box-shadow: 0.75rem 0.75rem 0 var(--block);
-  }
-
-  /* The 3D stage draws over the photo and bleeds past it, so the blocks and shadows have room.
-     The photo stays underneath for screen readers and as the fallback. */
-  .frame {
-    position: relative;
-  }
-
-  canvas {
-    position: absolute;
-    inset: -8% -5% -6%;
-    width: 110%;
-    height: 114%;
-    pointer-events: none;
-    opacity: 0;
-    /* Shadows fade out before the canvas edge instead of stopping at it. */
-    mask-image: linear-gradient(to right, #000 82%, transparent), linear-gradient(to bottom, #000 88%, transparent);
-    mask-composite: intersect;
-  }
-
-  @media (min-width: 60rem) {
-    canvas {
-      inset: -12% -14% -8% -10%;
-      width: 124%;
-      height: 120%;
-    }
-  }
-
-  .is-3d canvas {
-    opacity: 1;
-  }
-
-  .is-3d img {
-    opacity: 0;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    canvas,
-    .portrait img {
-      transition: opacity 600ms var(--ease-out);
-    }
-  }
-
-  figcaption {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1.6rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid var(--rule);
-    color: var(--graphite);
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.4rem 0.95rem 0.4rem 0.75rem;
+    border: 1px solid var(--glass-line);
+    border-radius: 999px;
+    background: var(--glass);
+    color: var(--fg);
     font-family: var(--font-mono);
     font-size: 0.8rem;
     letter-spacing: 0.06em;
-    text-transform: uppercase;
+    text-decoration: none;
+    backdrop-filter: blur(12px);
   }
 
-  .time {
-    color: var(--accent);
+  .status:hover {
+    border-color: var(--accent);
+  }
+
+  .pulse {
+    position: relative;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0.75rem var(--accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pulse::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: ping 2s var(--ease-out) infinite;
+    }
+  }
+
+  @keyframes ping {
+    to {
+      opacity: 0;
+      scale: 3;
+    }
   }
 
   h1 {
+    margin-top: 1.75rem;
     font-size: var(--step-5);
-    font-weight: 700;
-    line-height: 0.88;
+    line-height: 0.86;
     letter-spacing: -0.035em;
   }
 
-  /* Each letter is its own block of type: they flip up into place on load, and lift when the
+  /* The surname in italic, lit in the signal colour. */
+  .last {
+    color: var(--accent);
+    font-style: italic;
+    text-shadow: 0 0 0.35em color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+
+  :global([data-theme='light']) .last {
+    text-shadow: none;
+  }
+
+  /* Each letter is its own piece of type: they flip up into place on load and lift when the
      pointer passes over them. */
   .word {
     display: block;
@@ -207,78 +194,55 @@ const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
 
   @media (prefers-reduced-motion: no-preference) {
     .char {
-      animation: flip 700ms var(--ease-out) backwards;
-      animation-delay: calc(var(--i) * 40ms);
+      animation: flip 800ms var(--ease-out) backwards;
+      animation-delay: calc(var(--i) * 45ms);
       transition: transform 350ms var(--ease-out);
     }
 
     .char:hover {
-      transform: translateY(-0.1em) rotate(-5deg) scale(1.06);
+      transform: translateY(-0.08em) rotate(-4deg);
     }
-  }
-
-  :global(.intro) .char {
-    animation-delay: calc(1300ms + var(--i) * 40ms);
-  }
-
-  :global(.intro) .portrait img,
-  :global(.intro) .role,
-  :global(.intro) .pitch,
-  :global(.intro) .actions,
-  :global(.intro) .proof {
-    animation-delay: 1300ms;
   }
 
   @keyframes flip {
     from {
       opacity: 0;
-      transform: translateY(0.25em) rotateX(-100deg);
+      filter: blur(12px);
+      transform: translateY(0.3em) rotateX(-90deg);
     }
   }
 
-  /* The surname in italic vermilion, the one flourish on the page, set like metal type: it stands
-     off the page on a block of ink, one pixel per layer. */
-  .last {
-    color: var(--accent);
-    font-style: italic;
-    font-weight: 600;
-    text-shadow:
-      1px 1px 0 var(--ink),
-      2px 2px 0 var(--ink),
-      3px 3px 0 var(--ink),
-      4px 4px 0 var(--ink),
-      5px 5px 0 var(--ink),
-      6px 6px 0 var(--ink),
-      7px 7px 14px var(--haze);
-  }
-
   .role {
-    margin-top: 1.4rem;
-    color: var(--graphite);
-    font-size: var(--step-1);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.6rem;
+    margin-top: 1.75rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
   }
 
   .role strong {
-    color: var(--ink);
-    font-weight: 650;
+    color: var(--fg);
+    font-weight: 600;
   }
 
-  .role a {
-    color: var(--graphite);
+  .sep {
+    opacity: 0.6;
   }
 
-  .role a:hover {
+  .time {
     color: var(--accent);
   }
 
   .pitch {
-    max-width: 26ch;
-    margin-top: 1.75rem;
+    max-width: 30ch;
+    margin-top: 1.25rem;
     font-family: var(--font-display);
-    font-size: clamp(1.45rem, 1.1rem + 1.2vw, 2rem);
-    font-weight: 500;
-    line-height: 1.22;
-    letter-spacing: -0.01em;
+    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.4rem);
+    line-height: 1.15;
   }
 
   .actions {
@@ -286,17 +250,6 @@ const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
     flex-wrap: wrap;
     gap: 0.75rem;
     margin-top: 2.25rem;
-  }
-
-  /* Where the text column is narrowest, tighter buttons keep all four on one row. */
-  @media (min-width: 60rem) and (max-width: 72rem) {
-    .actions {
-      gap: 0.5rem;
-    }
-
-    .actions .button {
-      padding-inline: 1rem;
-    }
   }
 
   /* On phones the primary action takes its own row so the other three fit on one line. */
@@ -311,105 +264,116 @@ const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
     }
   }
 
-  .proof {
+  /* The photo, as a glass ID card. */
+  .id {
+    width: min(100%, 17rem);
+    padding: 0.75rem 0.75rem 1rem;
+  }
+
+  .id img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: calc(var(--radius) - 0.5rem);
+    object-fit: cover;
+  }
+
+  .id figcaption {
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.85rem 0.35rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+
+  .legend {
     display: flex;
-    align-items: flex-end;
-    gap: 1rem;
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--ink);
-    color: var(--graphite);
+    gap: 0.9rem;
+    max-width: 40rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
     font-size: var(--step--1);
-    text-decoration: none;
   }
 
-  .proof:hover .proof-text {
-    color: var(--ink);
+  .legend strong {
+    color: var(--fg);
   }
 
-  .spark {
-    display: flex;
+  /* A swatch of the colour scale the points use, oldest to newest. */
+  .swatch {
     flex: none;
-    align-items: flex-end;
-    gap: 4px;
-    height: 2.75rem;
+    width: 0.6rem;
+    margin-block: 0.3rem;
+    border-radius: 999px;
+    background: linear-gradient(var(--accent-2), var(--accent));
   }
 
-  .spark i {
-    width: 8px;
-    height: var(--h);
-    background: var(--ink);
-    transform-origin: bottom;
-  }
-
-  .proof-text strong {
-    display: block;
-    color: var(--ink);
-    font-family: var(--font-display);
-    font-size: var(--step-2);
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
-
-  /* The page's one orchestrated moment: the photo opens out, the lines under the name rise in
-     one after another, and the sparkline draws in. The name itself never waits. */
   @media (prefers-reduced-motion: no-preference) {
-    /* backwards, not both: holding the last frame's clip-path would also clip the offset block. */
-    .portrait img {
-      animation: open 1000ms var(--ease-out) backwards;
-    }
-
+    .status,
     .role,
     .pitch,
     .actions,
-    .proof {
-      animation: rise 600ms var(--ease-out) both;
+    .id,
+    .legend {
+      animation: rise 900ms var(--ease-out) backwards;
     }
 
     .role {
-      animation-delay: 100ms;
+      animation-delay: 350ms;
     }
 
     .pitch {
-      animation-delay: 200ms;
+      animation-delay: 450ms;
     }
 
     .actions {
-      animation-delay: 300ms;
+      animation-delay: 550ms;
     }
 
-    .proof {
-      animation-delay: 400ms;
+    .id {
+      animation-delay: 700ms;
     }
 
-    .spark i {
-      animation: grow 600ms var(--ease-out) both;
-      animation-delay: calc(550ms + var(--i) * 45ms);
+    .legend {
+      animation-delay: 850ms;
     }
-  }
 
-  @keyframes open {
-    from {
-      clip-path: inset(7% 7% 7% 7%);
-      transform: scale(1.04);
+    :global(.intro) .char {
+      animation-delay: calc(1100ms + var(--i) * 45ms);
     }
-    to {
-      clip-path: inset(0 -1rem -1rem 0);
-      transform: none;
+
+    :global(.intro) .status {
+      animation-delay: 1100ms;
+    }
+
+    :global(.intro) .role {
+      animation-delay: 1450ms;
+    }
+
+    :global(.intro) .pitch {
+      animation-delay: 1550ms;
+    }
+
+    :global(.intro) .actions {
+      animation-delay: 1650ms;
+    }
+
+    :global(.intro) .id {
+      animation-delay: 1800ms;
+    }
+
+    :global(.intro) .legend {
+      animation-delay: 1950ms;
     }
   }
 
   @keyframes rise {
     from {
       opacity: 0;
-      transform: translateY(12px);
-    }
-  }
-
-  @keyframes grow {
-    from {
-      transform: scaleY(0);
+      filter: blur(8px);
+      transform: translateY(1.25rem);
     }
   }
 </style>
