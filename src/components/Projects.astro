@@ -99,12 +99,12 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
 
   @media (prefers-reduced-motion: no-preference) {
     .project {
-      transition: border-color 250ms;
+      transition: box-shadow 250ms var(--ease-out);
     }
   }
 
   .project:hover {
-    border-color: color-mix(in srgb, var(--lamp) 45%, var(--line));
+    box-shadow: 0.4rem 0.4rem 0 var(--ink);
   }
 
   .head {
@@ -116,28 +116,28 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
 
   h3 {
     font-size: var(--step-2);
-    font-weight: 750;
+    font-weight: 650;
   }
 
   h3 a {
-    color: var(--plaster);
+    color: var(--ink);
     text-decoration: none;
   }
 
   h3 a:hover {
-    color: var(--lamp);
+    color: var(--accent);
   }
 
   .stars {
     flex: none;
-    color: var(--lamp);
+    color: var(--accent);
     font-size: var(--step--1);
     font-variant-numeric: tabular-nums;
   }
 
   .summary {
     margin-top: 0.6rem;
-    color: var(--stone);
+    color: var(--graphite);
   }
 
   .how {
@@ -149,7 +149,7 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
     align-items: center;
     gap: 0.6rem;
     min-height: 24px;
-    color: var(--stone);
+    color: var(--graphite);
     font-size: var(--step--1);
   }
 
@@ -160,7 +160,7 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
   }
 
   .how > summary:hover {
-    color: var(--plaster);
+    color: var(--ink);
   }
 
   .how-body {
@@ -170,7 +170,7 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
 
   .stack {
     margin-top: 0.6rem;
-    color: var(--stone);
+    color: var(--graphite);
   }
 
   /* Links sit at the bottom of the card, whatever the summary's length. */
@@ -196,11 +196,11 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
   }
 
   .earlier > summary:hover {
-    color: var(--lamp);
+    color: var(--accent);
   }
 
   .more {
-    border-top: 1px solid var(--line);
+    border-top: 1px solid var(--rule);
   }
 
   .more li {
@@ -208,7 +208,7 @@ const count = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eig
     flex-wrap: wrap;
     gap: 0.15rem 1rem;
     padding-block: 0.85rem;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--rule);
   }
 
   .more li > a:first-child {

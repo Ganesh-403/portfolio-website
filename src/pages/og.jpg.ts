@@ -10,16 +10,17 @@ import sharp from 'sharp';
 import { person, leapview } from '../data/profile';
 
 const require = createRequire(import.meta.url);
-const font = (family: string, weight: number) =>
-  readFile(require.resolve(`@fontsource/${family}/files/${family}-latin-${weight}-normal.woff`));
+const font = (family: string, weight: number, style = 'normal') =>
+  readFile(require.resolve(`@fontsource/${family}/files/${family}-latin-${weight}-${style}.woff`));
 
 type Node = { type: string; props: { style?: Record<string, unknown>; children?: unknown } };
 const h = (type: string, style: Record<string, unknown>, children?: unknown): Node => ({ type, props: { style, children } });
 
 export const GET: APIRoute = async () => {
-  const [regular, display, photo] = await Promise.all([
+  const [regular, display, displayItalic, photo] = await Promise.all([
     font('atkinson-hyperlegible-next', 400),
-    font('bricolage-grotesque', 800),
+    font('fraunces', 700),
+    font('fraunces', 600, 'italic'),
     // Builds run from the project root; import.meta.url points into the build output.
     readFile(join(process.cwd(), 'src/assets/ganesh.jpg')),
   ]);
@@ -41,8 +42,7 @@ export const GET: APIRoute = async () => {
         width: barWidth,
         height: Math.round(Math.max(3, (w.merged / max) * barHeight)),
         marginLeft: i === 0 ? 0 : gap,
-        backgroundImage: 'linear-gradient(#f3c37c, #e2603a)',
-        borderRadius: 2,
+        backgroundColor: '#1b1916',
       }),
     ),
   );
@@ -54,17 +54,17 @@ export const GET: APIRoute = async () => {
     { display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: 1040 - side - 64, height: side },
     [
       h('div', { display: 'flex', flexDirection: 'column', gap: 22 }, [
-        h('div', { display: 'flex', flexDirection: 'column', fontFamily: 'Bricolage', fontSize: 104, fontWeight: 800, letterSpacing: -5, lineHeight: 0.9 }, [
+        h('div', { display: 'flex', flexDirection: 'column', fontFamily: 'Fraunces', fontSize: 108, fontWeight: 700, letterSpacing: -3, lineHeight: 0.92 }, [
           h('div', {}, first),
-          h('div', { color: '#f3c37c' }, rest.join(' ')),
+          h('div', { color: '#b3311b', fontStyle: 'italic', fontWeight: 600 }, rest.join(' ')),
         ]),
-        h('div', { fontSize: 32, color: '#a3a9b6', lineHeight: 1.3 }, `${person.role} at ${person.company}. I build software end to end, from first sketch to production.`),
+        h('div', { fontSize: 32, color: '#565048', lineHeight: 1.3 }, `${person.role} at ${person.company}. I build software end to end, from first sketch to production.`),
       ]),
       h('div', { display: 'flex', flexDirection: 'row', alignItems: 'flex-end', gap: 20 }, [
         bars,
         h('div', { display: 'flex', flexDirection: 'column' }, [
-          h('div', { fontFamily: 'Bricolage', fontSize: 48, fontWeight: 800, lineHeight: 1 }, String(mergedPRs)),
-          h('div', { fontSize: 22, color: '#a3a9b6' }, 'merged pull requests in LeapView'),
+          h('div', { fontFamily: 'Fraunces', fontSize: 50, fontWeight: 700, lineHeight: 1 }, String(mergedPRs)),
+          h('div', { fontSize: 22, color: '#565048' }, 'merged pull requests in LeapView'),
         ]),
       ]),
     ],
@@ -75,7 +75,7 @@ export const GET: APIRoute = async () => {
       src: `data:image/jpeg;base64,${photo.toString('base64')}`,
       width: side,
       height: side,
-      style: { borderRadius: 28 },
+      style: { border: '2px solid #1b1916', boxShadow: '14px 14px 0 #1b1916' },
     },
   };
 
@@ -90,16 +90,16 @@ export const GET: APIRoute = async () => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      color: '#efe8dd',
+      color: '#1b1916',
       fontFamily: 'Atkinson',
     },
     [text, portrait],
   );
 
-  // The lamp glow sits behind the photo, as on the page.
+  // Newsprint with the page's heavy-and-hairline rule across the top.
   const canvas = h(
     'div',
-    { width: '100%', height: '100%', display: 'flex', backgroundColor: '#0f1426', backgroundImage: 'radial-gradient(circle at 76% 50%, rgba(243, 195, 124, 0.16), rgba(15, 20, 38, 0) 55%)' },
+    { width: '100%', height: '100%', display: 'flex', backgroundColor: '#f4efe4', borderTop: '14px solid #1b1916' },
     tree,
   );
   const svg = await satori(canvas as Parameters<typeof satori>[0], {
@@ -107,7 +107,8 @@ export const GET: APIRoute = async () => {
     height: 630,
     fonts: [
       { name: 'Atkinson', data: regular, weight: 400, style: 'normal' },
-      { name: 'Bricolage', data: display, weight: 800, style: 'normal' },
+      { name: 'Fraunces', data: display, weight: 700, style: 'normal' },
+      { name: 'Fraunces', data: displayItalic, weight: 600, style: 'italic' },
     ],
   });
   const png = new Resvg(svg).render().asPng();

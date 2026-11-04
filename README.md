@@ -2,7 +2,7 @@
 
 Source for my personal site: what I work on at [Flid AI](https://flid.ai/), my projects, open-source work, research, and how to hire me for freelance work.
 
-Built with [Astro](https://astro.build) as a static site. Its only JavaScript is small inline scripts (pointer glow, area tabs, chart readout, current-section marker, local time and the contact form's inline confirmation), and the page works without any of them.
+Built with [Astro](https://astro.build) as a static site. Its only JavaScript is small inline scripts (area tabs, chart readout, current-section marker, local time and the contact form's inline confirmation), and the page works without any of them.
 
 ## Updating content
 
@@ -40,11 +40,11 @@ npm run preview   # serves dist/
 
 Design notes:
 
-- **Lamplight.** The page is lit like the photo: a night-blue background, a warm lamp-gold accent taken from the lamp behind me, and a soft glow that follows the pointer. Display type is Bricolage Grotesque; body text is Atkinson Hyperlegible Next. Dark only, and every text colour meets WCAG AA (most well beyond it).
+- **Broadsheet.** The page reads like a well-set newspaper: warm newsprint with a faint grain, ink-black type, heavy-and-hairline rules over each section, and one vermilion for links and actions. Display type is Fraunces (italic for the surname); body text is Atkinson Hyperlegible Next. Light only, and every text colour meets WCAG AA (ink 15.3:1, graphite 7:1, vermilion 5.4:1).
 - **Visual hierarchy.** Each screen has one focal point, and the page runs in the order a visitor needs it: who I am and how to reach me, what I'm working on now, what I've built, what I offer, then background.
 - **Progressive disclosure.** The line people scan is always visible; detail opens on request: the six LeapView areas are tabs (all shown when JavaScript is off), each project's "How it works", older projects, internship details, and awards and certifications sit in native `<details>` elements, which find-in-page also opens.
 - **Evidence.** Every claim links to pull requests, repositories, papers or live demos. The LeapView chart can be explored by pointing at or tapping a week; the same numbers are in a "Weekly numbers" table.
-- **Motion.** One load sequence (the photo opens out, the hero lines rise in, the sparkline draws), chart bars that grow as the chart scrolls into view, a header that tints as you scroll, animated disclosures and tabs, and a nav marker for the section being read. All of it is off under reduced motion, and nothing depends on it.
+- **Motion.** One load sequence (the photograph opens out, the hero lines rise in, the sparkline draws), chart bars that grow as the chart scrolls into view, a header that tints as you scroll, animated disclosures and tabs, and a nav marker for the section being read. All of it is off under reduced motion, and nothing depends on it.
 - **A build gotcha.** Astro's CSS minifier folds `animation-timeline` into the `animation` shorthand, which browsers reject. Scroll-driven animations therefore set their timeline in a separate rule.
 
 ## Deployment

@@ -1,23 +1,25 @@
-@import '@fontsource-variable/bricolage-grotesque/opsz.css';
+@import '@fontsource-variable/fraunces/full.css';
+@import '@fontsource-variable/fraunces/full-italic.css';
 @import '@fontsource-variable/atkinson-hyperlegible-next';
 @import '@fontsource-variable/atkinson-hyperlegible-mono';
 
-/* Lamplight: the page is lit like the photo, a warm lamp against a night street.
-   Contrast (WCAG) on night: plaster 15:1, stone 7.8:1, lamp 11.2:1; field (form borders) 4.2:1.
-   Ember is for graphics only. */
+/* Broadsheet: the page reads like a well-set newspaper. Warm newsprint, ink-black type, hairline
+   rules between columns, and one vermilion for links and the things to act on.
+   Contrast (WCAG) on paper: ink 15.3:1, graphite 7:1, accent 5.4:1; field (form borders) 3.7:1.
+   Ochre is for graphics only. */
 :root {
-  --night: #0f1426;
-  --raised: #151c33;
-  --lift: #1b2440;
-  --line: #262f4d;
-  --field: #6b77a0;
-  --plaster: #efe8dd;
-  --stone: #a3a9b6;
-  --lamp: #f3c37c;
-  --ember: #e2603a;
-  --on-lamp: #0f1426;
+  --paper: #f4efe4;
+  --paper-deep: #ebe4d5;
+  --paper-shade: #e2d9c5;
+  --rule: #cdc3ae;
+  --field: #857a68;
+  --ink: #1b1916;
+  --graphite: #565048;
+  --accent: #b3311b;
+  --ochre: #d4891f;
+  --on-accent: #fffaf0;
 
-  --font-display: 'Bricolage Grotesque Variable', 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
   --font-sans: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
   --font-mono: 'Atkinson Hyperlegible Mono Variable', ui-monospace, 'SFMono-Regular', monospace;
 
@@ -33,10 +35,11 @@
   --page: 78rem;
   --measure: 42rem;
   --gutter: clamp(1.125rem, 0.5rem + 2.5vw, 2.5rem);
-  --radius: 28px;
-  --radius-sm: 18px;
+  /* Print has corners: just enough rounding to keep edges from looking sharp on screen. */
+  --radius: 3px;
+  --radius-sm: 2px;
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 *,
@@ -60,8 +63,8 @@ html {
 
 body {
   margin: 0;
-  background: var(--night);
-  color: var(--plaster);
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--font-sans);
   font-size: var(--step-0);
   line-height: 1.6;
@@ -69,16 +72,18 @@ body {
   overflow-x: clip;
 }
 
-/* The lamp: a warm pool of light that follows the pointer (Lamp.astro moves it). */
-.lamp-glow {
+/* Newsprint: a faint grain over the paper, drawn once as an inline SVG. */
+body::before {
+  content: '';
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(34rem circle at var(--lamp-x, 28%) var(--lamp-y, 32%), rgb(243 195 124 / 0.12), transparent 70%);
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.3 0 0 0 0 0.22 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-body > :not(.lamp-glow, .skip-link, script) {
+body > :not(.skip-link, script) {
   position: relative;
   z-index: 1;
 }
@@ -109,8 +114,11 @@ h3,
 h4 {
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  /* Fraunces' softness axis turned off, for a crisper, more bookish cut. */
+  font-variation-settings: 'SOFT' 0, 'WONK' 0;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
   text-wrap: balance;
 }
 
@@ -125,7 +133,7 @@ svg {
 }
 
 a {
-  color: var(--lamp);
+  color: var(--accent);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
 }
@@ -135,14 +143,14 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 2px solid var(--lamp);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 4px;
 }
 
 ::selection {
-  background: var(--lamp);
-  color: var(--on-lamp);
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 code,
@@ -169,9 +177,9 @@ code,
   top: -4rem;
   z-index: 10;
   padding: 0.5rem 0.9rem;
-  background: var(--lamp);
-  color: var(--on-lamp);
-  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: var(--radius-sm);
 }
 
 .skip-link:focus {
@@ -192,9 +200,9 @@ code,
   gap: 0.5rem;
   min-height: 3.1rem;
   padding: 0.55rem 1.35rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--plaster);
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
   font: inherit;
   font-size: 1rem;
   font-weight: 650;
@@ -204,51 +212,66 @@ code,
 }
 
 .button:hover {
-  border-color: var(--stone);
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .button.primary {
-  background: var(--lamp);
-  border-color: var(--lamp);
-  color: var(--on-lamp);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
 }
 
 .button.primary:hover {
-  background: var(--plaster);
-  border-color: var(--plaster);
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .button {
     transition:
       background-color 200ms,
-      border-color 200ms;
+      border-color 200ms,
+      color 200ms;
   }
 }
 
-/* A section: a short lamp-coloured heading, then its content. */
+/* A section: a heavy ink rule across the page with a hairline under it, like a newspaper
+   section, then its name in small capitals. */
 .section {
   padding-block: clamp(3.5rem, 2.5rem + 4vw, 7rem);
 }
 
 .section-name {
-  margin-bottom: 1.5rem;
-  color: var(--lamp);
-  font-family: var(--font-sans);
-  font-size: var(--step-0);
+  position: relative;
+  margin-bottom: 2rem;
+  padding-top: 0.85rem;
+  border-top: 3px solid var(--ink);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
   font-weight: 700;
-  letter-spacing: 0;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
-/* A card: the raised surface everything substantial sits on. */
+.section-name::before {
+  content: '';
+  position: absolute;
+  inset: 4px 0 auto;
+  border-top: 1px solid var(--ink);
+}
+
+/* A card: a ruled box on slightly deeper paper, where everything substantial sits. */
 .card {
-  border: 1px solid var(--line);
+  border: 1px solid var(--ink);
   border-radius: var(--radius);
-  background: linear-gradient(160deg, var(--raised), var(--night));
+  background: var(--paper-deep);
 }
 
 .muted {
-  color: var(--stone);
+  color: var(--graphite);
 }
 
 /* Disclosure: a native <details> whose summary is the line people scan and whose content is the
@@ -273,7 +296,7 @@ code,
   width: 0.8rem;
   height: 0.8rem;
   margin-left: auto;
-  color: var(--stone);
+  color: var(--graphite);
   background:
     linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat,
     linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat;
@@ -286,7 +309,7 @@ code,
 }
 
 .disclosure > summary:hover::after {
-  color: var(--lamp);
+  color: var(--accent);
 }
 
 @media (prefers-reduced-motion: no-preference) {

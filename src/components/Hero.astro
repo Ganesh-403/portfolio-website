@@ -91,60 +91,70 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
     }
   }
 
+  /* A printed photograph: a hairline frame and a solid ink block offset behind it. */
   .portrait img {
     width: 100%;
     height: auto;
     aspect-ratio: 1;
+    border: 1px solid var(--ink);
     border-radius: var(--radius);
-    background: var(--raised);
-    box-shadow: 0 2.5rem 7.5rem -2rem rgb(243 195 124 / 0.32);
+    background: var(--paper-deep);
+    box-shadow: 0.75rem 0.75rem 0 var(--ink);
   }
 
   figcaption {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    margin-top: 0.9rem;
-    color: var(--stone);
-    font-size: var(--step--1);
+    margin-top: 1.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--rule);
+    color: var(--graphite);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
   .time {
-    color: var(--lamp);
+    color: var(--accent);
   }
 
   h1 {
     font-size: var(--step-5);
-    font-weight: 800;
-    line-height: 0.86;
-    letter-spacing: -0.05em;
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: -0.035em;
   }
 
   h1 span {
     display: block;
   }
 
+  /* The surname in italic vermilion, the one flourish on the page. */
   .last {
-    color: var(--lamp);
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 600;
   }
 
   .role {
     margin-top: 1.4rem;
-    color: var(--stone);
+    color: var(--graphite);
     font-size: var(--step-1);
   }
 
   .role strong {
-    color: var(--plaster);
+    color: var(--ink);
     font-weight: 650;
   }
 
   .role a {
-    color: var(--stone);
+    color: var(--graphite);
   }
 
   .role a:hover {
-    color: var(--lamp);
+    color: var(--accent);
   }
 
   .pitch {
@@ -152,9 +162,9 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
     margin-top: 1.75rem;
     font-family: var(--font-display);
     font-size: clamp(1.45rem, 1.1rem + 1.2vw, 2rem);
-    font-weight: 650;
+    font-weight: 500;
     line-height: 1.22;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.01em;
   }
 
   .actions {
@@ -193,14 +203,14 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
     gap: 1rem;
     margin-top: 2.5rem;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--line);
-    color: var(--stone);
+    border-top: 1px solid var(--ink);
+    color: var(--graphite);
     font-size: var(--step--1);
     text-decoration: none;
   }
 
   .proof:hover .proof-text {
-    color: var(--plaster);
+    color: var(--ink);
   }
 
   .spark {
@@ -214,25 +224,24 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
   .spark i {
     width: 8px;
     height: var(--h);
-    border-radius: 2px;
-    background: var(--lamp);
+    background: var(--ink);
     transform-origin: bottom;
   }
 
   .proof-text strong {
     display: block;
-    color: var(--plaster);
+    color: var(--ink);
     font-family: var(--font-display);
     font-size: var(--step-2);
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
   }
 
   /* The page's one orchestrated moment: the photo opens out, the lines under the name rise in
      one after another, and the sparkline draws in. The name itself never waits. */
   @media (prefers-reduced-motion: no-preference) {
-    /* backwards, not both: holding the last frame's clip-path would also clip the glow's shadow. */
+    /* backwards, not both: holding the last frame's clip-path would also clip the offset block. */
     .portrait img {
       animation: open 1000ms var(--ease-out) backwards;
     }
@@ -268,11 +277,11 @@ const max = Math.max(...weekly.map((w) => w.merged), 1);
 
   @keyframes open {
     from {
-      clip-path: inset(7% 7% 7% 7% round 40px);
+      clip-path: inset(7% 7% 7% 7%);
       transform: scale(1.04);
     }
     to {
-      clip-path: inset(0 0 0 0 round var(--radius));
+      clip-path: inset(0 -1rem -1rem 0);
       transform: none;
     }
   }
