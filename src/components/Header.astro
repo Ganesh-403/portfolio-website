@@ -24,10 +24,26 @@ const nav = [
         {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
       </ul>
     </nav>
+    <button class="theme-switch" type="button" data-theme-switch aria-pressed="false">
+      <span class="visually-hidden">Dark mode</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="theme-moon">
+          <rect width="24" height="24" fill="white" />
+          <circle class="bite" cx="24" cy="4" r="7" fill="black" />
+        </mask>
+        <circle class="disc" cx="12" cy="12" r="5" mask="url(#theme-moon)" />
+        <g class="rays">
+          <path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8" />
+        </g>
+      </svg>
+    </button>
   </div>
 </header>
 
 <script>
+  import { themeSwitch } from '../scripts/theme';
+  themeSwitch();
+
   // On phones the nav scrolls sideways; keep a focused link fully in view.
   document.querySelector('nav')?.addEventListener('focusin', (event) => {
     (event.target as HTMLElement).scrollIntoView({ block: 'nearest', inline: 'nearest' });
@@ -116,6 +132,71 @@ const nav = [
 
   .home:hover {
     color: var(--accent);
+  }
+
+  /* Sun in the light edition, moon in the dark: the disc grows, a bite slides in, the rays fold. */
+  .theme-switch {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 0.15rem 0.15rem 0 var(--block);
+  }
+
+  .theme-switch:hover {
+    color: var(--accent);
+  }
+
+  .theme-switch svg {
+    width: 1.35rem;
+    height: 1.35rem;
+    overflow: visible;
+  }
+
+  .disc {
+    fill: currentColor;
+  }
+
+  .rays {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 1.8;
+    transform-origin: 12px 12px;
+  }
+
+  [aria-pressed='true'] .disc {
+    r: 8.5px;
+  }
+
+  [aria-pressed='true'] .bite {
+    cx: 16px;
+    cy: 7px;
+  }
+
+  [aria-pressed='true'] .rays {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .disc,
+    .bite,
+    .rays {
+      transition:
+        r 500ms var(--ease-out),
+        cx 500ms var(--ease-out),
+        cy 500ms var(--ease-out),
+        opacity 400ms,
+        transform 500ms var(--ease-out);
+    }
   }
 
   nav {

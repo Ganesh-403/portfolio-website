@@ -5,7 +5,6 @@ import {
   AmbientLight,
   BoxGeometry,
   BufferGeometry,
-  Color,
   ConeGeometry,
   DirectionalLight,
   DoubleSide,
@@ -19,6 +18,8 @@ import {
   MeshStandardMaterial,
   OctahedronGeometry,
   PerspectiveCamera,
+  Points,
+  PointsMaterial,
   Scene,
   SRGBColorSpace,
   TorusGeometry,
@@ -56,14 +57,9 @@ export function mountAmbient(canvas: HTMLCanvasElement) {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
   renderer.outputColorSpace = SRGBColorSpace;
 
-  const ink = new Color(css('--ink'));
-  const palette = {
-    paper: new Color(css('--paper')),
-    shade: new Color(css('--paper-shade')),
-    accent: new Color(css('--accent')),
-    ochre: new Color(css('--ochre')),
-    ink,
-  };
+  // Each shape has a role in the palette, so it can repaint when the edition changes.
+  const roles = { paper: '--paper', shade: '--paper-shade', accent: '--accent', ochre: '--ochre', ink: '--ink' } as const;
+  type Role = keyof typeof roles;
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(FOV, 1, 0.1, 60);
@@ -73,23 +69,46 @@ export function mountAmbient(canvas: HTMLCanvasElement) {
   sun.position.set(-4, 6, 8);
   scene.add(sun);
 
-  const outline = new LineBasicMaterial({ color: ink, transparent: true, opacity: 0.85 });
-  const make = (geometry: BufferGeometry, color: Color, flat = true) => {
-    const mesh = new Mesh(geometry, new MeshStandardMaterial({ color, roughness: 0.95, flatShading: flat, side: DoubleSide }));
+  const outline = new LineBasicMaterial({ transparent: true, opacity: 0.85 });
+  const materials = new Map<Role, MeshStandardMaterial>(
+    (Object.keys(roles) as Role[]).map((role) => [role, new MeshStandardMaterial({ roughness: 0.95, flatShading: true, side: DoubleSide })]),
+  );
+  const make = (geometry: BufferGeometry, role: Role) => {
+    const mesh = new Mesh(geometry, materials.get(role));
     mesh.add(new LineSegments(new EdgesGeometry(geometry, 20), outline));
     return mesh;
   };
 
+  // Dust: fine specks of ink (or, in the dark, of light) through the whole depth of the page.
+  const dustMaterial = new PointsMaterial({ size: 0.04, transparent: true, depthWrite: false });
+  let dust: Points | null = null;
+
+  const paint = () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    for (const [role, material] of materials) {
+      material.color.set(css(roles[role]));
+      const glows = dark && (role === 'accent' || role === 'ochre');
+      material.emissive.set(glows ? css(roles[role]) : '#000000');
+      material.emissiveIntensity = glows ? 0.35 : 0;
+    }
+    outline.color.set(css('--ink'));
+    outline.opacity = dark ? 0.55 : 0.85;
+    dustMaterial.color.set(dark ? css('--ochre') : css('--ink'));
+    dustMaterial.opacity = dark ? 0.7 : 0.35;
+  };
+  paint();
+  addEventListener('themechange', paint);
+
   // The cast, in the order they appear down the page.
   const kinds = [
-    () => make(planeGeometry(), palette.paper),
-    () => make(new OctahedronGeometry(0.55), palette.accent),
-    () => make(new BoxGeometry(0.9, 1.2, 0.02), palette.paper),
-    () => make(new TorusGeometry(0.45, 0.16, 10, 28), palette.ochre),
-    () => make(planeGeometry(), palette.paper),
-    () => make(new IcosahedronGeometry(0.5), palette.shade),
-    () => make(new ConeGeometry(0.45, 0.9, 4), palette.ink),
-    () => make(new BoxGeometry(0.5, 0.5, 0.5), palette.accent),
+    () => make(planeGeometry(), 'paper'),
+    () => make(new OctahedronGeometry(0.55), 'accent'),
+    () => make(new BoxGeometry(0.9, 1.2, 0.02), 'paper'),
+    () => make(new TorusGeometry(0.45, 0.16, 10, 28), 'ochre'),
+    () => make(planeGeometry(), 'paper'),
+    () => make(new IcosahedronGeometry(0.5), 'shade'),
+    () => make(new ConeGeometry(0.45, 0.9, 4), 'ink'),
+    () => make(new BoxGeometry(0.5, 0.5, 0.5), 'accent'),
   ];
 
   const unitHeight = 2 * DISTANCE * Math.tan((FOV / 2) * (Math.PI / 180));
@@ -117,6 +136,23 @@ export function mountAmbient(canvas: HTMLCanvasElement) {
       const scale = 0.8 + ((i * 3) % 4) * 0.18;
       return { mesh, group, scale, side: i % 2 ? 1 : -1, depth, y, spin: 0.15 + ((i * 5) % 7) * 0.05, phase: i * 1.7, plane: kind === 0 || kind === 4 };
     });
+    // The dust spans the same stretch of page as the shapes.
+    if (dust) {
+      scene.remove(dust);
+      dust.geometry.dispose();
+    }
+    const bottom = -(0.35 + count * 0.7) * unitHeight * PACE;
+    const specks = Math.min(900, count * 60);
+    const positions = new Float32Array(specks * 3);
+    for (let i = 0; i < specks; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 22;
+      positions[i * 3 + 1] = 2 + Math.random() * (bottom - 4);
+      positions[i * 3 + 2] = -7 + Math.random() * 9;
+    }
+    const geometry = new BufferGeometry();
+    geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+    dust = new Points(geometry, dustMaterial);
+    scene.add(dust);
     place();
   };
 
@@ -173,6 +209,10 @@ export function mountAmbient(canvas: HTMLCanvasElement) {
         mesh.rotation.y = t * spin * 0.7 + phase;
         group.position.y = item.y + Math.sin(t * 0.5 + phase) * 0.15;
       }
+    }
+    if (dust) {
+      dust.position.x = Math.sin(t * 0.05) * 0.4;
+      dust.position.y = Math.sin(t * 0.08) * 0.3;
     }
     renderer.render(scene, camera);
     raf = requestAnimationFrame(frame);

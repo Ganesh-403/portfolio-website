@@ -63,16 +63,44 @@ const jsonLd = {
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="theme-color" content="#f4efe4" />
 
+    <!-- Before the first paint: the remembered edition (or the system's), and on the first visit of
+         a session the short masthead intro. Inline so nothing flashes. -->
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        let theme = null;
+        try {
+          theme = localStorage.getItem('theme');
+        } catch {}
+        if (theme !== 'light' && theme !== 'dark') theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        root.dataset.theme = theme;
+        if (theme === 'dark') document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0f0e0c');
+        try {
+          if (!sessionStorage.getItem('intro') && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+            root.classList.add('intro');
+            sessionStorage.setItem('intro', '1');
+          }
+        } catch {}
+      })();
+    </script>
+
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
+    <div class="intro-curtain" aria-hidden="true">
+      <span class="intro-mark">GK</span>
+      <span class="intro-count"></span>
+    </div>
     <a class="skip-link" href="#main">Skip to content</a>
     <canvas class="ambient" aria-hidden="true"></canvas>
     <slot />
     <script>
       import { tilt, magnet } from '../scripts/tilt';
+      import { pointer, scramble } from '../scripts/pointer';
       tilt();
       magnet();
+      pointer();
+      scramble();
 
       // The ambient 3D layer is decoration: it loads once the page is idle, and not at all under
       // reduced motion or Save-Data.

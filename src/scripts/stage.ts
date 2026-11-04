@@ -4,7 +4,6 @@
 import {
   AmbientLight,
   BoxGeometry,
-  Color,
   DirectionalLight,
   EdgesGeometry,
   Group,
@@ -45,10 +44,6 @@ export async function mountStage(figure: HTMLElement) {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = PCFShadowMap;
 
-  const ink = new Color(css('--ink'));
-  const paper = new Color(css('--paper'));
-  const paperDeep = new Color(css('--paper-deep'));
-  const accent = new Color(css('--accent'));
 
   const scene = new Scene();
   const camera = new PerspectiveCamera(28, 1, 0.1, 50);
@@ -65,12 +60,13 @@ export async function mountStage(figure: HTMLElement) {
   scene.add(sun);
 
   // Only the shadows show on the page's own paper; the floor itself is invisible.
-  const floor = new Mesh(new PlaneGeometry(14, 14), new ShadowMaterial({ color: ink, opacity: 0.16 }));
+  const shadow = new ShadowMaterial();
+  const floor = new Mesh(new PlaneGeometry(14, 14), shadow);
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = true;
   scene.add(floor);
 
-  const outline = new LineBasicMaterial({ color: ink });
+  const outline = new LineBasicMaterial();
   const outlined = (mesh: Mesh) => {
     mesh.add(new LineSegments(new EdgesGeometry(mesh.geometry), outline));
     mesh.castShadow = true;
@@ -89,11 +85,12 @@ export async function mountStage(figure: HTMLElement) {
   texture.colorSpace = SRGBColorSpace;
   texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
 
-  const edge = new MeshStandardMaterial({ color: paper, roughness: 1 });
+  const edge = new MeshStandardMaterial({ roughness: 1 });
   const photo = new MeshBasicMaterial({ map: texture });
   const cardMaterials: Material[] = [edge, edge, edge, edge, photo, edge];
   const card = outlined(new Mesh(new BoxGeometry(2.4, 2.4, 0.06), cardMaterials));
-  const block = outlined(new Mesh(new BoxGeometry(2.4, 2.4, 0.3), new MeshStandardMaterial({ color: ink, roughness: 0.9 })));
+  const blockMaterial = new MeshStandardMaterial({ roughness: 0.9 });
+  const block = outlined(new Mesh(new BoxGeometry(2.4, 2.4, 0.3), blockMaterial));
   block.position.set(0.22, -0.22, -0.42);
 
   const print = new Group();
@@ -105,12 +102,13 @@ export async function mountStage(figure: HTMLElement) {
   // One block per week, in front of the photo; heights share one scale so the weeks compare.
   const peak = Math.max(...weeks, 1);
   const busiest = weeks.indexOf(peak);
+  const barMaterial = new MeshStandardMaterial({ roughness: 1 });
+  const peakMaterial = new MeshStandardMaterial({ roughness: 0.8 });
   const bars = weeks.map((merged, i) => {
     const height = 0.08 + (merged / peak) * 1.05;
     const geometry = new BoxGeometry(0.2, height, 0.2);
     geometry.translate(0, height / 2, 0);
-    const color = i === busiest ? accent : paperDeep;
-    const bar = outlined(new Mesh(geometry, new MeshStandardMaterial({ color, roughness: 1 })));
+    const bar = outlined(new Mesh(geometry, i === busiest ? peakMaterial : barMaterial));
     bar.position.set(-1.25 + i * 0.27, 0, 0.95 - i * 0.04);
     world.add(bar);
     return bar;
@@ -122,11 +120,31 @@ export async function mountStage(figure: HTMLElement) {
     { x: 1.45, y: 3.05, z: -1.4, r: -0.4, s: 0.5 },
     { x: -2.35, y: 0.9, z: -1.2, r: 0.9, s: 0.4 },
   ].map(({ x, y, z, r, s }) => {
-    const sheet = outlined(new Mesh(new BoxGeometry(s, s * 1.3, 0.015), new MeshStandardMaterial({ color: paper, roughness: 1 })));
+    const sheet = outlined(new Mesh(new BoxGeometry(s, s * 1.3, 0.015), edge));
     sheet.position.set(x, y, z);
     sheet.rotation.set(r * 0.4, r, r * 0.3);
     world.add(sheet);
     return { sheet, y, r };
+  });
+
+  // Colours come from the page's palette, so the scene changes edition with it. In the dark edition
+  // the busiest week glows a little.
+  const paint = () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    outline.color.set(css('--ink'));
+    edge.color.set(css('--paper'));
+    barMaterial.color.set(css('--paper-deep'));
+    blockMaterial.color.set(css('--block'));
+    peakMaterial.color.set(css('--accent'));
+    peakMaterial.emissive.set(dark ? css('--accent') : '#000000');
+    peakMaterial.emissiveIntensity = dark ? 0.45 : 0;
+    shadow.color.set(dark ? '#000000' : css('--ink'));
+    shadow.opacity = dark ? 0.55 : 0.16;
+  };
+  paint();
+  addEventListener('themechange', () => {
+    paint();
+    frame(performance.now());
   });
 
   const resize = () => {
@@ -152,7 +170,8 @@ export async function mountStage(figure: HTMLElement) {
     });
   }
 
-  const start = performance.now();
+  // During the first-visit intro the stage waits for the curtain to lift.
+  const start = performance.now() + (document.documentElement.classList.contains('intro') ? 1100 : 0);
   const frame = (now: number) => {
     const t = still ? 10 : (now - start) / 1000;
     look.x += (target.x - look.x) * 0.06;

@@ -6,7 +6,10 @@
 /* Broadsheet: the page reads like a well-set newspaper. Warm newsprint, ink-black type, hairline
    rules between columns, and one vermilion for links and the things to act on.
    Contrast (WCAG) on paper: ink 15.3:1, graphite 7:1, accent 5.4:1; field (form borders) 3.7:1.
-   Ochre is for graphics only. */
+   Ochre is for graphics only.
+   Night press is the dark edition: the same page printed in cream on near-black, with a warmer
+   vermilion. On its paper: ink 16.3:1, graphite 8.4:1, accent 6.8:1, field 4.7:1.
+   --block is the solid under cards and buttons; --lamp the light that follows the pointer. */
 :root {
   --paper: #f4efe4;
   --paper-deep: #ebe4d5;
@@ -18,6 +21,9 @@
   --accent: #b3311b;
   --ochre: #d4891f;
   --on-accent: #fffaf0;
+  --block: var(--ink);
+  --lamp: rgb(255 253 247 / 0.75);
+  --haze: rgb(27 25 22 / 0.28);
 
   --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
   --font-sans: 'Atkinson Hyperlegible Next Variable', system-ui, sans-serif;
@@ -40,6 +46,23 @@
   --radius-sm: 2px;
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
   color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --paper: #0f0e0c;
+  --paper-deep: #191714;
+  --paper-shade: #24211d;
+  --rule: #3a362f;
+  --field: #857c6e;
+  --ink: #f2ebdc;
+  --graphite: #b3aa99;
+  --accent: #ff6a45;
+  --ochre: #f0a640;
+  --on-accent: #170d09;
+  --block: #a8361d;
+  --lamp: rgb(255 106 69 / 0.13);
+  --haze: rgb(0 0 0 / 0.6);
+  color-scheme: dark;
 }
 
 *,
@@ -83,7 +106,13 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.3 0 0 0 0 0.22 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-body > :not(.skip-link, script, .ambient) {
+/* On the dark edition the grain is lighter specks instead of darker ones. */
+:root[data-theme='dark'] body::before {
+  opacity: 0.22;
+  filter: invert(1);
+}
+
+body > :not(.skip-link, script, .ambient, .intro-curtain, .cursor-ring) {
   position: relative;
   z-index: 1;
 }
@@ -254,11 +283,11 @@ code,
 /* Buttons are blocks of type standing on an ink base: they lift toward the pointer and press flat
    when clicked. */
 .button {
-  box-shadow: 0.2rem 0.2rem 0 var(--ink);
+  box-shadow: 0.2rem 0.2rem 0 var(--block);
 }
 
 .button:hover {
-  box-shadow: 0.35rem 0.35rem 0 var(--ink);
+  box-shadow: 0.35rem 0.35rem 0 var(--block);
   transform: translate(-0.15rem, -0.15rem);
 }
 
@@ -267,7 +296,7 @@ code,
 }
 
 .button:active {
-  box-shadow: 0 0 0 var(--ink);
+  box-shadow: 0 0 0 var(--block);
   transform: translate(0.2rem, 0.2rem);
 }
 
@@ -339,9 +368,12 @@ main {
 .card {
   border: 1px solid var(--ink);
   border-radius: var(--radius);
-  background: var(--paper-deep);
+  /* A pool of light follows the pointer across every card at once (scripts/pointer.ts). */
+  background:
+    radial-gradient(32rem circle at var(--mx, -50rem) var(--my, -50rem), var(--lamp), transparent 45%),
+    var(--paper-deep);
   /* Every card sits on a thin ink block, so the page has layers even at rest. */
-  box-shadow: 0.3rem 0.3rem 0 var(--ink);
+  box-shadow: 0.3rem 0.3rem 0 var(--block);
 }
 
 /* A card that tilts toward the pointer (see scripts/tilt.ts). At rest it lies flat; lifted, its
@@ -361,11 +393,11 @@ main {
   border-radius: inherit;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgb(255 252 244 / 0.8), transparent 55%);
+  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), var(--lamp), transparent 55%);
 }
 
 [data-tilt]:hover {
-  box-shadow: 0.55rem 0.55rem 0 var(--ink);
+  box-shadow: 0.55rem 0.55rem 0 var(--block);
 }
 
 /* Inside a lifted card the heading floats highest, then the links: three layers of paper. */
@@ -496,5 +528,114 @@ main {
     .disclosure[open]::details-content {
       block-size: auto;
     }
+  }
+}
+
+/* Switching editions: a circle of the new page opens from the switch (scripts/theme.ts). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* The ring that trails the pointer (scripts/pointer.ts). Difference blending keeps it visible on
+   both editions and over photos. */
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin: -1.125rem 0 0 -1.125rem;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transition:
+    scale 300ms var(--ease-out),
+    opacity 300ms,
+    background-color 300ms;
+}
+
+.cursor-ring.is-over {
+  scale: 1.8;
+  background: #fff;
+}
+
+.cursor-ring.is-down {
+  scale: 0.8;
+}
+
+.cursor-ring.is-away {
+  opacity: 0;
+}
+
+/* The masthead intro, once per session: the monogram and a count to 100 on the page colour, then
+   the sheet lifts away. It exists only when the head script adds .intro, so without JavaScript
+   or with reduced motion there is nothing to wait for. */
+.intro-curtain {
+  display: none;
+}
+
+@property --count {
+  syntax: '<integer>';
+  inherits: false;
+  initial-value: 0;
+}
+
+.intro body > .intro-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1rem;
+  background: var(--ink);
+  color: var(--paper);
+  pointer-events: none;
+  animation: lift 800ms 1000ms cubic-bezier(0.7, 0, 0.2, 1) forwards;
+}
+
+.intro-mark {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 3rem + 6vw, 9rem);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0.05em 0.05em 0 var(--accent);
+  animation: rise 700ms var(--ease-out) both;
+}
+
+.intro-count {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.2em;
+  counter-reset: count var(--count);
+  animation: count 950ms cubic-bezier(0.3, 0, 0.2, 1) forwards;
+}
+
+.intro-count::after {
+  content: counter(count) '%';
+}
+
+@keyframes count {
+  to {
+    --count: 100;
+  }
+}
+
+@keyframes lift {
+  to {
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
   }
 }

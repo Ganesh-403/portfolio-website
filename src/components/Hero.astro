@@ -124,7 +124,7 @@ const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
     border: 1px solid var(--ink);
     border-radius: var(--radius);
     background: var(--paper-deep);
-    box-shadow: 0.75rem 0.75rem 0 var(--ink);
+    box-shadow: 0.75rem 0.75rem 0 var(--block);
   }
 
   /* The 3D stage draws over the photo and bleeds past it, so the blocks and shadows have room.
@@ -217,6 +217,18 @@ const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
     }
   }
 
+  :global(.intro) .char {
+    animation-delay: calc(1300ms + var(--i) * 40ms);
+  }
+
+  :global(.intro) .portrait img,
+  :global(.intro) .role,
+  :global(.intro) .pitch,
+  :global(.intro) .actions,
+  :global(.intro) .proof {
+    animation-delay: 1300ms;
+  }
+
   @keyframes flip {
     from {
       opacity: 0;
@@ -237,7 +249,7 @@ const texture = await getImage({ src: photo, width: 1024, format: 'webp' });
       4px 4px 0 var(--ink),
       5px 5px 0 var(--ink),
       6px 6px 0 var(--ink),
-      7px 7px 14px rgb(27 25 22 / 0.25);
+      7px 7px 14px var(--haze);
   }
 
   .role {
