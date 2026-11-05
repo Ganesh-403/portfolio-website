@@ -53,7 +53,7 @@ const toolkit = ['Go', 'DuckDB', ...[...counts].sort((a, b) => b[1] - a[1]).map(
       <Image
         src={photo}
         alt={`${person.name} leaning on a balcony railing at night`}
-        widths={[480, 640, 800]}
+        widths={[480, 640, 800, 960, 1200]}
         format="webp"
         quality={92}
         sizes="(min-width: 64rem) 30rem, calc(100vw - 2.5rem)"
@@ -104,12 +104,21 @@ const toolkit = ['Go', 'DuckDB', ...[...counts].sort((a, b) => b[1] - a[1]).map(
   }
 
   // The notes sit at different depths: with a mouse they shift a few pixels against the pointer,
-  // nearer notes more. Nothing moves on its own.
+  // nearer notes more, updated at most once a frame. Nothing moves on its own.
   const visual = document.querySelector<HTMLElement>('[data-parallax]');
   if (visual && matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+    let queued = false;
+    const at = { x: 0, y: 0 };
     visual.closest('section')?.addEventListener('pointermove', (event) => {
-      visual.style.setProperty('--px', (event.clientX / innerWidth - 0.5).toFixed(3));
-      visual.style.setProperty('--py', (event.clientY / innerHeight - 0.5).toFixed(3));
+      at.x = event.clientX / innerWidth - 0.5;
+      at.y = event.clientY / innerHeight - 0.5;
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        visual.style.setProperty('--px', at.x.toFixed(3));
+        visual.style.setProperty('--py', at.y.toFixed(3));
+      });
     });
   }
 </script>
@@ -309,6 +318,12 @@ const toolkit = ['Go', 'DuckDB', ...[...counts].sort((a, b) => b[1] - a[1]).map(
     aspect-ratio: 1;
     border-radius: calc(var(--radius) - 0.45rem);
     object-fit: cover;
+  }
+
+  /* Other tilting cards lift their first child towards the viewer; for the photo that would scale it
+     up a few percent and soften it, so it stays flat on the card. */
+  .portrait:hover > img {
+    transform: none;
   }
 
   .portrait figcaption {

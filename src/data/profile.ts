@@ -6,7 +6,7 @@ import github from './github.json';
 
 export const person = {
   name: 'Ganesh Kambli',
-  role: 'AI Engineer',
+  role: 'Platform Engineer',
   company: 'Flid AI',
   companyUrl: 'https://flid.ai/',
   // Flid AI ApS is based in Odense, Denmark; I work remotely.
@@ -21,9 +21,9 @@ export const person = {
     sponsors: 'https://github.com/sponsors/Ganesh-403',
   },
   // Shown in <title>, meta description and the Open Graph image.
-  headline: 'AI engineer at Flid AI, working on open-source analytics in Go',
+  headline: 'Platform engineer at Flid AI, working on open-source analytics in Go',
   description:
-    'Ganesh Kambli is an AI engineer at Flid AI, based in Mumbai, working on LeapView, open-source BI in Go and DuckDB. He also builds software for clients end to end, from first design to deployment.',
+    'Ganesh Kambli is a platform engineer at Flid AI, based in Mumbai, working on LeapView, open-source BI in Go and DuckDB. He also builds software for clients end to end, from first design to deployment.',
 };
 
 export const hero = {
@@ -235,7 +235,7 @@ export type Role = {
 // Newest first. Dates follow LinkedIn.
 export const experience: Role[] = [
   {
-    title: 'AI Engineer',
+    title: 'Platform Engineer',
     org: 'Flid AI',
     kind: 'Full-time',
     start: 'Aug 2026',

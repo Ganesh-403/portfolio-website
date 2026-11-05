@@ -56,14 +56,24 @@ const stats = [
     numbers.forEach((el) => seen.observe(el));
   }
 
-  // The readouts lean together toward the pointer.
+  // The readouts lean together toward the pointer: at most once a frame, and only while they are on
+  // screen.
   const row = document.querySelector<HTMLElement>('.stats ul');
   if (row && !still && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    let visible = false;
+    let queued = false;
+    const at = { x: 0, y: 0 };
+    new IntersectionObserver(([entry]) => (visible = entry.isIntersecting)).observe(row);
     addEventListener('pointermove', (event) => {
-      const x = event.clientX / innerWidth - 0.5;
-      const y = event.clientY / innerHeight - 0.5;
-      row.style.setProperty('--turn-y', `${(x * 10).toFixed(1)}deg`);
-      row.style.setProperty('--turn-x', `${(-y * 8).toFixed(1)}deg`);
+      at.x = event.clientX / innerWidth - 0.5;
+      at.y = event.clientY / innerHeight - 0.5;
+      if (!visible || queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        row.style.setProperty('--turn-y', `${(at.x * 10).toFixed(1)}deg`);
+        row.style.setProperty('--turn-x', `${(-at.y * 8).toFixed(1)}deg`);
+      });
     });
   }
 </script>
@@ -99,7 +109,6 @@ const stats = [
     background: var(--glass);
     color: var(--fg);
     text-decoration: none;
-    backdrop-filter: blur(18px) saturate(140%);
     transform: rotateX(var(--turn-x, 0deg)) rotateY(var(--turn-y, 0deg));
   }
 

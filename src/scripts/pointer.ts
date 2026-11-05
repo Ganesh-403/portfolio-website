@@ -13,13 +13,25 @@ export function pointer() {
   const at = { x: -100, y: -100 };
   let queued = false;
 
+  // Only the cards on screen are lit, and each frame measures them all before restyling any, so
+  // the browser lays the page out once per frame rather than once per card.
+  const onScreen = new Set<HTMLElement>();
+  const watch = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) onScreen.add(entry.target as HTMLElement);
+      else onScreen.delete(entry.target as HTMLElement);
+    }
+  });
+  cards.forEach((card) => watch.observe(card));
+
   const paint = () => {
     queued = false;
-    for (const card of cards) {
-      const box = card.getBoundingClientRect();
-      card.style.setProperty('--mx', `${(at.x - box.left).toFixed(0)}px`);
-      card.style.setProperty('--my', `${(at.y - box.top).toFixed(0)}px`);
-    }
+    const lit = [...onScreen];
+    const boxes = lit.map((card) => card.getBoundingClientRect());
+    lit.forEach((card, i) => {
+      card.style.setProperty('--mx', `${(at.x - boxes[i].left).toFixed(0)}px`);
+      card.style.setProperty('--my', `${(at.y - boxes[i].top).toFixed(0)}px`);
+    });
   };
 
   addEventListener('pointermove', (event) => {
