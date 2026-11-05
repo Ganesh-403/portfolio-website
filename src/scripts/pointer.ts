@@ -1,4 +1,4 @@
-// Pointer effects for mouse and pen only: a ring that trails the cursor and swells over anything
+// Pointer effects for mouse and pen only: a ring that sits on the cursor and swells over anything
 // clickable, and the lamp that lights every card from where the pointer is.
 export function pointer() {
   if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
@@ -11,7 +11,6 @@ export function pointer() {
   if (!still) document.body.append(ring);
 
   const at = { x: -100, y: -100 };
-  const shown = { x: -100, y: -100 };
   let queued = false;
 
   const paint = () => {
@@ -26,6 +25,8 @@ export function pointer() {
   addEventListener('pointermove', (event) => {
     at.x = event.clientX;
     at.y = event.clientY;
+    // Placed straight away, not eased towards the pointer, so it never lags behind the cursor.
+    if (!still) ring.style.translate = `${at.x}px ${at.y}px`;
     const target = event.target as Element | null;
     ring.classList.toggle('is-over', !!target?.closest('a, button, summary, [role="tab"], [data-tilt], input, textarea'));
     if (!queued) {
@@ -43,15 +44,6 @@ export function pointer() {
   document.documentElement.addEventListener('pointerenter', () => ring.classList.remove('is-away'));
   addEventListener('pointerdown', () => ring.classList.add('is-down'));
   addEventListener('pointerup', () => ring.classList.remove('is-down'));
-
-  if (still) return;
-  const follow = () => {
-    shown.x += (at.x - shown.x) * 0.2;
-    shown.y += (at.y - shown.y) * 0.2;
-    ring.style.translate = `${shown.x.toFixed(1)}px ${shown.y.toFixed(1)}px`;
-    requestAnimationFrame(follow);
-  };
-  follow();
 }
 
 // Section names decode from scrambled type the first time they scroll into view. Screen readers
